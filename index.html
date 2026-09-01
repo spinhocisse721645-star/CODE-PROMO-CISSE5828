@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CISSE PRONOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #17202a;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      text-align: center;
+      padding: 28px 15px;
+    }
+
+    header h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #cbd5e1;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    /* PUBLICITÉ */
+    .ad {
+      min-height: 90px;
+      margin: 20px 0;
+      background: white;
+      border: 1px dashed #9ca3af;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .title {
+      margin: 25px 0 15px;
+      font-size: 22px;
+    }
+
+    /* PRONOSTICS */
+    .empty {
+      background: white;
+      border-radius: 14px;
+      padding: 25px;
+      text-align: center;
+      color: #6b7280;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    }
+
+    /* PARTENAIRES */
+    .partners {
+      margin: 25px 0;
+    }
+
+    .partner {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    }
+
+    .partner h3 {
+      margin-bottom: 10px;
+    }
+
+    .code {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin: 15px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .copy {
+      background: #111827;
+      color: white;
+    }
+
+    .link {
+      background: #16a34a;
+      color: white;
+    }
+
+    .notice {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.5;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #6b7280;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🔥 CISSE PRONOS</h1>
+    <p>Pronostics & analyses</p>
+  </header>
+
+  <main class="container">
+
+    <!-- EMPLACEMENT PUBLICITAIRE RÉEL -->
+    <div class="ad">
+      📢 ESPACE PUBLICITAIRE
+    </div>
+
+    <!-- PRONOSTICS -->
+    <h2 class="title">🎯 Pronostics</h2>
+
+    <div class="empty">
+      <p>📋 Aucun pronostic publié pour le moment.</p>
+      <br>
+      <p>Les pronostics seront ajoutés ici.</p>
+    </div>
+
+    <!-- PARTENAIRES -->
+    <h2 class="title">🎁 Codes partenaires</h2>
+
+    <div class="partners">
+
+      <!-- MELBET -->
+      <div class="partner">
+        <h3>🟢 MelBet</h3>
+
+        <p>Utilise mon code promo :</p>
+
+        <div class="code" id="codeMelbet">
+          CISSE5828
+        </div>
+
+        <button class="copy" onclick="copyCode('codeMelbet')">
+          📋 COPIER CISSE5828
+        </button>
+
+        <button class="link" onclick="window.open(
+          'https://refpa3665.com/L?tag=d_2940087m_45415c_&site=2940087&ad=45415',
+          '_blank'
+        )">
+          👉 S'INSCRIRE SUR MELBET
+        </button>
+      </div>
+
+      <!-- 1XBET -->
+      <div class="partner">
+        <h3>🔵 1xBet</h3>
+
+        <p>Utilise mon code promo :</p>
+
+        <div class="code" id="code1xbet">
+          CISSE5828
+        </div>
+
+        <button class="copy" onclick="copyCode('code1xbet')">
+          📋 COPIER CISSE5828
+        </button>
+
+        <button class="link" onclick="window.open(
+          'https://reffpa.com/L?tag=d_2237095m_97c_&site=2237095&ad=97',
+          '_blank'
+        )">
+          👉 S'INSCRIRE SUR 1XBET
+        </button>
+      </div>
+
+    </div>
+
+    <!-- PUBLICITÉ -->
+    <div class="ad">
+      📢 ESPACE PUBLICITAIRE
+    </div>
+
+    <div class="notice">
+      Les liens partenaires peuvent générer une commission selon
+      les conditions du programme partenaire. Les paris comportent
+      des risques. Jouez de manière responsable et uniquement
+      si vous êtes majeur et si les paris sont autorisés dans votre pays.
+    </div>
+
+  </main>
+
+  <footer>
+    © 2026 CISSE PRONOS
+  </footer>
+
+  <script>
+
+    function copyCode(id) {
+
+      const code = document.getElementById(id).innerText.trim();
+
+      navigator.clipboard.writeText(code)
+        .then(function() {
+          alert("Code promo copié : " + code);
+        })
+        .catch(function() {
+          alert("Code promo : " + code);
+        });
+
+    }
+
+  </script>
+
+</body>
+</html>

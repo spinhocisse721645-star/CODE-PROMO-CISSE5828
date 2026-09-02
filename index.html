@@ -13,128 +13,276 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0b0f14;
-      color: white;
+      background: #080c11;
+      color: #ffffff;
     }
 
     header {
-      background: #111820;
-      padding: 25px 15px;
+      background: linear-gradient(135deg, #111820, #17212c);
+      padding: 30px 15px;
       text-align: center;
-      border-bottom: 1px solid #26313d;
+      border-bottom: 1px solid #2b3744;
     }
 
     header h1 {
       margin: 0;
-      font-size: 30px;
+      font-size: 32px;
+      letter-spacing: 0.5px;
     }
 
     header p {
-      color: #9ca8b5;
-      margin-bottom: 0;
+      color: #aab5c0;
+      margin: 8px 0 0;
+      font-size: 15px;
     }
 
     .container {
+      width: 100%;
       max-width: 900px;
       margin: auto;
-      padding: 20px;
+      padding: 20px 15px;
     }
+
+    /* =====================================================
+       PUBLICITÉ
+       ===================================================== */
 
     .ad {
-      background: #151c24;
-      border: 1px dashed #536170;
-      border-radius: 12px;
-      padding: 25px;
+      background: #121921;
+      border: 1px dashed #596675;
+      border-radius: 14px;
+      padding: 25px 15px;
       text-align: center;
       color: #9ca8b5;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      font-size: 14px;
     }
 
-    h2 {
-      margin-top: 30px;
+    /* =====================================================
+       TITRES
+       ===================================================== */
+
+    .section-title {
+      margin: 30px 0 15px;
+      font-size: 22px;
     }
+
+    /* =====================================================
+       CARTE PRONOSTIC
+       ===================================================== */
 
     .prediction {
-      background: #151c24;
-      border: 1px solid #26313d;
-      border-radius: 14px;
+      background: linear-gradient(145deg, #141c25, #10171f);
+      border: 1px solid #2a3642;
+      border-radius: 18px;
       padding: 18px;
-      margin: 15px 0;
+      margin: 18px 0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .match-label {
+      color: #8f9cab;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
     }
 
     .teams {
-      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .team {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
       font-weight: bold;
-      line-height: 1.5;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .vs {
+      flex: 0 0 auto;
+      color: #8d99a6;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    /* =====================================================
+       DATE
+       ===================================================== */
+
+    .match-date {
+      background: #0b1016;
+      border-radius: 10px;
+      padding: 11px;
+      text-align: center;
+      color: #cbd3db;
+      font-size: 14px;
       margin-bottom: 15px;
     }
 
-    .info {
-      margin: 9px 0;
-      color: #d7dde4;
-      line-height: 1.5;
+    /* =====================================================
+       BLOC PRONOSTIC
+       ===================================================== */
+
+    .bet-box {
+      background: #0a0f14;
+      border: 1px solid #26313d;
+      border-radius: 13px;
+      padding: 15px;
+      margin-bottom: 14px;
     }
 
-    .bet {
-      background: #0b0f14;
-      border-radius: 10px;
-      padding: 12px;
-      margin: 12px 0;
+    .bet-title {
+      color: #9ca8b5;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 7px;
     }
 
-    .odds {
-      font-size: 22px;
+    .bet-value {
+      font-size: 19px;
       font-weight: bold;
-      margin: 12px 0;
+      line-height: 1.4;
     }
+
+    /* =====================================================
+       COTE
+       ===================================================== */
+
+    .odds-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #17212b;
+      border-radius: 12px;
+      padding: 13px 15px;
+      margin-bottom: 14px;
+    }
+
+    .odds-label {
+      color: #aeb8c2;
+      font-size: 14px;
+    }
+
+    .odds-value {
+      font-size: 23px;
+      font-weight: bold;
+    }
+
+    /* =====================================================
+       ANALYSE
+       ===================================================== */
+
+    .analysis {
+      background: #10171f;
+      border-left: 3px solid #596675;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 14px;
+      color: #d6dce2;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .analysis-title {
+      font-weight: bold;
+      color: #ffffff;
+      margin-bottom: 5px;
+    }
+
+    /* =====================================================
+       STATUT
+       ===================================================== */
 
     .status {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 8px;
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 11px 12px;
+      border-radius: 10px;
       font-weight: bold;
-      margin-top: 8px;
+      font-size: 14px;
     }
 
     .pending {
       background: #665414;
+      color: #ffe99b;
     }
 
     .won {
       background: #145c35;
+      color: #a8f0c5;
     }
 
     .lost {
       background: #702020;
+      color: #ffb2b2;
     }
 
+    /* =====================================================
+       PARTENAIRES
+       ===================================================== */
+
     .partner {
-      background: #151c24;
-      border: 1px solid #26313d;
-      border-radius: 14px;
+      background: linear-gradient(145deg, #141c25, #10171f);
+      border: 1px solid #2a3642;
+      border-radius: 18px;
       padding: 20px;
       margin-top: 20px;
     }
 
+    .partner h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 21px;
+    }
+
+    .partner p {
+      color: #b1bbc5;
+      line-height: 1.5;
+    }
+
     .code {
-      background: #0b0f14;
-      padding: 12px;
-      border-radius: 8px;
-      margin: 12px 0;
+      background: #080d12;
+      border: 1px solid #293541;
+      padding: 13px;
+      border-radius: 10px;
+      margin: 14px 0;
       font-weight: bold;
       text-align: center;
-      font-size: 20px;
+      font-size: 21px;
+      letter-spacing: 1px;
     }
 
     button {
+      width: 100%;
       border: none;
-      border-radius: 8px;
-      padding: 10px 15px;
+      border-radius: 10px;
+      padding: 12px 15px;
       cursor: pointer;
       font-weight: bold;
+      font-size: 14px;
+      background: #26313d;
+      color: white;
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
 
     .partner a {
@@ -145,16 +293,22 @@
       background: #26313d;
       color: white;
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 10px;
+      font-weight: bold;
     }
+
+    /* =====================================================
+       ÉTATS
+       ===================================================== */
 
     .empty {
       text-align: center;
-      padding: 30px;
+      padding: 30px 18px;
       color: #9ca8b5;
-      background: #151c24;
-      border-radius: 12px;
-      line-height: 1.6;
+      background: #121921;
+      border: 1px solid #26313d;
+      border-radius: 14px;
+      line-height: 1.7;
     }
 
     .loading {
@@ -163,11 +317,70 @@
       color: #9ca8b5;
     }
 
+    .last-update {
+      text-align: center;
+      color: #727e8a;
+      font-size: 12px;
+      margin: 15px 0 25px;
+    }
+
+    /* =====================================================
+       AVERTISSEMENT
+       ===================================================== */
+
+    .warning {
+      color: #8d99a6;
+      font-size: 13px;
+      margin-top: 28px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
     footer {
       text-align: center;
-      color: #7d8996;
+      color: #707b87;
       padding: 30px 15px;
       font-size: 13px;
+    }
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+    @media (max-width: 520px) {
+
+      header {
+        padding: 25px 12px;
+      }
+
+      header h1 {
+        font-size: 28px;
+      }
+
+      .container {
+        padding: 16px 12px;
+      }
+
+      .prediction {
+        padding: 15px;
+        border-radius: 15px;
+      }
+
+      .team {
+        font-size: 16px;
+      }
+
+      .teams {
+        gap: 7px;
+      }
+
+      .bet-value {
+        font-size: 18px;
+      }
+
+      .odds-value {
+        font-size: 21px;
+      }
     }
   </style>
 </head>
@@ -181,29 +394,45 @@
 
 <div class="container">
 
-  <!-- ESPACE PUBLICITAIRE -->
+  <!-- =====================================================
+       ESPACE PUBLICITAIRE
+       ===================================================== -->
+
   <div class="ad">
     📢 ESPACE PUBLICITAIRE
   </div>
 
 
-  <!-- PRONOSTICS -->
-  <h2>📋 Pronostics</h2>
+  <!-- =====================================================
+       PRONOSTICS
+       ===================================================== -->
+
+  <h2 class="section-title">📋 Pronostics</h2>
 
   <div id="pronostics">
+
     <div class="loading">
       ⏳ Chargement des pronostics...
     </div>
+
   </div>
 
+  <div id="lastUpdate" class="last-update"></div>
 
-  <!-- ESPACE PUBLICITAIRE -->
+
+  <!-- =====================================================
+       ESPACE PUBLICITAIRE
+       ===================================================== -->
+
   <div class="ad">
     📢 ESPACE PUBLICITAIRE
   </div>
 
 
-  <!-- MELBET -->
+  <!-- =====================================================
+       MELBET
+       ===================================================== -->
+
   <div class="partner">
 
     <h2>🎯 MelBet</h2>
@@ -232,7 +461,10 @@
   </div>
 
 
-  <!-- 1XBET -->
+  <!-- =====================================================
+       1XBET
+       ===================================================== -->
+
   <div class="partner">
 
     <h2>🎯 1xBet</h2>
@@ -257,8 +489,11 @@
   </div>
 
 
-  <!-- AVERTISSEMENT -->
-  <p style="color:#8d99a6; font-size:13px; margin-top:25px; line-height:1.6;">
+  <!-- =====================================================
+       AVERTISSEMENT
+       ===================================================== -->
+
+  <p class="warning">
 
     CISSE PRONOS peut utiliser des liens partenaires.
     Les paris comportent des risques.
@@ -326,7 +561,7 @@
     }
 
     return date.toLocaleString("fr-FR", {
-      dateStyle: "medium",
+      dateStyle: "full",
       timeStyle: "short"
     });
 
@@ -392,13 +627,17 @@
 
 
   /* =========================================================
-     CHARGER LES PRONOSTICS RÉELS
+     CHARGER LES VRAIS PRONOSTICS
      ========================================================= */
 
   async function loadPronostics() {
 
     const container =
       document.getElementById("pronostics");
+
+    const lastUpdate =
+      document.getElementById("lastUpdate");
+
 
     container.innerHTML = `
       <div class="loading">
@@ -449,6 +688,8 @@
         </div>
       `;
 
+      lastUpdate.textContent = "";
+
       return;
 
     }
@@ -476,6 +717,8 @@
         </div>
       `;
 
+      lastUpdate.textContent = "";
+
       return;
 
     }
@@ -497,6 +740,10 @@
         card.className =
           "prediction";
 
+
+        /* -----------------------------------------------------
+           DONNÉES RÉELLES SUPABASE
+           ----------------------------------------------------- */
 
         const equipe1 =
           escapeHtml(
@@ -529,64 +776,93 @@
           );
 
 
-        let descriptionHtml = "";
+        /* -----------------------------------------------------
+           ANALYSE
+           ----------------------------------------------------- */
+
+        let analysisHtml = "";
 
         if (description) {
 
-          descriptionHtml = `
-            <div class="info">
-              📝 ${description}
+          analysisHtml = `
+
+            <div class="analysis">
+
+              <div class="analysis-title">
+                📝 Analyse
+              </div>
+
+              ${description}
+
             </div>
+
           `;
 
         }
 
 
+        /* -----------------------------------------------------
+           CARTE
+           ----------------------------------------------------- */
+
         card.innerHTML = `
 
-          <div class="teams">
-
-            ⚽ ${equipe1}
-
-            <br>
-
-            🆚
-
-            <br>
-
-            ${equipe2}
-
+          <div class="match-label">
+            ⚽ MATCH
           </div>
 
 
-          <div class="bet">
+          <div class="teams">
 
-            <div class="info">
+            <div class="team">
+              ${equipe1}
+            </div>
 
-              🎯 <strong>Pari :</strong>
+            <div class="vs">
+              VS
+            </div>
 
-              ${pari}
-
+            <div class="team">
+              ${equipe2}
             </div>
 
           </div>
 
 
-          <div class="odds">
-
-            💰 Cote : ${cote}
-
-          </div>
-
-
-          <div class="info">
+          <div class="match-date">
 
             📅 ${date}
 
           </div>
 
 
-          ${descriptionHtml}
+          <div class="bet-box">
+
+            <div class="bet-title">
+              🎯 Pronostic
+            </div>
+
+            <div class="bet-value">
+              ${pari}
+            </div>
+
+          </div>
+
+
+          <div class="odds-box">
+
+            <div class="odds-label">
+              💰 Cote
+            </div>
+
+            <div class="odds-value">
+              ${cote}
+            </div>
+
+          </div>
+
+
+          ${analysisHtml}
 
 
           <div class="status ${statusClass(p.statut)}">
@@ -602,6 +878,24 @@
 
       }
     );
+
+
+    /* =======================================================
+       DERNIÈRE ACTUALISATION
+       ======================================================= */
+
+    const now =
+      new Date();
+
+    lastUpdate.textContent =
+      "🔄 Dernière actualisation : " +
+      now.toLocaleTimeString(
+        "fr-FR",
+        {
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
 
   }
 
@@ -619,7 +913,7 @@
       );
 
       alert(
-        "Code CISSE5828 copié !"
+        "✅ Code CISSE5828 copié !"
       );
 
     } catch (error) {
@@ -653,4 +947,4 @@
 </script>
 
 </body>
-</html>
+  </html>

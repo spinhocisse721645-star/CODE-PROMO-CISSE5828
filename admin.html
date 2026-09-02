@@ -80,6 +80,11 @@
       opacity: 0.9;
     }
 
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
     .logout {
       background: #702020;
       color: white;
@@ -117,6 +122,7 @@
       margin-top: 15px;
       border-radius: 8px;
       background: #202b36;
+      line-height: 1.5;
     }
 
     .hidden {
@@ -140,7 +146,9 @@
 
   <h1>🔐 CISSE PRONOS</h1>
 
-  <!-- CONNEXION -->
+  <!-- =====================================================
+       CONNEXION
+  ====================================================== -->
 
   <div id="loginBox" class="box">
 
@@ -175,15 +183,21 @@
   </div>
 
 
-  <!-- ADMIN -->
+  <!-- =====================================================
+       ADMIN
+  ====================================================== -->
 
   <div id="adminPanel">
+
+    <!-- FORMULAIRE -->
 
     <div class="box">
 
       <h2 id="formTitle">➕ Ajouter un pronostic</h2>
 
-      <input type="hidden" id="editId">
+      <input
+        type="hidden"
+        id="editId">
 
       <label>⚽ Équipe 1</label>
 
@@ -212,7 +226,7 @@
         id="cote"
         type="number"
         step="0.01"
-        min="1"
+        min="0.01"
         placeholder="Ex : 1.85">
 
       <label>📝 Analyse</label>
@@ -231,20 +245,36 @@
       <label>📌 Statut</label>
 
       <select id="statut">
-        <option value="Pending">⏳ Pending</option>
-        <option value="Won">✅ Won</option>
-        <option value="Lost">❌ Lost</option>
+
+        <option value="Pending">
+          ⏳ Pending
+        </option>
+
+        <option value="Won">
+          ✅ Won
+        </option>
+
+        <option value="Lost">
+          ❌ Lost
+        </option>
+
       </select>
 
-      <button id="saveButton" onclick="savePronostic()">
+      <button
+        id="saveButton"
+        onclick="savePronostic()">
+
         ➕ Publier le pronostic
+
       </button>
 
       <button
         id="cancelButton"
         class="cancel hidden"
         onclick="cancelEdit()">
+
         ❌ Annuler la modification
+
       </button>
 
       <div id="formMessage"></div>
@@ -252,7 +282,9 @@
     </div>
 
 
-    <!-- LISTE -->
+    <!-- =====================================================
+         LISTE DES PRONOSTICS
+    ====================================================== -->
 
     <div class="box">
 
@@ -265,14 +297,18 @@
     </div>
 
 
-    <!-- DECONNEXION -->
+    <!-- =====================================================
+         DECONNEXION
+    ====================================================== -->
 
     <div class="box">
 
       <button
         class="logout"
         onclick="logout()">
+
         🚪 Se déconnecter
+
       </button>
 
     </div>
@@ -284,800 +320,881 @@
 
 <script>
 
-  /* ==========================================================
-     SUPABASE
-  ========================================================== */
+/* ==========================================================
+   SUPABASE
+========================================================== */
 
-  const SUPABASE_URL =
-    "https://avonpsmoruevwlokkfjg.supabase.co";
+const SUPABASE_URL =
+  "https://avonpsmoruevwlokkfjg.supabase.co";
 
-  const SUPABASE_KEY =
-    "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uR8WnqfR";
+const SUPABASE_KEY =
+  "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uR8WnqfR";
 
-  const supabaseClient =
-    supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* ==========================================================
+   UTILITAIRES
+========================================================== */
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+function formatDate(value) {
+
+  if (!value) {
+    return "Date non indiquée";
+  }
+
+  const date = new Date(value);
+
+  if (isNaN(date.getTime())) {
+    return String(value);
+  }
+
+  return date.toLocaleString("fr-FR", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+}
+
+
+function setMessage(elementId, text) {
+
+  document.getElementById(elementId).innerHTML =
+    `<div class="message">${escapeHtml(text)}</div>`;
+}
+
+
+/* ==========================================================
+   AFFICHAGE
+========================================================== */
+
+function showLogin() {
+
+  document.getElementById("loginBox")
+    .style.display = "block";
+
+  document.getElementById("adminPanel")
+    .style.display = "none";
+}
+
+
+function showAdmin() {
+
+  document.getElementById("loginBox")
+    .style.display = "none";
+
+  document.getElementById("adminPanel")
+    .style.display = "block";
+
+  loadPronostics();
+}
+
+
+/* ==========================================================
+   VERIFICATION SESSION
+========================================================== */
+
+async function checkSession() {
+
+  const {
+    data,
+    error
+  } = await supabaseClient.auth.getSession();
+
+  if (error) {
+
+    console.error(error);
+
+    showLogin();
+
+    return;
+  }
+
+  if (data.session) {
+
+    showAdmin();
+
+  } else {
+
+    showLogin();
+  }
+}
+
+
+/* ==========================================================
+   CONNEXION
+========================================================== */
+
+async function login() {
+
+  const email =
+    document.getElementById("email")
+      .value
+      .trim();
+
+  const password =
+    document.getElementById("password")
+      .value;
+
+  if (!email || !password) {
+
+    setMessage(
+      "loginMessage",
+      "⚠️ Entre ton email et ton mot de passe."
+    );
+
+    return;
+  }
+
+
+  const {
+    error
+  } = await supabaseClient.auth.signInWithPassword({
+
+    email: email,
+
+    password: password
+
+  });
+
+
+  if (error) {
+
+    console.error(error);
+
+    setMessage(
+      "loginMessage",
+      "❌ Connexion impossible : " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  document.getElementById("password").value = "";
+
+  document.getElementById("loginMessage").innerHTML = "";
+
+  showAdmin();
+}
+
+
+/* ==========================================================
+   DECONNEXION
+========================================================== */
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  cancelEdit();
+
+  showLogin();
+}
+
+
+/* ==========================================================
+   RECUPERER L'UTILISATEUR
+========================================================== */
+
+async function getCurrentUser() {
+
+  const {
+    data,
+    error
+  } = await supabaseClient.auth.getUser();
+
+  if (error) {
+
+    console.error(error);
+
+    return null;
+  }
+
+  return data.user;
+}
+
+
+/* ==========================================================
+   AJOUT / MODIFICATION
+========================================================== */
+
+async function savePronostic() {
+
+  const user =
+    await getCurrentUser();
+
+
+  if (!user) {
+
+    showLogin();
+
+    return;
+  }
+
+
+  const equipe1 =
+    document.getElementById("equipe1")
+      .value
+      .trim();
+
+  const equipe2 =
+    document.getElementById("equipe2")
+      .value
+      .trim();
+
+  const pari =
+    document.getElementById("pari")
+      .value
+      .trim();
+
+  const cote =
+    document.getElementById("cote")
+      .value
+      .trim();
+
+  const description =
+    document.getElementById("description")
+      .value
+      .trim();
+
+  const dateInput =
+    document.getElementById("date_match")
+      .value;
+
+  const statut =
+    document.getElementById("statut")
+      .value;
+
+  const editId =
+    document.getElementById("editId")
+      .value;
+
+
+  /* ========================================================
+     VERIFICATION
+  ======================================================== */
+
+  if (
+    !equipe1 ||
+    !equipe2 ||
+    !pari ||
+    !cote ||
+    !dateInput
+  ) {
+
+    setMessage(
+      "formMessage",
+      "⚠️ Remplis tous les champs obligatoires."
+    );
+
+    return;
+  }
+
+
+  const coteNumber =
+    Number(cote);
+
+
+  if (
+    !Number.isFinite(coteNumber) ||
+    coteNumber <= 0
+  ) {
+
+    setMessage(
+      "formMessage",
+      "⚠️ La cote doit être un nombre valide."
+    );
+
+    return;
+  }
+
+
+  /*
+    Format de date envoyé à Supabase.
+  */
+
+  const dateMatch =
+    dateInput.replace("T", " ") + ":00";
+
+
+  let result;
+
+
+  /* ========================================================
+     MODIFICATION
+  ======================================================== */
+
+  if (editId) {
+
+    result =
+      await supabaseClient
+        .from("pronostics")
+        .update({
+
+          equipe1: equipe1,
+
+          equipe2: equipe2,
+
+          pari: pari,
+
+          cote: coteNumber,
+
+          description: description,
+
+          date_match: dateMatch,
+
+          statut: statut
+
+        })
+        .eq("id", editId)
+        .eq("user_id", user.id);
+
+  }
+
+
+  /* ========================================================
+     NOUVEAU PRONOSTIC
+  ======================================================== */
+
+  else {
+
+    /*
+      IMPORTANT :
+      Ta colonne "id" est obligatoire dans Supabase.
+      On génère donc automatiquement un UUID.
+    */
+
+    const nouveauId =
+      crypto.randomUUID();
+
+
+    result =
+      await supabaseClient
+        .from("pronostics")
+        .insert({
+
+          id: nouveauId,
+
+          equipe1: equipe1,
+
+          equipe2: equipe2,
+
+          pari: pari,
+
+          cote: coteNumber,
+
+          description: description,
+
+          date_match: dateMatch,
+
+          statut: statut,
+
+          user_id: user.id
+
+        });
+
+  }
+
+
+  /* ========================================================
+     VERIFICATION ERREUR
+  ======================================================== */
+
+  if (result.error) {
+
+    console.error(result.error);
+
+    setMessage(
+      "formMessage",
+      "❌ Erreur Supabase : " +
+      result.error.message
+    );
+
+    return;
+  }
+
+
+  /* ========================================================
+     SUCCES
+  ======================================================== */
+
+  if (editId) {
+
+    setMessage(
+      "formMessage",
+      "✅ Pronostic modifié avec succès."
+    );
+
+  } else {
+
+    setMessage(
+      "formMessage",
+      "✅ Pronostic publié avec succès."
+    );
+  }
+
+
+  clearForm();
+
+  document.getElementById("formTitle")
+    .textContent =
+    "➕ Ajouter un pronostic";
+
+  document.getElementById("saveButton")
+    .textContent =
+    "➕ Publier le pronostic";
+
+  document.getElementById("cancelButton")
+    .classList.add("hidden");
+
+
+  await loadPronostics();
+}
+
+
+/* ==========================================================
+   CHARGER LES PRONOSTICS
+========================================================== */
+
+async function loadPronostics() {
+
+  const list =
+    document.getElementById("list");
+
+
+  const user =
+    await getCurrentUser();
+
+
+  if (!user) {
+
+    showLogin();
+
+    return;
+  }
+
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("pronostics")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("date_match", {
+      ascending: false
+    });
+
+
+  if (error) {
+
+    console.error(error);
+
+    list.innerHTML =
+      `<div class="message">
+        ❌ ${escapeHtml(error.message)}
+      </div>`;
+
+    return;
+  }
+
+
+  if (!data || data.length === 0) {
+
+    list.innerHTML =
+      `<div class="message">
+        📋 Aucun pronostic publié pour le moment.
+      </div>`;
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  data.forEach(p => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "prediction";
+
+
+    let statusText =
+      "⏳ En attente";
+
+
+    if (p.statut === "Won") {
+
+      statusText =
+        "✅ Gagné";
+    }
+
+
+    if (p.statut === "Lost") {
+
+      statusText =
+        "❌ Perdu";
+    }
+
+
+    item.innerHTML = `
+
+      <div class="teams">
+
+        ${escapeHtml(p.equipe1)}
+
+        🆚
+
+        ${escapeHtml(p.equipe2)}
+
+      </div>
+
+      <p>
+        🎯 <strong>Pari :</strong>
+        ${escapeHtml(p.pari)}
+      </p>
+
+      <p>
+        💰 <strong>Cote :</strong>
+        ${escapeHtml(p.cote)}
+      </p>
+
+      <p>
+        📅 <strong>Match :</strong>
+        ${escapeHtml(formatDate(p.date_match))}
+      </p>
+
+      <p>
+        📝 <strong>Analyse :</strong><br>
+        ${escapeHtml(
+          p.description || "Aucune analyse"
+        )}
+      </p>
+
+      <p>
+        📌 <strong>Statut :</strong>
+        ${statusText}
+      </p>
+
+      <button
+        class="edit"
+        onclick="editPronostic('${escapeHtml(p.id)}')">
+
+        ✏️ Modifier
+
+      </button>
+
+      <button
+        class="delete"
+        onclick="deletePronostic('${escapeHtml(p.id)}')">
+
+        🗑️ Supprimer
+
+      </button>
+
+    `;
+
+
+    list.appendChild(item);
+
+  });
+}
+
+
+/* ==========================================================
+   MODIFIER
+========================================================== */
+
+async function editPronostic(id) {
+
+  const user =
+    await getCurrentUser();
+
+
+  if (!user) {
+
+    showLogin();
+
+    return;
+  }
+
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("pronostics")
+    .select("*")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .single();
+
+
+  if (error || !data) {
+
+    alert(
+      "❌ Impossible de récupérer ce pronostic."
+    );
+
+    return;
+  }
+
+
+  document.getElementById("editId").value =
+    data.id;
+
+  document.getElementById("equipe1").value =
+    data.equipe1 || "";
+
+  document.getElementById("equipe2").value =
+    data.equipe2 || "";
+
+  document.getElementById("pari").value =
+    data.pari || "";
+
+  document.getElementById("cote").value =
+    data.cote || "";
+
+  document.getElementById("description").value =
+    data.description || "";
+
+  document.getElementById("statut").value =
+    data.statut || "Pending";
+
+
+  /* ========================================================
+     CONVERSION DATETIME
+  ======================================================== */
+
+  if (data.date_match) {
+
+    const d =
+      new Date(data.date_match);
+
+
+    if (!isNaN(d.getTime())) {
+
+      const year =
+        d.getFullYear();
+
+      const month =
+        String(d.getMonth() + 1)
+          .padStart(2, "0");
+
+      const day =
+        String(d.getDate())
+          .padStart(2, "0");
+
+      const hours =
+        String(d.getHours())
+          .padStart(2, "0");
+
+      const minutes =
+        String(d.getMinutes())
+          .padStart(2, "0");
+
+
+      document.getElementById("date_match").value =
+        `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+  }
+
+
+  document.getElementById("formTitle")
+    .textContent =
+    "✏️ Modifier le pronostic";
+
+
+  document.getElementById("saveButton")
+    .textContent =
+    "💾 Enregistrer les modifications";
+
+
+  document.getElementById("cancelButton")
+    .classList.remove("hidden");
+
+
+  window.scrollTo({
+
+    top: 0,
+
+    behavior: "smooth"
+
+  });
+}
+
+
+/* ==========================================================
+   ANNULER MODIFICATION
+========================================================== */
+
+function cancelEdit() {
+
+  clearForm();
+
+
+  document.getElementById("formTitle")
+    .textContent =
+    "➕ Ajouter un pronostic";
+
+
+  document.getElementById("saveButton")
+    .textContent =
+    "➕ Publier le pronostic";
+
+
+  document.getElementById("cancelButton")
+    .classList.add("hidden");
+
+
+  document.getElementById("formMessage")
+    .innerHTML = "";
+}
+
+
+/* ==========================================================
+   VIDER FORMULAIRE
+========================================================== */
+
+function clearForm() {
+
+  document.getElementById("editId").value =
+    "";
+
+  document.getElementById("equipe1").value =
+    "";
+
+  document.getElementById("equipe2").value =
+    "";
+
+  document.getElementById("pari").value =
+    "";
+
+  document.getElementById("cote").value =
+    "";
+
+  document.getElementById("description").value =
+    "";
+
+  document.getElementById("date_match").value =
+    "";
+
+  document.getElementById("statut").value =
+    "Pending";
+}
+
+
+/* ==========================================================
+   SUPPRIMER
+========================================================== */
+
+async function deletePronostic(id) {
+
+  const confirmation =
+    confirm(
+      "⚠️ Veux-tu vraiment supprimer ce pronostic ?"
     );
 
 
-  /* ==========================================================
-     UTILITAIRES
-  ========================================================== */
+  if (!confirmation) {
 
-  function escapeHtml(value) {
-
-    return String(value ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+    return;
   }
 
 
-  function formatDate(value) {
+  const user =
+    await getCurrentUser();
 
-    if (!value) {
-      return "Date non indiquée";
-    }
 
-    const date = new Date(value);
+  if (!user) {
 
-    if (isNaN(date.getTime())) {
-      return String(value);
-    }
+    showLogin();
 
-    return date.toLocaleString("fr-FR", {
-      dateStyle: "medium",
-      timeStyle: "short"
-    });
+    return;
   }
 
 
-  function setMessage(elementId, text) {
+  const {
+    error
+  } = await supabaseClient
+    .from("pronostics")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.id);
 
-    document.getElementById(elementId).innerHTML =
-      `<div class="message">${escapeHtml(text)}</div>`;
+
+  if (error) {
+
+    console.error(error);
+
+    alert(
+      "❌ Erreur : " +
+      error.message
+    );
+
+    return;
   }
 
 
-  /* ==========================================================
-     AFFICHAGE
-  ========================================================== */
-
-  function showLogin() {
-
-    document.getElementById("loginBox")
-      .style.display = "block";
-
-    document.getElementById("adminPanel")
-      .style.display = "none";
-  }
+  alert(
+    "✅ Pronostic supprimé."
+  );
 
 
-  function showAdmin() {
-
-    document.getElementById("loginBox")
-      .style.display = "none";
-
-    document.getElementById("adminPanel")
-      .style.display = "block";
-
-    loadPronostics();
-  }
+  await loadPronostics();
+}
 
 
-  /* ==========================================================
-     VERIFICATION SESSION
-  ========================================================== */
+/* ==========================================================
+   CHANGEMENTS AUTHENTIFICATION
+========================================================== */
 
-  async function checkSession() {
+supabaseClient.auth.onAuthStateChange(
 
-    const {
-      data,
-      error
-    } = await supabaseClient.auth.getSession();
+  (event, session) => {
 
-    if (error) {
-
-      console.error(error);
-
-      showLogin();
-
-      return;
-    }
-
-    if (data.session) {
+    if (session) {
 
       showAdmin();
 
     } else {
 
       showLogin();
+
     }
+
   }
 
+);
 
-  /* ==========================================================
-     CONNEXION
-  ========================================================== */
 
-  async function login() {
+/* ==========================================================
+   DEMARRAGE
+========================================================== */
 
-    const email =
-      document.getElementById("email")
-        .value
-        .trim();
-
-    const password =
-      document.getElementById("password")
-        .value;
-
-    if (!email || !password) {
-
-      setMessage(
-        "loginMessage",
-        "⚠️ Entre ton email et ton mot de passe."
-      );
-
-      return;
-    }
-
-
-    const {
-      error
-    } = await supabaseClient.auth.signInWithPassword({
-
-      email: email,
-
-      password: password
-
-    });
-
-
-    if (error) {
-
-      console.error(error);
-
-      setMessage(
-        "loginMessage",
-        "❌ Connexion impossible. Vérifie ton email et ton mot de passe."
-      );
-
-      return;
-    }
-
-
-    document.getElementById("password").value = "";
-
-    document.getElementById("loginMessage").innerHTML = "";
-
-    showAdmin();
-  }
-
-
-  /* ==========================================================
-     DECONNEXION
-  ========================================================== */
-
-  async function logout() {
-
-    await supabaseClient.auth.signOut();
-
-    cancelEdit();
-
-    showLogin();
-  }
-
-
-  /* ==========================================================
-     RECUPERER L'UTILISATEUR
-  ========================================================== */
-
-  async function getCurrentUser() {
-
-    const {
-      data,
-      error
-    } = await supabaseClient.auth.getUser();
-
-    if (error) {
-
-      console.error(error);
-
-      return null;
-    }
-
-    return data.user;
-  }
-
-
-  /* ==========================================================
-     AJOUT / MODIFICATION
-  ========================================================== */
-
-  async function savePronostic() {
-
-    const user =
-      await getCurrentUser();
-
-
-    if (!user) {
-
-      showLogin();
-
-      return;
-    }
-
-
-    const equipe1 =
-      document.getElementById("equipe1")
-        .value
-        .trim();
-
-    const equipe2 =
-      document.getElementById("equipe2")
-        .value
-        .trim();
-
-    const pari =
-      document.getElementById("pari")
-        .value
-        .trim();
-
-    const cote =
-      document.getElementById("cote")
-        .value
-        .trim();
-
-    const description =
-      document.getElementById("description")
-        .value
-        .trim();
-
-    const dateInput =
-      document.getElementById("date_match")
-        .value;
-
-    const statut =
-      document.getElementById("statut")
-        .value;
-
-    const editId =
-      document.getElementById("editId")
-        .value;
-
-
-    /* VERIFICATION */
-
-    if (
-      !equipe1 ||
-      !equipe2 ||
-      !pari ||
-      !cote ||
-      !dateInput
-    ) {
-
-      setMessage(
-        "formMessage",
-        "⚠️ Remplis tous les champs obligatoires."
-      );
-
-      return;
-    }
-
-
-    const coteNumber =
-      Number(cote);
-
-
-    if (
-      !Number.isFinite(coteNumber) ||
-      coteNumber <= 0
-    ) {
-
-      setMessage(
-        "formMessage",
-        "⚠️ La cote doit être un nombre valide."
-      );
-
-      return;
-    }
-
-
-    /*
-      On garde une date au format standard.
-      Cela fonctionne avec les colonnes date/timestamp
-      et reste lisible si la colonne est text.
-    */
-
-    const dateMatch =
-      dateInput.replace("T", " ") + ":00";
-
-
-    let result;
-
-
-    /* ========================================================
-       MODIFICATION
-    ======================================================== */
-
-    if (editId) {
-
-      result =
-        await supabaseClient
-          .from("pronostics")
-          .update({
-
-            equipe1: equipe1,
-
-            equipe2: equipe2,
-
-            pari: pari,
-
-            cote: coteNumber,
-
-            description: description,
-
-            date_match: dateMatch,
-
-            statut: statut
-
-          })
-          .eq("id", editId)
-          .eq("user_id", user.id);
-
-
-    }
-
-    /* ========================================================
-       NOUVEAU PRONOSTIC
-    ======================================================== */
-
-    else {
-
-      result =
-        await supabaseClient
-          .from("pronostics")
-          .insert({
-
-            equipe1: equipe1,
-
-            equipe2: equipe2,
-
-            pari: pari,
-
-            cote: coteNumber,
-
-            description: description,
-
-            date_match: dateMatch,
-
-            statut: statut,
-
-            user_id: user.id
-
-          });
-    }
-
-
-    if (result.error) {
-
-      console.error(result.error);
-
-      setMessage(
-        "formMessage",
-        "❌ Erreur Supabase : " +
-        result.error.message
-      );
-
-      return;
-    }
-
-
-    if (editId) {
-
-      setMessage(
-        "formMessage",
-        "✅ Pronostic modifié avec succès."
-      );
-
-    } else {
-
-      setMessage(
-        "formMessage",
-        "✅ Pronostic publié avec succès."
-      );
-    }
-
-
-    clearForm();
-
-    await loadPronostics();
-  }
-
-
-  /* ==========================================================
-     CHARGER LES PRONOSTICS
-  ========================================================== */
-
-  async function loadPronostics() {
-
-    const list =
-      document.getElementById("list");
-
-
-    const user =
-      await getCurrentUser();
-
-
-    if (!user) {
-
-      showLogin();
-
-      return;
-    }
-
-
-    const {
-      data,
-      error
-    } = await supabaseClient
-      .from("pronostics")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("date_match", {
-        ascending: false
-      });
-
-
-    if (error) {
-
-      console.error(error);
-
-      list.innerHTML =
-        `<div class="message">
-          ❌ ${escapeHtml(error.message)}
-        </div>`;
-
-      return;
-    }
-
-
-    if (!data || data.length === 0) {
-
-      list.innerHTML =
-        `<div class="message">
-          📋 Aucun pronostic publié pour le moment.
-        </div>`;
-
-      return;
-    }
-
-
-    list.innerHTML = "";
-
-
-    data.forEach(p => {
-
-      const item =
-        document.createElement("div");
-
-      item.className = "prediction";
-
-
-      let statusText = "⏳ En attente";
-
-      if (p.statut === "Won") {
-        statusText = "✅ Gagné";
-      }
-
-      if (p.statut === "Lost") {
-        statusText = "❌ Perdu";
-      }
-
-
-      item.innerHTML = `
-
-        <div class="teams">
-          ${escapeHtml(p.equipe1)}
-          🆚
-          ${escapeHtml(p.equipe2)}
-        </div>
-
-        <p>
-          🎯 <strong>Pari :</strong>
-          ${escapeHtml(p.pari)}
-        </p>
-
-        <p>
-          💰 <strong>Cote :</strong>
-          ${escapeHtml(p.cote)}
-        </p>
-
-        <p>
-          📅 <strong>Match :</strong>
-          ${escapeHtml(formatDate(p.date_match))}
-        </p>
-
-        <p>
-          📝 <strong>Analyse :</strong><br>
-          ${escapeHtml(p.description || "Aucune analyse")}
-        </p>
-
-        <p>
-          📌 <strong>Statut :</strong>
-          ${statusText}
-        </p>
-
-        <button
-          class="edit"
-          onclick="editPronostic('${escapeHtml(p.id)}')">
-          ✏️ Modifier
-        </button>
-
-        <button
-          class="delete"
-          onclick="deletePronostic('${escapeHtml(p.id)}')">
-          🗑️ Supprimer
-        </button>
-      `;
-
-
-      list.appendChild(item);
-
-    });
-  }
-
-
-  /* ==========================================================
-     MODIFIER
-  ========================================================== */
-
-  async function editPronostic(id) {
-
-    const user =
-      await getCurrentUser();
-
-
-    if (!user) {
-
-      showLogin();
-
-      return;
-    }
-
-
-    const {
-      data,
-      error
-    } = await supabaseClient
-      .from("pronostics")
-      .select("*")
-      .eq("id", id)
-      .eq("user_id", user.id)
-      .single();
-
-
-    if (error || !data) {
-
-      alert(
-        "❌ Impossible de récupérer ce pronostic."
-      );
-
-      return;
-    }
-
-
-    document.getElementById("editId").value =
-      data.id;
-
-    document.getElementById("equipe1").value =
-      data.equipe1 || "";
-
-    document.getElementById("equipe2").value =
-      data.equipe2 || "";
-
-    document.getElementById("pari").value =
-      data.pari || "";
-
-    document.getElementById("cote").value =
-      data.cote || "";
-
-    document.getElementById("description").value =
-      data.description || "";
-
-    document.getElementById("statut").value =
-      data.statut || "Pending";
-
-
-    /*
-      Conversion pour datetime-local
-    */
-
-    if (data.date_match) {
-
-      const d =
-        new Date(data.date_match);
-
-      if (!isNaN(d.getTime())) {
-
-        const year =
-          d.getFullYear();
-
-        const month =
-          String(d.getMonth() + 1)
-            .padStart(2, "0");
-
-        const day =
-          String(d.getDate())
-            .padStart(2, "0");
-
-        const hours =
-          String(d.getHours())
-            .padStart(2, "0");
-
-        const minutes =
-          String(d.getMinutes())
-            .padStart(2, "0");
-
-        document.getElementById("date_match").value =
-          `${year}-${month}-${day}T${hours}:${minutes}`;
-      }
-    }
-
-
-    document.getElementById("formTitle")
-      .textContent =
-      "✏️ Modifier le pronostic";
-
-    document.getElementById("saveButton")
-      .textContent =
-      "💾 Enregistrer les modifications";
-
-    document.getElementById("cancelButton")
-      .classList.remove("hidden");
-
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  }
-
-
-  /* ==========================================================
-     ANNULER MODIFICATION
-  ========================================================== */
-
-  function cancelEdit() {
-
-    clearForm();
-
-    document.getElementById("formTitle")
-      .textContent =
-      "➕ Ajouter un pronostic";
-
-    document.getElementById("saveButton")
-      .textContent =
-      "➕ Publier le pronostic";
-
-    document.getElementById("cancelButton")
-      .classList.add("hidden");
-  }
-
-
-  /* ==========================================================
-     VIDER FORMULAIRE
-  ========================================================== */
-
-  function clearForm() {
-
-    document.getElementById("editId").value = "";
-
-    document.getElementById("equipe1").value = "";
-
-    document.getElementById("equipe2").value = "";
-
-    document.getElementById("pari").value = "";
-
-    document.getElementById("cote").value = "";
-
-    document.getElementById("description").value = "";
-
-    document.getElementById("date_match").value = "";
-
-    document.getElementById("statut").value = "Pending";
-  }
-
-
-  /* ==========================================================
-     SUPPRIMER
-  ========================================================== */
-
-  async function deletePronostic(id) {
-
-    const confirmation =
-      confirm(
-        "⚠️ Veux-tu vraiment supprimer ce pronostic ?"
-      );
-
-
-    if (!confirmation) {
-      return;
-    }
-
-
-    const user =
-      await getCurrentUser();
-
-
-    if (!user) {
-
-      showLogin();
-
-      return;
-    }
-
-
-    const {
-      error
-    } = await supabaseClient
-      .from("pronostics")
-      .delete()
-      .eq("id", id)
-      .eq("user_id", user.id);
-
-
-    if (error) {
-
-      console.error(error);
-
-      alert(
-        "❌ Erreur : " +
-        error.message
-      );
-
-      return;
-    }
-
-
-    alert(
-      "✅ Pronostic supprimé."
-    );
-
-
-    loadPronostics();
-  }
-
-
-  /* ==========================================================
-     ECOUTER LES CHANGEMENTS D'AUTHENTIFICATION
-  ========================================================== */
-
-  supabaseClient.auth.onAuthStateChange(
-    (event, session) => {
-
-      if (session) {
-
-        showAdmin();
-
-      } else {
-
-        showLogin();
-      }
-    }
-  );
-
-
-  /* ==========================================================
-     DEMARRAGE
-  ========================================================== */
-
-  checkSession();
+checkSession();
 
 </script>
 
 </body>
-  </html>
+
+</html>

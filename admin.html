@@ -43,46 +43,47 @@
     label {
       display: block;
       font-weight: bold;
-      margin-top: 12px;
+      margin-top: 14px;
+      font-size: 17px;
     }
 
     input,
     textarea,
     select {
       width: 100%;
-      padding: 13px;
-      margin-top: 7px;
+      padding: 14px;
+      margin-top: 8px;
       border: 1px solid #364453;
-      border-radius: 8px;
+      border-radius: 10px;
       background: #0b0f14;
       color: white;
       font-size: 16px;
     }
 
+    select {
+      appearance: auto;
+    }
+
     textarea {
       resize: vertical;
+      min-height: 130px;
     }
 
     button {
       width: 100%;
-      padding: 13px;
+      padding: 14px;
       margin-top: 15px;
       border: 0;
-      border-radius: 8px;
+      border-radius: 10px;
       background: #e6e6e6;
       color: #111;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: bold;
       cursor: pointer;
     }
 
     button:hover {
       opacity: 0.9;
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: wait;
     }
 
     .logout {
@@ -110,19 +111,21 @@
       border-radius: 12px;
       padding: 16px;
       margin-top: 15px;
+      background: #111820;
     }
 
     .teams {
       font-size: 20px;
       font-weight: bold;
+      margin-bottom: 12px;
     }
 
     .message {
-      padding: 12px;
+      padding: 13px;
       margin-top: 15px;
-      border-radius: 8px;
+      border-radius: 9px;
       background: #202b36;
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
     .hidden {
@@ -137,6 +140,22 @@
       color: #9ca8b5;
       font-size: 13px;
     }
+
+    .status {
+      font-weight: bold;
+    }
+
+    .status-pending {
+      color: #ffd166;
+    }
+
+    .status-won {
+      color: #50fa7b;
+    }
+
+    .status-lost {
+      color: #ff5555;
+    }
   </style>
 </head>
 
@@ -146,9 +165,10 @@
 
   <h1>🔐 CISSE PRONOS</h1>
 
-  <!-- =====================================================
+
+  <!-- =========================
        CONNEXION
-  ====================================================== -->
+  ========================== -->
 
   <div id="loginBox" class="box">
 
@@ -158,7 +178,7 @@
       Connecte-toi avec ton compte Supabase.
     </p>
 
-    <label>Email</label>
+    <label>📧 Email</label>
 
     <input
       id="email"
@@ -166,13 +186,15 @@
       autocomplete="username"
       placeholder="Ton adresse email">
 
-    <label>Mot de passe</label>
+
+    <label>🔑 Mot de passe</label>
 
     <input
       id="password"
       type="password"
       autocomplete="current-password"
       placeholder="Ton mot de passe">
+
 
     <button onclick="login()">
       🔐 Se connecter
@@ -183,21 +205,30 @@
   </div>
 
 
-  <!-- =====================================================
+
+  <!-- =========================
        ADMIN
-  ====================================================== -->
+  ========================== -->
 
   <div id="adminPanel">
 
-    <!-- FORMULAIRE -->
+
+    <!-- =========================
+         FORMULAIRE
+    ========================== -->
 
     <div class="box">
 
-      <h2 id="formTitle">➕ Ajouter un pronostic</h2>
+      <h2 id="formTitle">
+        ➕ Ajouter un pronostic
+      </h2>
 
       <input
         type="hidden"
         id="editId">
+
+
+      <!-- EQUIPE 1 -->
 
       <label>⚽ Équipe 1</label>
 
@@ -206,6 +237,9 @@
         type="text"
         placeholder="Ex : Arsenal">
 
+
+      <!-- EQUIPE 2 -->
+
       <label>⚽ Équipe 2</label>
 
       <input
@@ -213,12 +247,79 @@
         type="text"
         placeholder="Ex : Chelsea">
 
+
+      <!-- TYPE DE PARI -->
+
       <label>🎯 Type de pari</label>
 
+      <select id="pari">
+
+        <option value="">
+          -- Choisir un pari --
+        </option>
+
+        <option value="Victoire équipe 1">
+          🏆 Victoire équipe 1
+        </option>
+
+        <option value="Victoire équipe 2">
+          🏆 Victoire équipe 2
+        </option>
+
+        <option value="Match nul">
+          🤝 Match nul
+        </option>
+
+        <option value="Plus de 2 buts">
+          ⚽ Plus de 2 buts
+        </option>
+
+        <option value="3 buts ou plus">
+          ⚽ 3 buts ou plus
+        </option>
+
+        <option value="Moins de 2 buts">
+          ⚽ Moins de 2 buts
+        </option>
+
+        <option value="Nombre de corners">
+          🚩 Nombre de corners
+        </option>
+
+        <option value="Nombre de fautes">
+          🟨 Nombre de fautes
+        </option>
+
+        <option value="Cartons jaunes">
+          🟨 Cartons jaunes
+        </option>
+
+        <option value="Carton rouge">
+          🟥 Carton rouge
+        </option>
+
+        <option value="Les deux équipes marquent">
+          🎯 Les deux équipes marquent
+        </option>
+
+        <option value="Autre pari">
+          ✏️ Autre pari
+        </option>
+
+      </select>
+
+
+      <!-- PRECISION DU PARI -->
+
+      <label>🎯 Précision du pari</label>
+
       <input
-        id="pari"
+        id="precision"
         type="text"
-        placeholder="Ex : Victoire Arsenal">
+        placeholder="Ex : Plus de 8.5 corners">
+
+
+      <!-- COTE -->
 
       <label>💰 Cote</label>
 
@@ -226,8 +327,11 @@
         id="cote"
         type="number"
         step="0.01"
-        min="0.01"
+        min="1"
         placeholder="Ex : 1.85">
+
+
+      <!-- ANALYSE -->
 
       <label>📝 Analyse</label>
 
@@ -236,11 +340,17 @@
         rows="5"
         placeholder="Écris ton analyse du match..."></textarea>
 
+
+      <!-- DATE -->
+
       <label>📅 Date et heure du match</label>
 
       <input
         id="date_match"
         type="datetime-local">
+
+
+      <!-- STATUT -->
 
       <label>📌 Statut</label>
 
@@ -260,6 +370,9 @@
 
       </select>
 
+
+      <!-- BOUTON -->
+
       <button
         id="saveButton"
         onclick="savePronostic()">
@@ -267,6 +380,7 @@
         ➕ Publier le pronostic
 
       </button>
+
 
       <button
         id="cancelButton"
@@ -277,18 +391,22 @@
 
       </button>
 
+
       <div id="formMessage"></div>
 
     </div>
 
 
-    <!-- =====================================================
+
+    <!-- =========================
          LISTE DES PRONOSTICS
-    ====================================================== -->
+    ========================== -->
 
     <div class="box">
 
-      <h2>📋 Mes pronostics</h2>
+      <h2>
+        📋 Mes pronostics
+      </h2>
 
       <div id="list">
         Chargement...
@@ -297,9 +415,10 @@
     </div>
 
 
-    <!-- =====================================================
+
+    <!-- =========================
          DECONNEXION
-    ====================================================== -->
+    ========================== -->
 
     <div class="box">
 
@@ -316,6 +435,7 @@
   </div>
 
 </div>
+
 
 
 <script>
@@ -338,7 +458,30 @@ const supabaseClient =
 
 
 /* ==========================================================
-   UTILITAIRES
+   UTILITAIRE : ID UNIQUE
+========================================================== */
+
+function generateId() {
+
+  if (
+    window.crypto &&
+    typeof window.crypto.randomUUID === "function"
+  ) {
+
+    return window.crypto.randomUUID();
+
+  }
+
+  return (
+    Date.now().toString(36) +
+    Math.random().toString(36).substring(2)
+  );
+
+}
+
+
+/* ==========================================================
+   SECURITE HTML
 ========================================================== */
 
 function escapeHtml(value) {
@@ -352,60 +495,94 @@ function escapeHtml(value) {
 }
 
 
+/* ==========================================================
+   DATE
+========================================================== */
+
 function formatDate(value) {
 
   if (!value) {
+
     return "Date non indiquée";
+
   }
 
   const date = new Date(value);
 
   if (isNaN(date.getTime())) {
+
     return String(value);
+
   }
 
-  return date.toLocaleString("fr-FR", {
-    dateStyle: "medium",
-    timeStyle: "short"
-  });
-}
+  return date.toLocaleString(
+    "fr-FR",
+    {
+      dateStyle: "medium",
+      timeStyle: "short"
+    }
+  );
 
-
-function setMessage(elementId, text) {
-
-  document.getElementById(elementId).innerHTML =
-    `<div class="message">${escapeHtml(text)}</div>`;
 }
 
 
 /* ==========================================================
-   AFFICHAGE
+   MESSAGE
+========================================================== */
+
+function setMessage(
+  elementId,
+  text
+) {
+
+  document.getElementById(
+    elementId
+  ).innerHTML =
+    `<div class="message">
+      ${escapeHtml(text)}
+    </div>`;
+
+}
+
+
+/* ==========================================================
+   AFFICHAGE LOGIN
 ========================================================== */
 
 function showLogin() {
 
-  document.getElementById("loginBox")
-    .style.display = "block";
+  document.getElementById(
+    "loginBox"
+  ).style.display = "block";
 
-  document.getElementById("adminPanel")
-    .style.display = "none";
-}
+  document.getElementById(
+    "adminPanel"
+  ).style.display = "none";
 
-
-function showAdmin() {
-
-  document.getElementById("loginBox")
-    .style.display = "none";
-
-  document.getElementById("adminPanel")
-    .style.display = "block";
-
-  loadPronostics();
 }
 
 
 /* ==========================================================
-   VERIFICATION SESSION
+   AFFICHAGE ADMIN
+========================================================== */
+
+function showAdmin() {
+
+  document.getElementById(
+    "loginBox"
+  ).style.display = "none";
+
+  document.getElementById(
+    "adminPanel"
+  ).style.display = "block";
+
+  loadPronostics();
+
+}
+
+
+/* ==========================================================
+   SESSION
 ========================================================== */
 
 async function checkSession() {
@@ -413,7 +590,9 @@ async function checkSession() {
   const {
     data,
     error
-  } = await supabaseClient.auth.getSession();
+  } =
+    await supabaseClient.auth.getSession();
+
 
   if (error) {
 
@@ -422,7 +601,9 @@ async function checkSession() {
     showLogin();
 
     return;
+
   }
+
 
   if (data.session) {
 
@@ -431,7 +612,9 @@ async function checkSession() {
   } else {
 
     showLogin();
+
   }
+
 }
 
 
@@ -442,13 +625,16 @@ async function checkSession() {
 async function login() {
 
   const email =
-    document.getElementById("email")
-      .value
-      .trim();
+    document.getElementById(
+      "email"
+    ).value.trim();
+
 
   const password =
-    document.getElementById("password")
-      .value;
+    document.getElementById(
+      "password"
+    ).value;
+
 
   if (!email || !password) {
 
@@ -458,18 +644,21 @@ async function login() {
     );
 
     return;
+
   }
 
 
   const {
     error
-  } = await supabaseClient.auth.signInWithPassword({
+  } =
+    await supabaseClient.auth
+      .signInWithPassword({
 
-    email: email,
+        email: email,
 
-    password: password
+        password: password
 
-  });
+      });
 
 
   if (error) {
@@ -483,14 +672,22 @@ async function login() {
     );
 
     return;
+
   }
 
 
-  document.getElementById("password").value = "";
+  document.getElementById(
+    "password"
+  ).value = "";
 
-  document.getElementById("loginMessage").innerHTML = "";
+
+  document.getElementById(
+    "loginMessage"
+  ).innerHTML = "";
+
 
   showAdmin();
+
 }
 
 
@@ -505,11 +702,12 @@ async function logout() {
   cancelEdit();
 
   showLogin();
+
 }
 
 
 /* ==========================================================
-   RECUPERER L'UTILISATEUR
+   UTILISATEUR CONNECTE
 ========================================================== */
 
 async function getCurrentUser() {
@@ -517,21 +715,26 @@ async function getCurrentUser() {
   const {
     data,
     error
-  } = await supabaseClient.auth.getUser();
+  } =
+    await supabaseClient.auth.getUser();
+
 
   if (error) {
 
     console.error(error);
 
     return null;
+
   }
 
+
   return data.user;
+
 }
 
 
 /* ==========================================================
-   AJOUT / MODIFICATION
+   ENREGISTRER PRONOSTIC
 ========================================================== */
 
 async function savePronostic() {
@@ -545,50 +748,67 @@ async function savePronostic() {
     showLogin();
 
     return;
+
   }
 
 
   const equipe1 =
-    document.getElementById("equipe1")
-      .value
-      .trim();
+    document.getElementById(
+      "equipe1"
+    ).value.trim();
+
 
   const equipe2 =
-    document.getElementById("equipe2")
-      .value
-      .trim();
+    document.getElementById(
+      "equipe2"
+    ).value.trim();
+
 
   const pari =
-    document.getElementById("pari")
-      .value
-      .trim();
+    document.getElementById(
+      "pari"
+    ).value;
+
+
+  const precision =
+    document.getElementById(
+      "precision"
+    ).value.trim();
+
 
   const cote =
-    document.getElementById("cote")
-      .value
-      .trim();
+    document.getElementById(
+      "cote"
+    ).value.trim();
+
 
   const description =
-    document.getElementById("description")
-      .value
-      .trim();
+    document.getElementById(
+      "description"
+    ).value.trim();
+
 
   const dateInput =
-    document.getElementById("date_match")
-      .value;
+    document.getElementById(
+      "date_match"
+    ).value;
+
 
   const statut =
-    document.getElementById("statut")
-      .value;
+    document.getElementById(
+      "statut"
+    ).value;
+
 
   const editId =
-    document.getElementById("editId")
-      .value;
+    document.getElementById(
+      "editId"
+    ).value;
 
 
-  /* ========================================================
+  /* ==========================
      VERIFICATION
-  ======================================================== */
+  ========================== */
 
   if (
     !equipe1 ||
@@ -604,6 +824,7 @@ async function savePronostic() {
     );
 
     return;
+
   }
 
 
@@ -622,15 +843,19 @@ async function savePronostic() {
     );
 
     return;
+
   }
 
 
-  /*
-    Format de date envoyé à Supabase.
-  */
+  /* ==========================
+     DATE
+  ========================== */
 
   const dateMatch =
-    dateInput.replace("T", " ") + ":00";
+    dateInput.replace(
+      "T",
+      " "
+    ) + ":00";
 
 
   let result;
@@ -647,23 +872,36 @@ async function savePronostic() {
         .from("pronostics")
         .update({
 
-          equipe1: equipe1,
+          equipe1:
+            equipe1,
 
-          equipe2: equipe2,
+          equipe2:
+            equipe2,
 
-          pari: pari,
+          pari:
+            pari,
 
-          cote: coteNumber,
+          cote:
+            coteNumber,
 
-          description: description,
+          description:
+            description,
 
-          date_match: dateMatch,
+          date_match:
+            dateMatch,
 
-          statut: statut
+          statut:
+            statut
 
         })
-        .eq("id", editId)
-        .eq("user_id", user.id);
+        .eq(
+          "id",
+          editId
+        )
+        .eq(
+          "user_id",
+          user.id
+        );
 
   }
 
@@ -676,12 +914,32 @@ async function savePronostic() {
 
     /*
       IMPORTANT :
-      Ta colonne "id" est obligatoire dans Supabase.
-      On génère donc automatiquement un UUID.
+      Ta colonne "id" est obligatoire.
+      On génère donc un ID automatiquement.
     */
 
-    const nouveauId =
-      crypto.randomUUID();
+    const newId =
+      generateId();
+
+
+    /*
+      On ajoute la précision au texte du pari
+      pour ne pas avoir besoin d'une nouvelle
+      colonne dans Supabase.
+    */
+
+    let pariFinal =
+      pari;
+
+
+    if (precision) {
+
+      pariFinal =
+        pari +
+        " — " +
+        precision;
+
+    }
 
 
     result =
@@ -689,23 +947,32 @@ async function savePronostic() {
         .from("pronostics")
         .insert({
 
-          id: nouveauId,
+          id:
+            newId,
 
-          equipe1: equipe1,
+          equipe1:
+            equipe1,
 
-          equipe2: equipe2,
+          equipe2:
+            equipe2,
 
-          pari: pari,
+          pari:
+            pariFinal,
 
-          cote: coteNumber,
+          cote:
+            coteNumber,
 
-          description: description,
+          description:
+            description,
 
-          date_match: dateMatch,
+          date_match:
+            dateMatch,
 
-          statut: statut,
+          statut:
+            statut,
 
-          user_id: user.id
+          user_id:
+            user.id
 
         });
 
@@ -713,12 +980,14 @@ async function savePronostic() {
 
 
   /* ========================================================
-     VERIFICATION ERREUR
+     ERREUR
   ======================================================== */
 
   if (result.error) {
 
-    console.error(result.error);
+    console.error(
+      result.error
+    );
 
     setMessage(
       "formMessage",
@@ -727,6 +996,7 @@ async function savePronostic() {
     );
 
     return;
+
   }
 
 
@@ -747,24 +1017,14 @@ async function savePronostic() {
       "formMessage",
       "✅ Pronostic publié avec succès."
     );
+
   }
 
 
-  clearForm();
-
-  document.getElementById("formTitle")
-    .textContent =
-    "➕ Ajouter un pronostic";
-
-  document.getElementById("saveButton")
-    .textContent =
-    "➕ Publier le pronostic";
-
-  document.getElementById("cancelButton")
-    .classList.add("hidden");
-
+  cancelEdit();
 
   await loadPronostics();
+
 }
 
 
@@ -775,7 +1035,9 @@ async function savePronostic() {
 async function loadPronostics() {
 
   const list =
-    document.getElementById("list");
+    document.getElementById(
+      "list"
+    );
 
 
   const user =
@@ -787,19 +1049,27 @@ async function loadPronostics() {
     showLogin();
 
     return;
+
   }
 
 
   const {
     data,
     error
-  } = await supabaseClient
-    .from("pronostics")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("date_match", {
-      ascending: false
-    });
+  } =
+    await supabaseClient
+      .from("pronostics")
+      .select("*")
+      .eq(
+        "user_id",
+        user.id
+      )
+      .order(
+        "date_match",
+        {
+          ascending: false
+        }
+      );
 
 
   if (error) {
@@ -812,10 +1082,14 @@ async function loadPronostics() {
       </div>`;
 
     return;
+
   }
 
 
-  if (!data || data.length === 0) {
+  if (
+    !data ||
+    data.length === 0
+  ) {
 
     list.innerHTML =
       `<div class="message">
@@ -823,100 +1097,123 @@ async function loadPronostics() {
       </div>`;
 
     return;
+
   }
 
 
   list.innerHTML = "";
 
 
-  data.forEach(p => {
+  data.forEach(
+    p => {
 
-    const item =
-      document.createElement("div");
-
-    item.className =
-      "prediction";
-
-
-    let statusText =
-      "⏳ En attente";
+      const item =
+        document.createElement(
+          "div"
+        );
 
 
-    if (p.statut === "Won") {
+      item.className =
+        "prediction";
 
-      statusText =
-        "✅ Gagné";
+
+      let statusText =
+        "⏳ En attente";
+
+      let statusClass =
+        "status-pending";
+
+
+      if (
+        p.statut === "Won"
+      ) {
+
+        statusText =
+          "✅ Gagné";
+
+        statusClass =
+          "status-won";
+
+      }
+
+
+      if (
+        p.statut === "Lost"
+      ) {
+
+        statusText =
+          "❌ Perdu";
+
+        statusClass =
+          "status-lost";
+
+      }
+
+
+      item.innerHTML = `
+
+        <div class="teams">
+          ${escapeHtml(p.equipe1)}
+          🆚
+          ${escapeHtml(p.equipe2)}
+        </div>
+
+        <p>
+          🎯 <strong>Pari :</strong>
+          ${escapeHtml(p.pari)}
+        </p>
+
+        <p>
+          💰 <strong>Cote :</strong>
+          ${escapeHtml(p.cote)}
+        </p>
+
+        <p>
+          📅 <strong>Match :</strong>
+          ${escapeHtml(
+            formatDate(p.date_match)
+          )}
+        </p>
+
+        <p>
+          📝 <strong>Analyse :</strong><br>
+          ${escapeHtml(
+            p.description ||
+            "Aucune analyse"
+          )}
+        </p>
+
+        <p class="status ${statusClass}">
+          📌 <strong>Statut :</strong>
+          ${statusText}
+        </p>
+
+        <button
+          class="edit"
+          onclick="editPronostic(${JSON.stringify(p.id)})">
+
+          ✏️ Modifier
+
+        </button>
+
+        <button
+          class="delete"
+          onclick="deletePronostic(${JSON.stringify(p.id)})">
+
+          🗑️ Supprimer
+
+        </button>
+
+      `;
+
+
+      list.appendChild(
+        item
+      );
+
     }
+  );
 
-
-    if (p.statut === "Lost") {
-
-      statusText =
-        "❌ Perdu";
-    }
-
-
-    item.innerHTML = `
-
-      <div class="teams">
-
-        ${escapeHtml(p.equipe1)}
-
-        🆚
-
-        ${escapeHtml(p.equipe2)}
-
-      </div>
-
-      <p>
-        🎯 <strong>Pari :</strong>
-        ${escapeHtml(p.pari)}
-      </p>
-
-      <p>
-        💰 <strong>Cote :</strong>
-        ${escapeHtml(p.cote)}
-      </p>
-
-      <p>
-        📅 <strong>Match :</strong>
-        ${escapeHtml(formatDate(p.date_match))}
-      </p>
-
-      <p>
-        📝 <strong>Analyse :</strong><br>
-        ${escapeHtml(
-          p.description || "Aucune analyse"
-        )}
-      </p>
-
-      <p>
-        📌 <strong>Statut :</strong>
-        ${statusText}
-      </p>
-
-      <button
-        class="edit"
-        onclick="editPronostic('${escapeHtml(p.id)}')">
-
-        ✏️ Modifier
-
-      </button>
-
-      <button
-        class="delete"
-        onclick="deletePronostic('${escapeHtml(p.id)}')">
-
-        🗑️ Supprimer
-
-      </button>
-
-    `;
-
-
-    list.appendChild(item);
-
-  });
 }
 
 
@@ -935,102 +1232,221 @@ async function editPronostic(id) {
     showLogin();
 
     return;
+
   }
 
 
   const {
     data,
     error
-  } = await supabaseClient
-    .from("pronostics")
-    .select("*")
-    .eq("id", id)
-    .eq("user_id", user.id)
-    .single();
+  } =
+    await supabaseClient
+      .from("pronostics")
+      .select("*")
+      .eq(
+        "id",
+        id
+      )
+      .eq(
+        "user_id",
+        user.id
+      )
+      .single();
 
 
-  if (error || !data) {
+  if (
+    error ||
+    !data
+  ) {
 
     alert(
       "❌ Impossible de récupérer ce pronostic."
     );
 
     return;
+
   }
 
 
-  document.getElementById("editId").value =
+  document.getElementById(
+    "editId"
+  ).value =
     data.id;
 
-  document.getElementById("equipe1").value =
+
+  document.getElementById(
+    "equipe1"
+  ).value =
     data.equipe1 || "";
 
-  document.getElementById("equipe2").value =
+
+  document.getElementById(
+    "equipe2"
+  ).value =
     data.equipe2 || "";
 
-  document.getElementById("pari").value =
+
+  /*
+    Comme le pari peut maintenant contenir
+    une précision, on affiche le texte complet
+    dans le champ select seulement si une option
+    correspond.
+  */
+
+  const pariSelect =
+    document.getElementById(
+      "pari"
+    );
+
+
+  const pariValue =
     data.pari || "";
 
-  document.getElementById("cote").value =
+
+  let found =
+    false;
+
+
+  for (
+    const option of pariSelect.options
+  ) {
+
+    if (
+      option.value ===
+      pariValue
+    ) {
+
+      pariSelect.value =
+        option.value;
+
+      found = true;
+
+      break;
+
+    }
+
+  }
+
+
+  if (!found) {
+
+    pariSelect.value =
+      "Autre pari";
+
+  }
+
+
+  document.getElementById(
+    "precision"
+  ).value = "";
+
+
+  document.getElementById(
+    "cote"
+  ).value =
     data.cote || "";
 
-  document.getElementById("description").value =
+
+  document.getElementById(
+    "description"
+  ).value =
     data.description || "";
 
-  document.getElementById("statut").value =
-    data.statut || "Pending";
+
+  document.getElementById(
+    "statut"
+  ).value =
+    data.statut ||
+    "Pending";
 
 
-  /* ========================================================
-     CONVERSION DATETIME
-  ======================================================== */
+  /* ==========================
+     DATE
+  ========================== */
 
-  if (data.date_match) {
+  if (
+    data.date_match
+  ) {
 
     const d =
-      new Date(data.date_match);
+      new Date(
+        data.date_match
+      );
 
 
-    if (!isNaN(d.getTime())) {
+    if (
+      !isNaN(
+        d.getTime()
+      )
+    ) {
 
       const year =
         d.getFullYear();
 
+
       const month =
-        String(d.getMonth() + 1)
-          .padStart(2, "0");
+        String(
+          d.getMonth() + 1
+        ).padStart(
+          2,
+          "0"
+        );
+
 
       const day =
-        String(d.getDate())
-          .padStart(2, "0");
+        String(
+          d.getDate()
+        ).padStart(
+          2,
+          "0"
+        );
+
 
       const hours =
-        String(d.getHours())
-          .padStart(2, "0");
+        String(
+          d.getHours()
+        ).padStart(
+          2,
+          "0"
+        );
+
 
       const minutes =
-        String(d.getMinutes())
-          .padStart(2, "0");
+        String(
+          d.getMinutes()
+        ).padStart(
+          2,
+          "0"
+        );
 
 
-      document.getElementById("date_match").value =
+      document.getElementById(
+        "date_match"
+      ).value =
         `${year}-${month}-${day}T${hours}:${minutes}`;
+
     }
+
   }
 
 
-  document.getElementById("formTitle")
-    .textContent =
+  document.getElementById(
+    "formTitle"
+  ).textContent =
     "✏️ Modifier le pronostic";
 
 
-  document.getElementById("saveButton")
-    .textContent =
+  document.getElementById(
+    "saveButton"
+  ).textContent =
     "💾 Enregistrer les modifications";
 
 
-  document.getElementById("cancelButton")
-    .classList.remove("hidden");
+  document.getElementById(
+    "cancelButton"
+  ).classList.remove(
+    "hidden"
+  );
 
 
   window.scrollTo({
@@ -1040,6 +1456,7 @@ async function editPronostic(id) {
     behavior: "smooth"
 
   });
+
 }
 
 
@@ -1049,57 +1466,70 @@ async function editPronostic(id) {
 
 function cancelEdit() {
 
-  clearForm();
+  document.getElementById(
+    "editId"
+  ).value = "";
 
 
-  document.getElementById("formTitle")
-    .textContent =
+  document.getElementById(
+    "equipe1"
+  ).value = "";
+
+
+  document.getElementById(
+    "equipe2"
+  ).value = "";
+
+
+  document.getElementById(
+    "pari"
+  ).value = "";
+
+
+  document.getElementById(
+    "precision"
+  ).value = "";
+
+
+  document.getElementById(
+    "cote"
+  ).value = "";
+
+
+  document.getElementById(
+    "description"
+  ).value = "";
+
+
+  document.getElementById(
+    "date_match"
+  ).value = "";
+
+
+  document.getElementById(
+    "statut"
+  ).value =
+    "Pending";
+
+
+  document.getElementById(
+    "formTitle"
+  ).textContent =
     "➕ Ajouter un pronostic";
 
 
-  document.getElementById("saveButton")
-    .textContent =
+  document.getElementById(
+    "saveButton"
+  ).textContent =
     "➕ Publier le pronostic";
 
 
-  document.getElementById("cancelButton")
-    .classList.add("hidden");
+  document.getElementById(
+    "cancelButton"
+  ).classList.add(
+    "hidden"
+  );
 
-
-  document.getElementById("formMessage")
-    .innerHTML = "";
-}
-
-
-/* ==========================================================
-   VIDER FORMULAIRE
-========================================================== */
-
-function clearForm() {
-
-  document.getElementById("editId").value =
-    "";
-
-  document.getElementById("equipe1").value =
-    "";
-
-  document.getElementById("equipe2").value =
-    "";
-
-  document.getElementById("pari").value =
-    "";
-
-  document.getElementById("cote").value =
-    "";
-
-  document.getElementById("description").value =
-    "";
-
-  document.getElementById("date_match").value =
-    "";
-
-  document.getElementById("statut").value =
-    "Pending";
 }
 
 
@@ -1118,6 +1548,7 @@ async function deletePronostic(id) {
   if (!confirmation) {
 
     return;
+
   }
 
 
@@ -1130,16 +1561,24 @@ async function deletePronostic(id) {
     showLogin();
 
     return;
+
   }
 
 
   const {
     error
-  } = await supabaseClient
-    .from("pronostics")
-    .delete()
-    .eq("id", id)
-    .eq("user_id", user.id);
+  } =
+    await supabaseClient
+      .from("pronostics")
+      .delete()
+      .eq(
+        "id",
+        id
+      )
+      .eq(
+        "user_id",
+        user.id
+      );
 
 
   if (error) {
@@ -1152,6 +1591,7 @@ async function deletePronostic(id) {
     );
 
     return;
+
   }
 
 
@@ -1161,16 +1601,19 @@ async function deletePronostic(id) {
 
 
   await loadPronostics();
+
 }
 
 
 /* ==========================================================
-   CHANGEMENTS AUTHENTIFICATION
+   AUTHENTIFICATION
 ========================================================== */
 
 supabaseClient.auth.onAuthStateChange(
-
-  (event, session) => {
+  (
+    event,
+    session
+  ) => {
 
     if (session) {
 
@@ -1183,7 +1626,6 @@ supabaseClient.auth.onAuthStateChange(
     }
 
   }
-
 );
 
 
@@ -1196,5 +1638,4 @@ checkSession();
 </script>
 
 </body>
-
 </html>

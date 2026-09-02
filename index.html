@@ -68,12 +68,21 @@
     .teams {
       font-size: 20px;
       font-weight: bold;
-      margin-bottom: 12px;
+      line-height: 1.5;
+      margin-bottom: 15px;
     }
 
     .info {
-      margin: 7px 0;
+      margin: 9px 0;
       color: #d7dde4;
+      line-height: 1.5;
+    }
+
+    .bet {
+      background: #0b0f14;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 12px 0;
     }
 
     .odds {
@@ -145,6 +154,13 @@
       color: #9ca8b5;
       background: #151c24;
       border-radius: 12px;
+      line-height: 1.6;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #9ca8b5;
     }
 
     footer {
@@ -165,62 +181,104 @@
 
 <div class="container">
 
+  <!-- ESPACE PUBLICITAIRE -->
   <div class="ad">
     📢 ESPACE PUBLICITAIRE
   </div>
 
+
+  <!-- PRONOSTICS -->
   <h2>📋 Pronostics</h2>
 
   <div id="pronostics">
-    Chargement des pronostics...
+    <div class="loading">
+      ⏳ Chargement des pronostics...
+    </div>
   </div>
 
+
+  <!-- ESPACE PUBLICITAIRE -->
   <div class="ad">
     📢 ESPACE PUBLICITAIRE
   </div>
 
+
+  <!-- MELBET -->
   <div class="partner">
+
     <h2>🎯 MelBet</h2>
-    <p>Utilise mon code promo :</p>
 
-    <div class="code">CISSE5828</div>
+    <p>
+      Utilise mon code promo :
+    </p>
 
-    <button onclick="copyCode()">📋 Copier le code</button>
+    <div class="code">
+      CISSE5828
+    </div>
+
+    <button onclick="copyCode()">
+      📋 Copier le code
+    </button>
 
     <a
       href="https://refpa3665.com/L?tag=d_2940087m_45415c_&site=2940087&ad=45415"
       target="_blank"
       rel="noopener noreferrer">
+
       🔗 Accéder à MelBet
+
     </a>
+
   </div>
 
-  <div class="partner">
-    <h2>🎯 1xBet</h2>
-    <p>Utilise mon code promo :</p>
 
-    <div class="code">CISSE5828</div>
+  <!-- 1XBET -->
+  <div class="partner">
+
+    <h2>🎯 1xBet</h2>
+
+    <p>
+      Utilise mon code promo :
+    </p>
+
+    <div class="code">
+      CISSE5828
+    </div>
 
     <a
       href="https://reffpa.com/L?tag=d_2237095m_97c_&site=2237095&ad=97"
       target="_blank"
       rel="noopener noreferrer">
+
       🔗 Accéder à 1xBet
+
     </a>
+
   </div>
 
-  <p style="color:#8d99a6; font-size:13px; margin-top:25px;">
+
+  <!-- AVERTISSEMENT -->
+  <p style="color:#8d99a6; font-size:13px; margin-top:25px; line-height:1.6;">
+
     CISSE PRONOS peut utiliser des liens partenaires.
-    Les paris comportent des risques. Jouez de manière responsable.
+    Les paris comportent des risques.
+    Jouez de manière responsable.
+
   </p>
 
 </div>
+
 
 <footer>
   © 2026 CISSE PRONOS
 </footer>
 
+
 <script>
+
+  /* =========================================================
+     SUPABASE
+     ========================================================= */
 
   const SUPABASE_URL =
     "https://avonpsmoruevwlokkfjg.supabase.co";
@@ -229,11 +287,37 @@
     "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uR8WnqfR";
 
   const supabaseClient =
-    supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
+
+  /* =========================================================
+     PROTECTION HTML
+     ========================================================= */
+
+  function escapeHtml(value) {
+
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  }
+
+
+  /* =========================================================
+     DATE
+     ========================================================= */
 
   function formatDate(dateString) {
-    if (!dateString) return "Date non précisée";
+
+    if (!dateString) {
+      return "Date non précisée";
+    }
 
     const date = new Date(dateString);
 
@@ -245,148 +329,326 @@
       dateStyle: "medium",
       timeStyle: "short"
     });
+
   }
 
 
-  function statusClass(status) {
-    const value = String(status || "").toLowerCase();
+  /* =========================================================
+     STATUT
+     ========================================================= */
 
-    if (value === "won" || value === "gagné") {
+  function statusClass(status) {
+
+    const value =
+      String(status || "")
+        .toLowerCase()
+        .trim();
+
+    if (
+      value === "won" ||
+      value === "gagné" ||
+      value === "gagne"
+    ) {
       return "won";
     }
 
-    if (value === "lost" || value === "perdu") {
+    if (
+      value === "lost" ||
+      value === "perdu"
+    ) {
       return "lost";
     }
 
     return "pending";
+
   }
 
 
   function statusText(status) {
-    const value = String(status || "").toLowerCase();
 
-    if (value === "won") return "✅ Gagné";
-    if (value === "lost") return "❌ Perdu";
+    const value =
+      String(status || "")
+        .toLowerCase()
+        .trim();
+
+    if (
+      value === "won" ||
+      value === "gagné" ||
+      value === "gagne"
+    ) {
+      return "✅ Gagné";
+    }
+
+    if (
+      value === "lost" ||
+      value === "perdu"
+    ) {
+      return "❌ Perdu";
+    }
 
     return "⏳ En attente";
+
   }
 
+
+  /* =========================================================
+     CHARGER LES PRONOSTICS RÉELS
+     ========================================================= */
 
   async function loadPronostics() {
 
     const container =
       document.getElementById("pronostics");
 
-    const { data, error } =
-      await supabaseClient
-        .from("pronostics")
-        .select("*")
-        .order("date_match", { ascending: true });
+    container.innerHTML = `
+      <div class="loading">
+        ⏳ Chargement des pronostics...
+      </div>
+    `;
 
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+
+      .from("pronostics")
+
+      .select(
+        "id,equipe1,equipe2,pari,cote,description,date_match,statut"
+      )
+
+      .order(
+        "date_match",
+        {
+          ascending: true
+        }
+      );
+
+
+    /* =======================================================
+       ERREUR
+       ======================================================= */
 
     if (error) {
 
-      console.error(error);
+      console.error(
+        "Erreur Supabase :",
+        error
+      );
 
       container.innerHTML = `
         <div class="empty">
+
           ⚠️ Impossible de charger les pronostics.
+
+          <br><br>
+
+          Réessaie dans quelques instants.
+
         </div>
       `;
 
       return;
+
     }
 
 
-    if (!data || data.length === 0) {
+    /* =======================================================
+       AUCUN PRONOSTIC
+       ======================================================= */
+
+    if (
+      !data ||
+      data.length === 0
+    ) {
 
       container.innerHTML = `
         <div class="empty">
+
           📋 Aucun pronostic publié pour le moment.
+
           <br><br>
-          Les pronostics seront ajoutés ici.
+
+          Les nouveaux pronostics
+          apparaîtront automatiquement ici.
+
         </div>
       `;
 
       return;
+
     }
 
+
+    /* =======================================================
+       AFFICHAGE
+       ======================================================= */
 
     container.innerHTML = "";
 
 
-    data.forEach(p => {
+    data.forEach(
+      function(p) {
 
-      const card =
-        document.createElement("div");
+        const card =
+          document.createElement("div");
 
-      card.className = "prediction";
+        card.className =
+          "prediction";
 
 
-      card.innerHTML = `
-        <div class="teams">
-          ⚽ ${escapeHtml(p.equipe1 || "")}
-          <br>
-          🆚
-          <br>
-          ${escapeHtml(p.equipe2 || "")}
-        </div>
+        const equipe1 =
+          escapeHtml(
+            p.equipe1 || "Équipe 1"
+          );
 
-        <div class="info">
-          🎯 Pari :
-          <strong>${escapeHtml(p.pari || "")}</strong>
-        </div>
+        const equipe2 =
+          escapeHtml(
+            p.equipe2 || "Équipe 2"
+          );
 
-        <div class="odds">
-          💰 Cote : ${escapeHtml(p.cote ?? "")}
-        </div>
+        const pari =
+          escapeHtml(
+            p.pari || "Pari non précisé"
+          );
 
-        <div class="info">
-          📅 ${escapeHtml(formatDate(p.date_match))}
-        </div>
+        const cote =
+          escapeHtml(
+            p.cote ?? "Non précisée"
+          );
 
-        <div class="info">
-          📝 ${escapeHtml(p.description || "")}
-        </div>
+        const description =
+          escapeHtml(
+            p.description || ""
+          );
 
-        <div class="status ${statusClass(p.statut)}">
-          ${statusText(p.statut)}
-        </div>
-      `;
+        const date =
+          escapeHtml(
+            formatDate(p.date_match)
+          );
 
-      container.appendChild(card);
-    });
+
+        let descriptionHtml = "";
+
+        if (description) {
+
+          descriptionHtml = `
+            <div class="info">
+              📝 ${description}
+            </div>
+          `;
+
+        }
+
+
+        card.innerHTML = `
+
+          <div class="teams">
+
+            ⚽ ${equipe1}
+
+            <br>
+
+            🆚
+
+            <br>
+
+            ${equipe2}
+
+          </div>
+
+
+          <div class="bet">
+
+            <div class="info">
+
+              🎯 <strong>Pari :</strong>
+
+              ${pari}
+
+            </div>
+
+          </div>
+
+
+          <div class="odds">
+
+            💰 Cote : ${cote}
+
+          </div>
+
+
+          <div class="info">
+
+            📅 ${date}
+
+          </div>
+
+
+          ${descriptionHtml}
+
+
+          <div class="status ${statusClass(p.statut)}">
+
+            ${statusText(p.statut)}
+
+          </div>
+
+        `;
+
+
+        container.appendChild(card);
+
+      }
+    );
+
   }
 
 
-  function escapeHtml(value) {
-
-    return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
+  /* =========================================================
+     COPIER LE CODE PROMO
+     ========================================================= */
 
   async function copyCode() {
 
     try {
 
-      await navigator.clipboard.writeText("CISSE5828");
+      await navigator.clipboard.writeText(
+        "CISSE5828"
+      );
 
-      alert("Code CISSE5828 copié !");
+      alert(
+        "Code CISSE5828 copié !"
+      );
 
     } catch (error) {
 
-      alert("Code : CISSE5828");
+      alert(
+        "Code promo : CISSE5828"
+      );
+
     }
+
   }
 
 
+  /* =========================================================
+     LANCEMENT
+     ========================================================= */
+
   loadPronostics();
+
+
+  /* =========================================================
+     ACTUALISATION AUTOMATIQUE
+     Toutes les 60 secondes
+     ========================================================= */
+
+  setInterval(
+    loadPronostics,
+    60000
+  );
 
 </script>
 

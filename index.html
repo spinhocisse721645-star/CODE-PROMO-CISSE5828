@@ -6,131 +6,151 @@
 
   <title>CISSE PRONOS</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      color: #17202a;
+      background: #0b0f14;
+      color: white;
     }
 
     header {
-      background: #111827;
-      color: white;
+      background: #111820;
+      padding: 25px 15px;
       text-align: center;
-      padding: 28px 15px;
+      border-bottom: 1px solid #26313d;
     }
 
     header h1 {
+      margin: 0;
       font-size: 30px;
-      margin-bottom: 8px;
     }
 
     header p {
-      color: #cbd5e1;
+      color: #9ca8b5;
+      margin-bottom: 0;
     }
 
     .container {
-      width: 92%;
-      max-width: 700px;
+      max-width: 900px;
       margin: auto;
+      padding: 20px;
     }
 
-    /* PUBLICITÉ */
     .ad {
-      min-height: 90px;
-      margin: 20px 0;
-      background: white;
-      border: 1px dashed #9ca3af;
+      background: #151c24;
+      border: 1px dashed #536170;
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #6b7280;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    .title {
-      margin: 25px 0 15px;
-      font-size: 22px;
-    }
-
-    /* PRONOSTICS */
-    .empty {
-      background: white;
-      border-radius: 14px;
       padding: 25px;
       text-align: center;
-      color: #6b7280;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+      color: #9ca8b5;
+      margin-bottom: 20px;
     }
 
-    /* PARTENAIRES */
-    .partners {
-      margin: 25px 0;
+    h2 {
+      margin-top: 30px;
     }
 
-    .partner {
-      background: white;
+    .prediction {
+      background: #151c24;
+      border: 1px solid #26313d;
       border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 15px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
-    }
-
-    .partner h3 {
-      margin-bottom: 10px;
-    }
-
-    .code {
-      background: #f1f5f9;
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-      letter-spacing: 2px;
+      padding: 18px;
       margin: 15px 0;
     }
 
-    button {
-      width: 100%;
-      padding: 13px;
-      border: none;
+    .teams {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .info {
+      margin: 7px 0;
+      color: #d7dde4;
+    }
+
+    .odds {
+      font-size: 22px;
+      font-weight: bold;
+      margin: 12px 0;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
       border-radius: 8px;
       font-weight: bold;
-      cursor: pointer;
       margin-top: 8px;
     }
 
-    .copy {
-      background: #111827;
-      color: white;
+    .pending {
+      background: #665414;
     }
 
-    .link {
-      background: #16a34a;
-      color: white;
+    .won {
+      background: #145c35;
     }
 
-    .notice {
-      font-size: 12px;
-      color: #6b7280;
-      line-height: 1.5;
-      margin: 20px 0;
+    .lost {
+      background: #702020;
+    }
+
+    .partner {
+      background: #151c24;
+      border: 1px solid #26313d;
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .code {
+      background: #0b0f14;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+      font-weight: bold;
       text-align: center;
+      font-size: 20px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .partner a {
+      display: block;
+      text-align: center;
+      padding: 13px;
+      margin-top: 10px;
+      background: #26313d;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #9ca8b5;
+      background: #151c24;
+      border-radius: 12px;
     }
 
     footer {
       text-align: center;
-      padding: 25px 15px;
-      color: #6b7280;
+      color: #7d8996;
+      padding: 30px 15px;
       font-size: 13px;
     }
   </style>
@@ -138,113 +158,237 @@
 
 <body>
 
-  <header>
-    <h1>🔥 CISSE PRONOS</h1>
-    <p>Pronostics & analyses</p>
-  </header>
+<header>
+  <h1>🔥 CISSE PRONOS</h1>
+  <p>Pronostics & analyses</p>
+</header>
 
-  <main class="container">
+<div class="container">
 
-    <!-- EMPLACEMENT PUBLICITAIRE RÉEL -->
-    <div class="ad">
-      📢 ESPACE PUBLICITAIRE
-    </div>
+  <div class="ad">
+    📢 ESPACE PUBLICITAIRE
+  </div>
 
-    <!-- PRONOSTICS -->
-    <h2 class="title">🎯 Pronostics</h2>
+  <h2>📋 Pronostics</h2>
 
-    <div class="empty">
-      <p>📋 Aucun pronostic publié pour le moment.</p>
-      <br>
-      <p>Les pronostics seront ajoutés ici.</p>
-    </div>
+  <div id="pronostics">
+    Chargement des pronostics...
+  </div>
 
-    <!-- PARTENAIRES -->
-    <h2 class="title">🎁 Codes partenaires</h2>
+  <div class="ad">
+    📢 ESPACE PUBLICITAIRE
+  </div>
 
-    <div class="partners">
+  <div class="partner">
+    <h2>🎯 MelBet</h2>
+    <p>Utilise mon code promo :</p>
 
-      <!-- MELBET -->
-      <div class="partner">
-        <h3>🟢 MelBet</h3>
+    <div class="code">CISSE5828</div>
 
-        <p>Utilise mon code promo :</p>
+    <button onclick="copyCode()">📋 Copier le code</button>
 
-        <div class="code" id="codeMelbet">
-          CISSE5828
-        </div>
+    <a
+      href="https://refpa3665.com/L?tag=d_2940087m_45415c_&site=2940087&ad=45415"
+      target="_blank"
+      rel="noopener noreferrer">
+      🔗 Accéder à MelBet
+    </a>
+  </div>
 
-        <button class="copy" onclick="copyCode('codeMelbet')">
-          📋 COPIER CISSE5828
-        </button>
+  <div class="partner">
+    <h2>🎯 1xBet</h2>
+    <p>Utilise mon code promo :</p>
 
-        <button class="link" onclick="window.open(
-          'https://refpa3665.com/L?tag=d_2940087m_45415c_&site=2940087&ad=45415',
-          '_blank'
-        )">
-          👉 S'INSCRIRE SUR MELBET
-        </button>
-      </div>
+    <div class="code">CISSE5828</div>
 
-      <!-- 1XBET -->
-      <div class="partner">
-        <h3>🔵 1xBet</h3>
+    <a
+      href="https://reffpa.com/L?tag=d_2237095m_97c_&site=2237095&ad=97"
+      target="_blank"
+      rel="noopener noreferrer">
+      🔗 Accéder à 1xBet
+    </a>
+  </div>
 
-        <p>Utilise mon code promo :</p>
+  <p style="color:#8d99a6; font-size:13px; margin-top:25px;">
+    CISSE PRONOS peut utiliser des liens partenaires.
+    Les paris comportent des risques. Jouez de manière responsable.
+  </p>
 
-        <div class="code" id="code1xbet">
-          CISSE5828
-        </div>
+</div>
 
-        <button class="copy" onclick="copyCode('code1xbet')">
-          📋 COPIER CISSE5828
-        </button>
+<footer>
+  © 2026 CISSE PRONOS
+</footer>
 
-        <button class="link" onclick="window.open(
-          'https://reffpa.com/L?tag=d_2237095m_97c_&site=2237095&ad=97',
-          '_blank'
-        )">
-          👉 S'INSCRIRE SUR 1XBET
-        </button>
-      </div>
+<script>
 
-    </div>
+  const SUPABASE_URL =
+    "https://avonpsmoruevwlokkfjg.supabase.co";
 
-    <!-- PUBLICITÉ -->
-    <div class="ad">
-      📢 ESPACE PUBLICITAIRE
-    </div>
+  const SUPABASE_KEY =
+    "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uR8WnqfR";
 
-    <div class="notice">
-      Les liens partenaires peuvent générer une commission selon
-      les conditions du programme partenaire. Les paris comportent
-      des risques. Jouez de manière responsable et uniquement
-      si vous êtes majeur et si les paris sont autorisés dans votre pays.
-    </div>
+  const supabaseClient =
+    supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  </main>
 
-  <footer>
-    © 2026 CISSE PRONOS
-  </footer>
+  function formatDate(dateString) {
+    if (!dateString) return "Date non précisée";
 
-  <script>
+    const date = new Date(dateString);
 
-    function copyCode(id) {
-
-      const code = document.getElementById(id).innerText.trim();
-
-      navigator.clipboard.writeText(code)
-        .then(function() {
-          alert("Code promo copié : " + code);
-        })
-        .catch(function() {
-          alert("Code promo : " + code);
-        });
-
+    if (isNaN(date.getTime())) {
+      return dateString;
     }
 
-  </script>
+    return date.toLocaleString("fr-FR", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+  }
+
+
+  function statusClass(status) {
+    const value = String(status || "").toLowerCase();
+
+    if (value === "won" || value === "gagné") {
+      return "won";
+    }
+
+    if (value === "lost" || value === "perdu") {
+      return "lost";
+    }
+
+    return "pending";
+  }
+
+
+  function statusText(status) {
+    const value = String(status || "").toLowerCase();
+
+    if (value === "won") return "✅ Gagné";
+    if (value === "lost") return "❌ Perdu";
+
+    return "⏳ En attente";
+  }
+
+
+  async function loadPronostics() {
+
+    const container =
+      document.getElementById("pronostics");
+
+    const { data, error } =
+      await supabaseClient
+        .from("pronostics")
+        .select("*")
+        .order("date_match", { ascending: true });
+
+
+    if (error) {
+
+      console.error(error);
+
+      container.innerHTML = `
+        <div class="empty">
+          ⚠️ Impossible de charger les pronostics.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+      container.innerHTML = `
+        <div class="empty">
+          📋 Aucun pronostic publié pour le moment.
+          <br><br>
+          Les pronostics seront ajoutés ici.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    data.forEach(p => {
+
+      const card =
+        document.createElement("div");
+
+      card.className = "prediction";
+
+
+      card.innerHTML = `
+        <div class="teams">
+          ⚽ ${escapeHtml(p.equipe1 || "")}
+          <br>
+          🆚
+          <br>
+          ${escapeHtml(p.equipe2 || "")}
+        </div>
+
+        <div class="info">
+          🎯 Pari :
+          <strong>${escapeHtml(p.pari || "")}</strong>
+        </div>
+
+        <div class="odds">
+          💰 Cote : ${escapeHtml(p.cote ?? "")}
+        </div>
+
+        <div class="info">
+          📅 ${escapeHtml(formatDate(p.date_match))}
+        </div>
+
+        <div class="info">
+          📝 ${escapeHtml(p.description || "")}
+        </div>
+
+        <div class="status ${statusClass(p.statut)}">
+          ${statusText(p.statut)}
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+
+  function escapeHtml(value) {
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+
+  async function copyCode() {
+
+    try {
+
+      await navigator.clipboard.writeText("CISSE5828");
+
+      alert("Code CISSE5828 copié !");
+
+    } catch (error) {
+
+      alert("Code : CISSE5828");
+    }
+  }
+
+
+  loadPronostics();
+
+</script>
 
 </body>
 </html>

@@ -4,382 +4,482 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>CISSE PRONOS</title>
+  <title>CISSE PRONOS - Pronostics & Analyses</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * {
       box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #080c11;
+      background: #0b0f19;
       color: #ffffff;
+      line-height: 1.5;
     }
 
     header {
-      background: linear-gradient(135deg, #111820, #17212c);
+      background: linear-gradient(135deg, #111827, #172554);
       padding: 30px 15px;
       text-align: center;
-      border-bottom: 1px solid #2b3744;
+      border-bottom: 1px solid #26344f;
     }
 
     header h1 {
-      margin: 0;
       font-size: 32px;
-      letter-spacing: 0.5px;
+      margin-bottom: 5px;
     }
 
     header p {
-      color: #aab5c0;
-      margin: 8px 0 0;
+      color: #aeb9cc;
       font-size: 15px;
     }
 
     .container {
       width: 100%;
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
-      padding: 20px 15px;
+      padding: 20px 15px 50px;
     }
 
-    /* =====================================================
-       PUBLICITÉ
-       ===================================================== */
+    /* =========================
+       PUBLICITE
+    ========================= */
 
-    .ad {
-      background: #121921;
-      border: 1px dashed #596675;
-      border-radius: 14px;
-      padding: 25px 15px;
+    .ad-space {
+      background: #111827;
+      border: 1px dashed #52627c;
+      border-radius: 12px;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      color: #9ca8b5;
       margin-bottom: 25px;
+      color: #9aa7bd;
       font-size: 14px;
     }
 
-    /* =====================================================
+    /* =========================
        TITRES
-       ===================================================== */
+    ========================= */
 
     .section-title {
-      margin: 30px 0 15px;
-      font-size: 22px;
+      font-size: 24px;
+      margin: 25px 0 15px;
     }
 
-    /* =====================================================
-       CARTE PRONOSTIC
-       ===================================================== */
+    .section-subtitle {
+      color: #9aa7bd;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
 
-    .prediction {
-      background: linear-gradient(145deg, #141c25, #10171f);
-      border: 1px solid #2a3642;
-      border-radius: 18px;
+    /* =========================
+       RESUME DES MATCHS
+    ========================= */
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .summary-box {
+      background: #111827;
+      border: 1px solid #25314a;
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .summary-number {
+      font-size: 25px;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+
+    .summary-label {
+      color: #9aa7bd;
+      font-size: 13px;
+    }
+
+    /* =========================
+       FILTRES
+    ========================= */
+
+    .filters {
+      background: #111827;
+      border: 1px solid #25314a;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      border: 1px solid #34425d;
+      background: #182235;
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 9px 13px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .filter-btn:hover {
+      background: #22304a;
+    }
+
+    .filter-btn.active {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    /* =========================
+       PRONOSTICS
+    ========================= */
+
+    #pronostics {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .pronostic-card {
+      background: #111827;
+      border: 1px solid #26344f;
+      border-radius: 16px;
       padding: 18px;
-      margin: 18px 0;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.20);
     }
 
     .match-label {
-      color: #8f9cab;
+      color: #60a5fa;
       font-size: 12px;
+      font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
     }
 
     .teams {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 18px;
+      gap: 10px;
+      text-align: center;
+      margin-bottom: 15px;
     }
 
     .team {
-      flex: 1;
-      text-align: center;
       font-size: 18px;
       font-weight: bold;
-      line-height: 1.4;
       word-break: break-word;
     }
 
     .vs {
-      flex: 0 0 auto;
-      color: #8d99a6;
+      color: #64748b;
       font-size: 13px;
       font-weight: bold;
     }
 
-    /* =====================================================
+    /* =========================
        DATE
-       ===================================================== */
+    ========================= */
 
-    .match-date {
-      background: #0b1016;
+    .date-box {
+      background: #0b1220;
+      border: 1px solid #24314a;
       border-radius: 10px;
       padding: 11px;
       text-align: center;
-      color: #cbd3db;
-      font-size: 14px;
       margin-bottom: 15px;
     }
 
-    /* =====================================================
-       BLOC PRONOSTIC
-       ===================================================== */
-
-    .bet-box {
-      background: #0a0f14;
-      border: 1px solid #26313d;
-      border-radius: 13px;
-      padding: 15px;
-      margin-bottom: 14px;
+    .date-label {
+      display: block;
+      color: #94a3b8;
+      font-size: 11px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
     }
 
-    .bet-title {
-      color: #9ca8b5;
+    .date-value {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* =========================
+       ETAT DU MATCH
+    ========================= */
+
+    .match-state {
+      text-align: center;
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 15px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .state-upcoming {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      color: #4ade80;
+    }
+
+    .state-past {
+      background: rgba(148, 163, 184, 0.10);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #cbd5e1;
+    }
+
+    .state-unknown {
+      background: rgba(234, 179, 8, 0.10);
+      border: 1px solid rgba(234, 179, 8, 0.30);
+      color: #facc15;
+    }
+
+    /* =========================
+       INFOS PRONO
+    ========================= */
+
+    .prediction-box {
+      background: #172033;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .prediction-title {
+      color: #93c5fd;
       font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 7px;
+      margin-bottom: 5px;
     }
 
-    .bet-value {
-      font-size: 19px;
+    .prediction-value {
+      font-size: 17px;
       font-weight: bold;
-      line-height: 1.4;
     }
-
-    /* =====================================================
-       COTE
-       ===================================================== */
 
     .odds-box {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      background: #17212b;
-      border-radius: 12px;
-      padding: 13px 15px;
-      margin-bottom: 14px;
+      background: #0b1220;
+      border: 1px solid #26344f;
+      border-radius: 10px;
+      padding: 13px;
+      margin-bottom: 12px;
     }
 
     .odds-label {
-      color: #aeb8c2;
-      font-size: 14px;
+      color: #94a3b8;
+      font-size: 13px;
     }
 
     .odds-value {
-      font-size: 23px;
+      font-size: 20px;
       font-weight: bold;
+      color: #facc15;
     }
 
-    /* =====================================================
-       ANALYSE
-       ===================================================== */
-
-    .analysis {
-      background: #10171f;
-      border-left: 3px solid #596675;
-      border-radius: 8px;
+    .analysis-box {
+      background: #0d1525;
+      border-left: 3px solid #2563eb;
       padding: 12px;
-      margin-bottom: 14px;
-      color: #d6dce2;
-      line-height: 1.6;
+      border-radius: 8px;
+      color: #cbd5e1;
       font-size: 14px;
+      margin-bottom: 12px;
     }
-
-    .analysis-title {
-      font-weight: bold;
-      color: #ffffff;
-      margin-bottom: 5px;
-    }
-
-    /* =====================================================
-       STATUT
-       ===================================================== */
 
     .status {
-      display: block;
       width: 100%;
       text-align: center;
-      padding: 11px 12px;
-      border-radius: 10px;
+      border-radius: 8px;
+      padding: 9px;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 13px;
     }
 
-    .pending {
-      background: #665414;
-      color: #ffe99b;
+    .status.pending {
+      background: rgba(234, 179, 8, 0.12);
+      color: #facc15;
+      border: 1px solid rgba(234, 179, 8, 0.25);
     }
 
-    .won {
-      background: #145c35;
-      color: #a8f0c5;
+    .status.won {
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.25);
     }
 
-    .lost {
-      background: #702020;
-      color: #ffb2b2;
+    .status.lost {
+      background: rgba(239, 68, 68, 0.12);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.25);
     }
 
-    /* =====================================================
+    /* =========================
        PARTENAIRES
-       ===================================================== */
+    ========================= */
 
-    .partner {
-      background: linear-gradient(145deg, #141c25, #10171f);
-      border: 1px solid #2a3642;
-      border-radius: 18px;
-      padding: 20px;
-      margin-top: 20px;
+    .partners {
+      margin-top: 35px;
     }
 
-    .partner h2 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      font-size: 21px;
+    .partner-card {
+      background: #111827;
+      border: 1px solid #26344f;
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 15px;
     }
 
-    .partner p {
-      color: #b1bbc5;
-      line-height: 1.5;
+    .partner-card h3 {
+      margin-bottom: 8px;
     }
 
-    .code {
-      background: #080d12;
-      border: 1px solid #293541;
-      padding: 13px;
-      border-radius: 10px;
-      margin: 14px 0;
+    .partner-card p {
+      color: #b7c1d1;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .promo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #0b1220;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 12px 0;
+    }
+
+    .promo-code {
       font-weight: bold;
-      text-align: center;
-      font-size: 21px;
       letter-spacing: 1px;
     }
 
-    button {
-      width: 100%;
+    .copy-btn {
       border: none;
-      border-radius: 10px;
-      padding: 12px 15px;
+      background: #2563eb;
+      color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 7px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 14px;
-      background: #26313d;
-      color: white;
     }
 
-    button:active {
-      transform: scale(0.98);
-    }
-
-    .partner a {
+    .partner-link {
       display: block;
       text-align: center;
-      padding: 13px;
-      margin-top: 10px;
-      background: #26313d;
-      color: white;
       text-decoration: none;
-      border-radius: 10px;
+      background: #1d4ed8;
+      color: #ffffff;
+      padding: 11px;
+      border-radius: 8px;
       font-weight: bold;
+      margin-top: 10px;
     }
 
-    /* =====================================================
-       ÉTATS
-       ===================================================== */
-
-    .empty {
-      text-align: center;
-      padding: 30px 18px;
-      color: #9ca8b5;
-      background: #121921;
-      border: 1px solid #26313d;
-      border-radius: 14px;
-      line-height: 1.7;
+    .partner-link:hover {
+      background: #2563eb;
     }
 
-    .loading {
-      text-align: center;
-      padding: 30px;
-      color: #9ca8b5;
-    }
-
-    .last-update {
-      text-align: center;
-      color: #727e8a;
+    .notice {
+      color: #8f9caf;
       font-size: 12px;
-      margin: 15px 0 25px;
+      margin-top: 12px;
     }
 
-    /* =====================================================
-       AVERTISSEMENT
-       ===================================================== */
+    /* =========================
+       MESSAGE
+    ========================= */
 
-    .warning {
-      color: #8d99a6;
-      font-size: 13px;
-      margin-top: 28px;
-      line-height: 1.7;
+    .message {
+      background: #111827;
+      border: 1px solid #26344f;
+      border-radius: 12px;
+      padding: 20px;
       text-align: center;
+      color: #9aa7bd;
     }
+
+    .error {
+      color: #f87171;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
 
     footer {
       text-align: center;
-      color: #707b87;
-      padding: 30px 15px;
-      font-size: 13px;
+      color: #6f7c91;
+      font-size: 12px;
+      border-top: 1px solid #202b40;
+      padding: 25px 15px;
+      margin-top: 20px;
     }
 
-    /* =====================================================
+    /* =========================
        MOBILE
-       ===================================================== */
+    ========================= */
 
-    @media (max-width: 520px) {
-
-      header {
-        padding: 25px 12px;
-      }
+    @media (max-width: 650px) {
 
       header h1 {
-        font-size: 28px;
+        font-size: 27px;
       }
 
       .container {
-        padding: 16px 12px;
+        padding-left: 12px;
+        padding-right: 12px;
       }
 
-      .prediction {
-        padding: 15px;
-        border-radius: 15px;
+      .summary {
+        grid-template-columns: 1fr;
       }
 
       .team {
         font-size: 16px;
       }
 
-      .teams {
-        gap: 7px;
+      .pronostic-card {
+        padding: 15px;
       }
 
-      .bet-value {
-        font-size: 18px;
+      .filter-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
       }
 
-      .odds-value {
-        font-size: 21px;
+      .filter-btn {
+        width: 100%;
+      }
+
+      .promo {
+        flex-direction: column;
+      }
+
+      .copy-btn {
+        width: 100%;
       }
     }
   </style>
@@ -394,183 +494,435 @@
 
 <div class="container">
 
-  <!-- =====================================================
-       ESPACE PUBLICITAIRE
-       ===================================================== -->
-
-  <div class="ad">
+  <!-- ESPACE PUBLICITAIRE -->
+  <div class="ad-space">
     📢 ESPACE PUBLICITAIRE
   </div>
 
+  <h2 class="section-title">⚽ Pronostics</h2>
 
-  <!-- =====================================================
-       PRONOSTICS
-       ===================================================== -->
-
-  <h2 class="section-title">📋 Pronostics</h2>
-
-  <div id="pronostics">
-
-    <div class="loading">
-      ⏳ Chargement des pronostics...
-    </div>
-
-  </div>
-
-  <div id="lastUpdate" class="last-update"></div>
-
-
-  <!-- =====================================================
-       ESPACE PUBLICITAIRE
-       ===================================================== -->
-
-  <div class="ad">
-    📢 ESPACE PUBLICITAIRE
-  </div>
-
-
-  <!-- =====================================================
-       MELBET
-       ===================================================== -->
-
-  <div class="partner">
-
-    <h2>🎯 MelBet</h2>
-
-    <p>
-      Utilise mon code promo :
-    </p>
-
-    <div class="code">
-      CISSE5828
-    </div>
-
-    <button onclick="copyCode()">
-      📋 Copier le code
-    </button>
-
-    <a
-      href="https://refpa3665.com/L?tag=d_2940087m_45415c_&site=2940087&ad=45415"
-      target="_blank"
-      rel="noopener noreferrer">
-
-      🔗 Accéder à MelBet
-
-    </a>
-
-  </div>
-
-
-  <!-- =====================================================
-       1XBET
-       ===================================================== -->
-
-  <div class="partner">
-
-    <h2>🎯 1xBet</h2>
-
-    <p>
-      Utilise mon code promo :
-    </p>
-
-    <div class="code">
-      CISSE5828
-    </div>
-
-    <a
-      href="https://reffpa.com/L?tag=d_2237095m_97c_&site=2237095&ad=97"
-      target="_blank"
-      rel="noopener noreferrer">
-
-      🔗 Accéder à 1xBet
-
-    </a>
-
-  </div>
-
-
-  <!-- =====================================================
-       AVERTISSEMENT
-       ===================================================== -->
-
-  <p class="warning">
-
-    CISSE PRONOS peut utiliser des liens partenaires.
-    Les paris comportent des risques.
-    Jouez de manière responsable.
-
+  <p class="section-subtitle">
+    Retrouvez ici les pronostics publiés.
+    Les informations affichées proviennent directement de notre base de données.
   </p>
+
+  <!-- RESUME -->
+  <div class="summary">
+
+    <div class="summary-box">
+      <div class="summary-number" id="totalCount">0</div>
+      <div class="summary-label">Total</div>
+    </div>
+
+    <div class="summary-box">
+      <div class="summary-number" id="upcomingCount">0</div>
+      <div class="summary-label">À venir</div>
+    </div>
+
+    <div class="summary-box">
+      <div class="summary-number" id="pastCount">0</div>
+      <div class="summary-label">Passés</div>
+    </div>
+
+  </div>
+
+  <!-- FILTRES -->
+  <div class="filters">
+
+    <div class="filter-buttons">
+
+      <button
+        class="filter-btn active"
+        onclick="changeFilter('all', this)">
+        Tous
+      </button>
+
+      <button
+        class="filter-btn"
+        onclick="changeFilter('upcoming', this)">
+        🟢 À venir
+      </button>
+
+      <button
+        class="filter-btn"
+        onclick="changeFilter('past', this)">
+        📅 Passés
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- PRONOSTICS -->
+  <div id="pronostics">
+    <div class="message">
+      Chargement des pronostics...
+    </div>
+  </div>
+
+
+  <!-- =========================
+       PARTENAIRES
+  ========================== -->
+
+  <div class="partners">
+
+    <h2 class="section-title">🤝 Nos partenaires</h2>
+
+    <!-- MELBET -->
+    <div class="partner-card">
+
+      <h3>🎯 MelBet</h3>
+
+      <p>
+        Utilise notre code promo pour ton inscription.
+      </p>
+
+      <div class="promo">
+
+        <span class="promo-code" id="melbetCode">
+          CISSE5828
+        </span>
+
+        <button
+          class="copy-btn"
+          onclick="copyCode('CISSE5828')">
+          Copier
+        </button>
+
+      </div>
+
+      <a
+        class="partner-link"
+        href="https://refpa3665.com/L?tag=d_2940087m_45415c_&site=2940087&ad=45415"
+        target="_blank"
+        rel="noopener noreferrer">
+        🚀 Accéder à MelBet
+      </a>
+
+    </div>
+
+
+    <!-- 1XBET -->
+    <div class="partner-card">
+
+      <h3>🎯 1xBet</h3>
+
+      <p>
+        Utilise notre code promo pour ton inscription.
+      </p>
+
+      <div class="promo">
+
+        <span class="promo-code">
+          CISSE5828
+        </span>
+
+        <button
+          class="copy-btn"
+          onclick="copyCode('CISSE5828')">
+          Copier
+        </button>
+
+      </div>
+
+      <a
+        class="partner-link"
+        href="https://reffpa.com/L?tag=d_2237095m_97c_&site=2237095&ad=97"
+        target="_blank"
+        rel="noopener noreferrer">
+        🚀 Accéder à 1xBet
+      </a>
+
+    </div>
+
+    <p class="notice">
+      Liens partenaires / affiliation. Les jeux d'argent comportent des risques.
+      Jouez de manière responsable et uniquement si vous êtes majeur selon la législation applicable.
+    </p>
+
+  </div>
 
 </div>
 
 
 <footer>
-  © 2026 CISSE PRONOS
+  © 2026 CISSE PRONOS — Tous droits réservés.
 </footer>
 
 
 <script>
 
-  /* =========================================================
+  /* ============================================================
      SUPABASE
-     ========================================================= */
+  ============================================================ */
 
   const SUPABASE_URL =
     "https://avonpsmoruevwlokkfjg.supabase.co";
 
   const SUPABASE_KEY =
-    "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uR8WnqfR";
+    "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uRrW8nqfR";
 
   const supabaseClient =
-    supabase.createClient(
+    window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_KEY
     );
 
 
-  /* =========================================================
-     PROTECTION HTML
-     ========================================================= */
+  /* ============================================================
+     VARIABLES
+  ============================================================ */
+
+  let allPronostics = [];
+
+  let currentFilter = "all";
+
+
+  /* ============================================================
+     PARSE DATE
+  ============================================================ */
+
+  function parseFrenchDate(dateText) {
+
+    if (!dateText) {
+      return null;
+    }
+
+    let text = String(dateText).trim();
+
+    if (!text) {
+      return null;
+    }
+
+    /*
+      FORMAT :
+      2026-09-03 18:45
+      2026-09-03T18:45
+    */
+
+    let isoMatch = text.match(
+      /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/
+    );
+
+    if (isoMatch) {
+
+      const year = Number(isoMatch[1]);
+      const month = Number(isoMatch[2]) - 1;
+      const day = Number(isoMatch[3]);
+
+      const hour =
+        isoMatch[4] !== undefined
+          ? Number(isoMatch[4])
+          : 0;
+
+      const minute =
+        isoMatch[5] !== undefined
+          ? Number(isoMatch[5])
+          : 0;
+
+      return new Date(
+        year,
+        month,
+        day,
+        hour,
+        minute
+      );
+    }
+
+
+    /*
+      FORMAT :
+      03/09/2026 18:45
+      03-09-2026 18:45
+    */
+
+    let numericMatch = text.match(
+      /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})(?:[ T]+(\d{1,2}):(\d{2}))?/
+    );
+
+    if (numericMatch) {
+
+      const day = Number(numericMatch[1]);
+      const month = Number(numericMatch[2]) - 1;
+      const year = Number(numericMatch[3]);
+
+      const hour =
+        numericMatch[4] !== undefined
+          ? Number(numericMatch[4])
+          : 0;
+
+      const minute =
+        numericMatch[5] !== undefined
+          ? Number(numericMatch[5])
+          : 0;
+
+      return new Date(
+        year,
+        month,
+        day,
+        hour,
+        minute
+      );
+    }
+
+
+    /*
+      FORMAT :
+      3 septembre 2026 18:45
+      03 septembre 2026 18:45
+    */
+
+    const months = {
+      janvier: 0,
+      février: 1,
+      fevrier: 1,
+      mars: 2,
+      avril: 3,
+      mai: 4,
+      juin: 5,
+      juillet: 6,
+      août: 7,
+      aout: 7,
+      septembre: 8,
+      octobre: 9,
+      novembre: 10,
+      décembre: 11,
+      decembre: 11
+    };
+
+    let frenchMatch = text
+      .toLowerCase()
+      .match(
+        /^(\d{1,2})\s+([a-zéèêûôîàç]+)\s+(\d{4})(?:[ àt]+(\d{1,2}):(\d{2}))?/
+      );
+
+    if (frenchMatch) {
+
+      const day = Number(frenchMatch[1]);
+
+      const monthName = frenchMatch[2];
+
+      const year = Number(frenchMatch[3]);
+
+      const month = months[monthName];
+
+      if (month !== undefined) {
+
+        const hour =
+          frenchMatch[4] !== undefined
+            ? Number(frenchMatch[4])
+            : 0;
+
+        const minute =
+          frenchMatch[5] !== undefined
+            ? Number(frenchMatch[5])
+            : 0;
+
+        return new Date(
+          year,
+          month,
+          day,
+          hour,
+          minute
+        );
+      }
+    }
+
+
+    /*
+      Dernier recours :
+      navigateur
+    */
+
+    const fallback = new Date(text);
+
+    if (!isNaN(fallback.getTime())) {
+      return fallback;
+    }
+
+    return null;
+  }
+
+
+  /* ============================================================
+     FORMATAGE DATE
+  ============================================================ */
+
+  function formatDate(dateText) {
+
+    const date = parseFrenchDate(dateText);
+
+    if (!date) {
+      return dateText || "Date non disponible";
+    }
+
+    return date.toLocaleString(
+      "fr-FR",
+      {
+        dateStyle: "full",
+        timeStyle: "short"
+      }
+    );
+  }
+
+
+  /* ============================================================
+     ETAT DU MATCH
+  ============================================================ */
+
+  function getMatchState(dateText) {
+
+    const date = parseFrenchDate(dateText);
+
+    if (!date) {
+
+      return {
+        type: "unknown",
+        label: "📅 Date à vérifier"
+      };
+    }
+
+    const now = new Date();
+
+    if (date.getTime() > now.getTime()) {
+
+      return {
+        type: "upcoming",
+        label: "🟢 Match à venir"
+      };
+
+    }
+
+    return {
+      type: "past",
+      label: "📅 Match passé"
+    };
+  }
+
+
+  /* ============================================================
+     ECHAPPEMENT HTML
+  ============================================================ */
 
   function escapeHtml(value) {
 
-    return String(value ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+    if (value === null || value === undefined) {
+      return "";
+    }
 
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
 
-  /* =========================================================
-     DATE
-     ========================================================= */
-
-  function formatDate(dateString) {
-
-    if (!dateString) {
-      return "Date non précisée";
-    }
-
-    const date = new Date(dateString);
-
-    if (isNaN(date.getTime())) {
-      return dateString;
-    }
-
-    return date.toLocaleString("fr-FR", {
-      dateStyle: "full",
-      timeStyle: "short"
-    });
-
-  }
-
-
-  /* =========================================================
+  /* ============================================================
      STATUT
-     ========================================================= */
+  ============================================================ */
 
   function statusClass(status) {
 
@@ -580,346 +932,402 @@
         .trim();
 
     if (
-      value === "won" ||
-      value === "gagné" ||
-      value === "gagne"
+      value.includes("gagn") ||
+      value.includes("won") ||
+      value.includes("réussi") ||
+      value.includes("reussi")
     ) {
       return "won";
     }
 
     if (
-      value === "lost" ||
-      value === "perdu"
+      value.includes("perdu") ||
+      value.includes("lost") ||
+      value.includes("perd")
     ) {
       return "lost";
     }
 
     return "pending";
-
   }
 
 
-  function statusText(status) {
+  /* ============================================================
+     AFFICHER LES PRONOSTICS
+  ============================================================ */
 
-    const value =
-      String(status || "")
-        .toLowerCase()
-        .trim();
+  function renderPronostics() {
 
-    if (
-      value === "won" ||
-      value === "gagné" ||
-      value === "gagne"
-    ) {
-      return "✅ Gagné";
+    const container =
+      document.getElementById("pronostics");
+
+    if (!container) {
+      return;
     }
 
-    if (
-      value === "lost" ||
-      value === "perdu"
-    ) {
-      return "❌ Perdu";
+    let filtered = [...allPronostics];
+
+
+    /* FILTRE */
+
+    if (currentFilter === "upcoming") {
+
+      filtered = filtered.filter(function(prono) {
+
+        return getMatchState(prono.date_match).type === "upcoming";
+
+      });
+
     }
 
-    return "⏳ En attente";
+    if (currentFilter === "past") {
 
+      filtered = filtered.filter(function(prono) {
+
+        return getMatchState(prono.date_match).type === "past";
+
+      });
+
+    }
+
+
+    /*
+      TRI :
+
+      1. Matchs à venir
+      2. Matchs passés
+
+      Les matchs à venir :
+      plus proche d'abord.
+
+      Les matchs passés :
+      plus récent d'abord.
+    */
+
+    filtered.sort(function(a, b) {
+
+      const dateA = parseFrenchDate(a.date_match);
+      const dateB = parseFrenchDate(b.date_match);
+
+      if (!dateA && !dateB) {
+        return 0;
+      }
+
+      if (!dateA) {
+        return 1;
+      }
+
+      if (!dateB) {
+        return -1;
+      }
+
+      const now = new Date();
+
+      const aFuture = dateA > now;
+      const bFuture = dateB > now;
+
+
+      /* Les matchs futurs avant les anciens */
+
+      if (aFuture && !bFuture) {
+        return -1;
+      }
+
+      if (!aFuture && bFuture) {
+        return 1;
+      }
+
+
+      /* Deux matchs futurs */
+
+      if (aFuture && bFuture) {
+        return dateA - dateB;
+      }
+
+
+      /* Deux matchs passés */
+
+      return dateB - dateA;
+
+    });
+
+
+    /* Aucun résultat */
+
+    if (filtered.length === 0) {
+
+      container.innerHTML = `
+        <div class="message">
+          Aucun pronostic à afficher pour ce filtre.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    /* Affichage */
+
+    container.innerHTML =
+      filtered.map(function(prono) {
+
+        const state =
+          getMatchState(prono.date_match);
+
+        const safeStatus =
+          escapeHtml(
+            prono.statut || "En attente"
+          );
+
+        const stateClass =
+          state.type === "upcoming"
+            ? "state-upcoming"
+            : state.type === "past"
+              ? "state-past"
+              : "state-unknown";
+
+        return `
+
+          <article class="pronostic-card">
+
+            <div class="match-label">
+              ⚽ MATCH
+            </div>
+
+            <div class="teams">
+
+              <div class="team">
+                ${escapeHtml(prono.equipe1)}
+              </div>
+
+              <div class="vs">
+                VS
+              </div>
+
+              <div class="team">
+                ${escapeHtml(prono.equipe2)}
+              </div>
+
+            </div>
+
+
+            <div class="date-box">
+
+              <span class="date-label">
+                📅 Date du match
+              </span>
+
+              <span class="date-value">
+                ${escapeHtml(
+                  formatDate(prono.date_match)
+                )}
+              </span>
+
+            </div>
+
+
+            <div class="match-state ${stateClass}">
+              ${state.label}
+            </div>
+
+
+            <div class="prediction-box">
+
+              <div class="prediction-title">
+                🎯 Pronostic
+              </div>
+
+              <div class="prediction-value">
+                ${escapeHtml(prono.pari)}
+              </div>
+
+            </div>
+
+
+            <div class="odds-box">
+
+              <span class="odds-label">
+                💰 Cote
+              </span>
+
+              <span class="odds-value">
+                ${escapeHtml(prono.cote)}
+              </span>
+
+            </div>
+
+
+            <div class="analysis-box">
+
+              <strong>📝 Analyse</strong><br><br>
+
+              ${escapeHtml(
+                prono.description ||
+                "Aucune analyse disponible."
+              )}
+
+            </div>
+
+
+            <div class="status ${statusClass(prono.statut)}">
+
+              ${safeStatus}
+
+            </div>
+
+          </article>
+
+        `;
+
+      }).join("");
   }
 
 
-  /* =========================================================
-     CHARGER LES VRAIS PRONOSTICS
-     ========================================================= */
+  /* ============================================================
+     COMPTEURS
+  ============================================================ */
+
+  function updateCounters() {
+
+    const total =
+      allPronostics.length;
+
+    const upcoming =
+      allPronostics.filter(function(prono) {
+
+        return getMatchState(prono.date_match).type === "upcoming";
+
+      }).length;
+
+    const past =
+      allPronostics.filter(function(prono) {
+
+        return getMatchState(prono.date_match).type === "past";
+
+      }).length;
+
+
+    document.getElementById("totalCount").textContent =
+      total;
+
+    document.getElementById("upcomingCount").textContent =
+      upcoming;
+
+    document.getElementById("pastCount").textContent =
+      past;
+  }
+
+
+  /* ============================================================
+     CHANGER FILTRE
+  ============================================================ */
+
+  function changeFilter(filter, button) {
+
+    currentFilter = filter;
+
+
+    document
+      .querySelectorAll(".filter-btn")
+      .forEach(function(btn) {
+
+        btn.classList.remove("active");
+
+      });
+
+
+    if (button) {
+      button.classList.add("active");
+    }
+
+
+    renderPronostics();
+  }
+
+
+  /* ============================================================
+     CHARGER LES PRONOSTICS
+  ============================================================ */
 
   async function loadPronostics() {
 
     const container =
       document.getElementById("pronostics");
 
-    const lastUpdate =
-      document.getElementById("lastUpdate");
+
+    try {
+
+      const { data, error } =
+        await supabaseClient
+          .from("pronostics")
+          .select(
+            "id,equipe1,equipe2,pari,cote,description,date_match,statut"
+          );
 
 
-    container.innerHTML = `
-      <div class="loading">
-        ⏳ Chargement des pronostics...
-      </div>
-    `;
+      if (error) {
+        throw error;
+      }
 
 
-    const {
-      data,
-      error
-    } = await supabaseClient
-
-      .from("pronostics")
-
-      .select(
-        "id,equipe1,equipe2,pari,cote,description,date_match,statut"
-      )
-
-      .order(
-        "date_match",
-        {
-          ascending: true
-        }
-      );
+      allPronostics =
+        Array.isArray(data)
+          ? data
+          : [];
 
 
-    /* =======================================================
-       ERREUR
-       ======================================================= */
+      updateCounters();
 
-    if (error) {
+      renderPronostics();
+
+
+    } catch (error) {
 
       console.error(
         "Erreur Supabase :",
         error
       );
 
-      container.innerHTML = `
-        <div class="empty">
 
-          ⚠️ Impossible de charger les pronostics.
+      container.innerHTML = `
+
+        <div class="message error">
+
+          ❌ Impossible de charger les pronostics.
 
           <br><br>
 
-          Réessaie dans quelques instants.
+          Vérifie la connexion à Supabase
+          et les règles RLS de la table
+          <strong>pronostics</strong>.
 
         </div>
+
       `;
 
-      lastUpdate.textContent = "";
-
-      return;
-
     }
-
-
-    /* =======================================================
-       AUCUN PRONOSTIC
-       ======================================================= */
-
-    if (
-      !data ||
-      data.length === 0
-    ) {
-
-      container.innerHTML = `
-        <div class="empty">
-
-          📋 Aucun pronostic publié pour le moment.
-
-          <br><br>
-
-          Les nouveaux pronostics
-          apparaîtront automatiquement ici.
-
-        </div>
-      `;
-
-      lastUpdate.textContent = "";
-
-      return;
-
-    }
-
-
-    /* =======================================================
-       AFFICHAGE
-       ======================================================= */
-
-    container.innerHTML = "";
-
-
-    data.forEach(
-      function(p) {
-
-        const card =
-          document.createElement("div");
-
-        card.className =
-          "prediction";
-
-
-        /* -----------------------------------------------------
-           DONNÉES RÉELLES SUPABASE
-           ----------------------------------------------------- */
-
-        const equipe1 =
-          escapeHtml(
-            p.equipe1 || "Équipe 1"
-          );
-
-        const equipe2 =
-          escapeHtml(
-            p.equipe2 || "Équipe 2"
-          );
-
-        const pari =
-          escapeHtml(
-            p.pari || "Pari non précisé"
-          );
-
-        const cote =
-          escapeHtml(
-            p.cote ?? "Non précisée"
-          );
-
-        const description =
-          escapeHtml(
-            p.description || ""
-          );
-
-        const date =
-          escapeHtml(
-            formatDate(p.date_match)
-          );
-
-
-        /* -----------------------------------------------------
-           ANALYSE
-           ----------------------------------------------------- */
-
-        let analysisHtml = "";
-
-        if (description) {
-
-          analysisHtml = `
-
-            <div class="analysis">
-
-              <div class="analysis-title">
-                📝 Analyse
-              </div>
-
-              ${description}
-
-            </div>
-
-          `;
-
-        }
-
-
-        /* -----------------------------------------------------
-           CARTE
-           ----------------------------------------------------- */
-
-        card.innerHTML = `
-
-          <div class="match-label">
-            ⚽ MATCH
-          </div>
-
-
-          <div class="teams">
-
-            <div class="team">
-              ${equipe1}
-            </div>
-
-            <div class="vs">
-              VS
-            </div>
-
-            <div class="team">
-              ${equipe2}
-            </div>
-
-          </div>
-
-
-          <div class="match-date">
-
-            📅 ${date}
-
-          </div>
-
-
-          <div class="bet-box">
-
-            <div class="bet-title">
-              🎯 Pronostic
-            </div>
-
-            <div class="bet-value">
-              ${pari}
-            </div>
-
-          </div>
-
-
-          <div class="odds-box">
-
-            <div class="odds-label">
-              💰 Cote
-            </div>
-
-            <div class="odds-value">
-              ${cote}
-            </div>
-
-          </div>
-
-
-          ${analysisHtml}
-
-
-          <div class="status ${statusClass(p.statut)}">
-
-            ${statusText(p.statut)}
-
-          </div>
-
-        `;
-
-
-        container.appendChild(card);
-
-      }
-    );
-
-
-    /* =======================================================
-       DERNIÈRE ACTUALISATION
-       ======================================================= */
-
-    const now =
-      new Date();
-
-    lastUpdate.textContent =
-      "🔄 Dernière actualisation : " +
-      now.toLocaleTimeString(
-        "fr-FR",
-        {
-          hour: "2-digit",
-          minute: "2-digit"
-        }
-      );
 
   }
 
 
-  /* =========================================================
+  /* ============================================================
      COPIER LE CODE PROMO
-     ========================================================= */
+  ============================================================ */
 
-  async function copyCode() {
+  async function copyCode(code) {
 
     try {
 
-      await navigator.clipboard.writeText(
-        "CISSE5828"
-      );
+      await navigator.clipboard.writeText(code);
 
       alert(
-        "✅ Code CISSE5828 copié !"
+        "Code promo copié : " + code
       );
 
     } catch (error) {
 
       alert(
-        "Code promo : CISSE5828"
+        "Code promo : " + code
       );
 
     }
@@ -927,17 +1335,18 @@
   }
 
 
-  /* =========================================================
-     LANCEMENT
-     ========================================================= */
+  /* ============================================================
+     DEMARRAGE
+  ============================================================ */
 
   loadPronostics();
 
 
-  /* =========================================================
-     ACTUALISATION AUTOMATIQUE
-     Toutes les 60 secondes
-     ========================================================= */
+  /*
+    Actualisation automatique toutes les 60 secondes.
+    Les données restent entièrement réelles :
+    elles sont relues depuis Supabase.
+  */
 
   setInterval(
     loadPronostics,

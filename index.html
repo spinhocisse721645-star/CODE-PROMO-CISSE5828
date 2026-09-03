@@ -46,10 +46,6 @@
       padding: 20px 15px 50px;
     }
 
-    /* =========================
-       PUBLICITE
-    ========================= */
-
     .ad-space {
       background: #111827;
       border: 1px dashed #52627c;
@@ -64,10 +60,6 @@
       font-size: 14px;
     }
 
-    /* =========================
-       TITRES
-    ========================= */
-
     .section-title {
       font-size: 24px;
       margin: 25px 0 15px;
@@ -78,10 +70,6 @@
       margin-bottom: 20px;
       font-size: 14px;
     }
-
-    /* =========================
-       RESUME DES MATCHS
-    ========================= */
 
     .summary {
       display: grid;
@@ -108,10 +96,6 @@
       color: #9aa7bd;
       font-size: 13px;
     }
-
-    /* =========================
-       FILTRES
-    ========================= */
 
     .filters {
       background: #111827;
@@ -145,10 +129,6 @@
       background: #2563eb;
       border-color: #2563eb;
     }
-
-    /* =========================
-       PRONOSTICS
-    ========================= */
 
     #pronostics {
       display: flex;
@@ -194,10 +174,6 @@
       font-weight: bold;
     }
 
-    /* =========================
-       DATE
-    ========================= */
-
     .date-box {
       background: #0b1220;
       border: 1px solid #24314a;
@@ -219,10 +195,6 @@
       font-size: 14px;
       font-weight: bold;
     }
-
-    /* =========================
-       ETAT DU MATCH
-    ========================= */
 
     .match-state {
       text-align: center;
@@ -250,10 +222,6 @@
       border: 1px solid rgba(234, 179, 8, 0.30);
       color: #facc15;
     }
-
-    /* =========================
-       INFOS PRONO
-    ========================= */
 
     .prediction-box {
       background: #172033;
@@ -334,10 +302,6 @@
       border: 1px solid rgba(239, 68, 68, 0.25);
     }
 
-    /* =========================
-       PARTENAIRES
-    ========================= */
-
     .partners {
       margin-top: 35px;
     }
@@ -408,10 +372,6 @@
       margin-top: 12px;
     }
 
-    /* =========================
-       MESSAGE
-    ========================= */
-
     .message {
       background: #111827;
       border: 1px solid #26344f;
@@ -425,9 +385,9 @@
       color: #f87171;
     }
 
-    /* =========================
-       FOOTER
-    ========================= */
+    .success {
+      color: #4ade80;
+    }
 
     footer {
       text-align: center;
@@ -437,10 +397,6 @@
       padding: 25px 15px;
       margin-top: 20px;
     }
-
-    /* =========================
-       MOBILE
-    ========================= */
 
     @media (max-width: 650px) {
 
@@ -494,7 +450,6 @@
 
 <div class="container">
 
-  <!-- ESPACE PUBLICITAIRE -->
   <div class="ad-space">
     📢 ESPACE PUBLICITAIRE
   </div>
@@ -506,7 +461,6 @@
     Les informations affichées proviennent directement de notre base de données.
   </p>
 
-  <!-- RESUME -->
   <div class="summary">
 
     <div class="summary-box">
@@ -526,7 +480,6 @@
 
   </div>
 
-  <!-- FILTRES -->
   <div class="filters">
 
     <div class="filter-buttons">
@@ -553,23 +506,16 @@
 
   </div>
 
-  <!-- PRONOSTICS -->
   <div id="pronostics">
     <div class="message">
       Chargement des pronostics...
     </div>
   </div>
 
-
-  <!-- =========================
-       PARTENAIRES
-  ========================== -->
-
   <div class="partners">
 
     <h2 class="section-title">🤝 Nos partenaires</h2>
 
-    <!-- MELBET -->
     <div class="partner-card">
 
       <h3>🎯 MelBet</h3>
@@ -580,7 +526,7 @@
 
       <div class="promo">
 
-        <span class="promo-code" id="melbetCode">
+        <span class="promo-code">
           CISSE5828
         </span>
 
@@ -602,8 +548,6 @@
 
     </div>
 
-
-    <!-- 1XBET -->
     <div class="partner-card">
 
       <h3>🎯 1xBet</h3>
@@ -645,7 +589,6 @@
 
 </div>
 
-
 <footer>
   © 2026 CISSE PRONOS — Tous droits réservés.
 </footer>
@@ -654,7 +597,7 @@
 <script>
 
   /* ============================================================
-     SUPABASE
+     CONFIGURATION SUPABASE
   ============================================================ */
 
   const SUPABASE_URL =
@@ -663,11 +606,35 @@
   const SUPABASE_KEY =
     "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uRrW8nqfR";
 
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
+
+  /* ============================================================
+     INITIALISATION
+  ============================================================ */
+
+  let supabaseClient = null;
+
+  try {
+
+    if (!window.supabase) {
+      throw new Error(
+        "La bibliothèque Supabase n'a pas été chargée."
+      );
+    }
+
+    supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+  } catch (error) {
+
+    console.error(
+      "Erreur initialisation Supabase :",
+      error
     );
+
+  }
 
 
   /* ============================================================
@@ -689,27 +656,32 @@
       return null;
     }
 
-    let text = String(dateText).trim();
+    const text =
+      String(dateText).trim();
 
     if (!text) {
       return null;
     }
 
-    /*
-      FORMAT :
-      2026-09-03 18:45
-      2026-09-03T18:45
-    */
 
-    let isoMatch = text.match(
-      /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/
-    );
+    /* 2026-09-03 18:45 */
+    /* 2026-09-03T18:45 */
+
+    const isoMatch =
+      text.match(
+        /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/
+      );
 
     if (isoMatch) {
 
-      const year = Number(isoMatch[1]);
-      const month = Number(isoMatch[2]) - 1;
-      const day = Number(isoMatch[3]);
+      const year =
+        Number(isoMatch[1]);
+
+      const month =
+        Number(isoMatch[2]) - 1;
+
+      const day =
+        Number(isoMatch[3]);
 
       const hour =
         isoMatch[4] !== undefined
@@ -731,21 +703,24 @@
     }
 
 
-    /*
-      FORMAT :
-      03/09/2026 18:45
-      03-09-2026 18:45
-    */
+    /* 03/09/2026 18:45 */
+    /* 03-09-2026 18:45 */
 
-    let numericMatch = text.match(
-      /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})(?:[ T]+(\d{1,2}):(\d{2}))?/
-    );
+    const numericMatch =
+      text.match(
+        /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})(?:[ T]+(\d{1,2}):(\d{2}))?/
+      );
 
     if (numericMatch) {
 
-      const day = Number(numericMatch[1]);
-      const month = Number(numericMatch[2]) - 1;
-      const year = Number(numericMatch[3]);
+      const day =
+        Number(numericMatch[1]);
+
+      const month =
+        Number(numericMatch[2]) - 1;
+
+      const year =
+        Number(numericMatch[3]);
 
       const hour =
         numericMatch[4] !== undefined
@@ -767,13 +742,10 @@
     }
 
 
-    /*
-      FORMAT :
-      3 septembre 2026 18:45
-      03 septembre 2026 18:45
-    */
+    /* Dates françaises */
 
     const months = {
+
       janvier: 0,
       février: 1,
       fevrier: 1,
@@ -789,23 +761,32 @@
       novembre: 10,
       décembre: 11,
       decembre: 11
+
     };
 
-    let frenchMatch = text
-      .toLowerCase()
-      .match(
-        /^(\d{1,2})\s+([a-zéèêûôîàç]+)\s+(\d{4})(?:[ àt]+(\d{1,2}):(\d{2}))?/
-      );
+
+    const frenchMatch =
+      text
+        .toLowerCase()
+        .match(
+          /^(\d{1,2})\s+([a-zéèêûôîàç]+)\s+(\d{4})(?:[ àt]+(\d{1,2}):(\d{2}))?/
+        );
+
 
     if (frenchMatch) {
 
-      const day = Number(frenchMatch[1]);
+      const day =
+        Number(frenchMatch[1]);
 
-      const monthName = frenchMatch[2];
+      const monthName =
+        frenchMatch[2];
 
-      const year = Number(frenchMatch[3]);
+      const year =
+        Number(frenchMatch[3]);
 
-      const month = months[monthName];
+      const month =
+        months[monthName];
+
 
       if (month !== undefined) {
 
@@ -826,16 +807,16 @@
           hour,
           minute
         );
+
       }
+
     }
 
 
-    /*
-      Dernier recours :
-      navigateur
-    */
+    /* Dernier recours */
 
-    const fallback = new Date(text);
+    const fallback =
+      new Date(text);
 
     if (!isNaN(fallback.getTime())) {
       return fallback;
@@ -851,10 +832,12 @@
 
   function formatDate(dateText) {
 
-    const date = parseFrenchDate(dateText);
+    const date =
+      parseFrenchDate(dateText);
 
     if (!date) {
-      return dateText || "Date non disponible";
+      return dateText ||
+        "Date non disponible";
     }
 
     return date.toLocaleString(
@@ -873,7 +856,9 @@
 
   function getMatchState(dateText) {
 
-    const date = parseFrenchDate(dateText);
+    const date =
+      parseFrenchDate(dateText);
+
 
     if (!date) {
 
@@ -881,11 +866,18 @@
         type: "unknown",
         label: "📅 Date à vérifier"
       };
+
     }
 
-    const now = new Date();
 
-    if (date.getTime() > now.getTime()) {
+    const now =
+      new Date();
+
+
+    if (
+      date.getTime() >
+      now.getTime()
+    ) {
 
       return {
         type: "upcoming",
@@ -893,6 +885,7 @@
       };
 
     }
+
 
     return {
       type: "past",
@@ -902,12 +895,15 @@
 
 
   /* ============================================================
-     ECHAPPEMENT HTML
+     SECURITE HTML
   ============================================================ */
 
   function escapeHtml(value) {
 
-    if (value === null || value === undefined) {
+    if (
+      value === null ||
+      value === undefined
+    ) {
       return "";
     }
 
@@ -931,255 +927,345 @@
         .toLowerCase()
         .trim();
 
+
     if (
       value.includes("gagn") ||
       value.includes("won") ||
       value.includes("réussi") ||
       value.includes("reussi")
     ) {
+
       return "won";
+
     }
+
 
     if (
       value.includes("perdu") ||
       value.includes("lost") ||
       value.includes("perd")
     ) {
+
       return "lost";
+
     }
+
 
     return "pending";
   }
 
 
   /* ============================================================
-     AFFICHER LES PRONOSTICS
+     AFFICHAGE
   ============================================================ */
 
   function renderPronostics() {
 
     const container =
-      document.getElementById("pronostics");
+      document.getElementById(
+        "pronostics"
+      );
+
 
     if (!container) {
       return;
     }
 
-    let filtered = [...allPronostics];
+
+    let filtered =
+      [...allPronostics];
 
 
     /* FILTRE */
 
-    if (currentFilter === "upcoming") {
+    if (
+      currentFilter ===
+      "upcoming"
+    ) {
 
-      filtered = filtered.filter(function(prono) {
+      filtered =
+        filtered.filter(
+          function(prono) {
 
-        return getMatchState(prono.date_match).type === "upcoming";
+            return (
+              getMatchState(
+                prono.date_match
+              ).type ===
+              "upcoming"
+            );
 
-      });
+          }
+        );
 
     }
 
-    if (currentFilter === "past") {
 
-      filtered = filtered.filter(function(prono) {
+    if (
+      currentFilter ===
+      "past"
+    ) {
 
-        return getMatchState(prono.date_match).type === "past";
+      filtered =
+        filtered.filter(
+          function(prono) {
 
-      });
+            return (
+              getMatchState(
+                prono.date_match
+              ).type ===
+              "past"
+            );
+
+          }
+        );
 
     }
 
 
-    /*
-      TRI :
+    /* TRI */
 
-      1. Matchs à venir
-      2. Matchs passés
+    filtered.sort(
+      function(a, b) {
 
-      Les matchs à venir :
-      plus proche d'abord.
+        const dateA =
+          parseFrenchDate(
+            a.date_match
+          );
 
-      Les matchs passés :
-      plus récent d'abord.
-    */
+        const dateB =
+          parseFrenchDate(
+            b.date_match
+          );
 
-    filtered.sort(function(a, b) {
 
-      const dateA = parseFrenchDate(a.date_match);
-      const dateB = parseFrenchDate(b.date_match);
+        if (!dateA && !dateB) {
+          return 0;
+        }
 
-      if (!dateA && !dateB) {
-        return 0;
+        if (!dateA) {
+          return 1;
+        }
+
+        if (!dateB) {
+          return -1;
+        }
+
+
+        const now =
+          new Date();
+
+
+        const aFuture =
+          dateA > now;
+
+        const bFuture =
+          dateB > now;
+
+
+        if (
+          aFuture &&
+          !bFuture
+        ) {
+          return -1;
+        }
+
+
+        if (
+          !aFuture &&
+          bFuture
+        ) {
+          return 1;
+        }
+
+
+        if (
+          aFuture &&
+          bFuture
+        ) {
+          return dateA - dateB;
+        }
+
+
+        return dateB - dateA;
+
       }
-
-      if (!dateA) {
-        return 1;
-      }
-
-      if (!dateB) {
-        return -1;
-      }
-
-      const now = new Date();
-
-      const aFuture = dateA > now;
-      const bFuture = dateB > now;
-
-
-      /* Les matchs futurs avant les anciens */
-
-      if (aFuture && !bFuture) {
-        return -1;
-      }
-
-      if (!aFuture && bFuture) {
-        return 1;
-      }
-
-
-      /* Deux matchs futurs */
-
-      if (aFuture && bFuture) {
-        return dateA - dateB;
-      }
-
-
-      /* Deux matchs passés */
-
-      return dateB - dateA;
-
-    });
+    );
 
 
     /* Aucun résultat */
 
-    if (filtered.length === 0) {
+    if (
+      filtered.length === 0
+    ) {
 
       container.innerHTML = `
+
         <div class="message">
-          Aucun pronostic à afficher pour ce filtre.
+
+          Aucun pronostic à afficher
+          pour ce filtre.
+
         </div>
+
       `;
 
       return;
     }
 
 
-    /* Affichage */
+    /* AFFICHAGE */
 
     container.innerHTML =
-      filtered.map(function(prono) {
+      filtered
+        .map(
+          function(prono) {
 
-        const state =
-          getMatchState(prono.date_match);
-
-        const safeStatus =
-          escapeHtml(
-            prono.statut || "En attente"
-          );
-
-        const stateClass =
-          state.type === "upcoming"
-            ? "state-upcoming"
-            : state.type === "past"
-              ? "state-past"
-              : "state-unknown";
-
-        return `
-
-          <article class="pronostic-card">
-
-            <div class="match-label">
-              ⚽ MATCH
-            </div>
-
-            <div class="teams">
-
-              <div class="team">
-                ${escapeHtml(prono.equipe1)}
-              </div>
-
-              <div class="vs">
-                VS
-              </div>
-
-              <div class="team">
-                ${escapeHtml(prono.equipe2)}
-              </div>
-
-            </div>
+            const state =
+              getMatchState(
+                prono.date_match
+              );
 
 
-            <div class="date-box">
-
-              <span class="date-label">
-                📅 Date du match
-              </span>
-
-              <span class="date-value">
-                ${escapeHtml(
-                  formatDate(prono.date_match)
-                )}
-              </span>
-
-            </div>
+            const stateClass =
+              state.type ===
+              "upcoming"
+                ? "state-upcoming"
+                : state.type === "past"
+                  ? "state-past"
+                  : "state-unknown";
 
 
-            <div class="match-state ${stateClass}">
-              ${state.label}
-            </div>
+            const safeStatus =
+              escapeHtml(
+                prono.statut ||
+                "En attente"
+              );
 
 
-            <div class="prediction-box">
+            return `
 
-              <div class="prediction-title">
-                🎯 Pronostic
-              </div>
+              <article
+                class="pronostic-card"
+              >
 
-              <div class="prediction-value">
-                ${escapeHtml(prono.pari)}
-              </div>
-
-            </div>
+                <div class="match-label">
+                  ⚽ MATCH
+                </div>
 
 
-            <div class="odds-box">
+                <div class="teams">
 
-              <span class="odds-label">
-                💰 Cote
-              </span>
-
-              <span class="odds-value">
-                ${escapeHtml(prono.cote)}
-              </span>
-
-            </div>
+                  <div class="team">
+                    ${escapeHtml(
+                      prono.equipe1
+                    )}
+                  </div>
 
 
-            <div class="analysis-box">
-
-              <strong>📝 Analyse</strong><br><br>
-
-              ${escapeHtml(
-                prono.description ||
-                "Aucune analyse disponible."
-              )}
-
-            </div>
+                  <div class="vs">
+                    VS
+                  </div>
 
 
-            <div class="status ${statusClass(prono.statut)}">
+                  <div class="team">
+                    ${escapeHtml(
+                      prono.equipe2
+                    )}
+                  </div>
 
-              ${safeStatus}
+                </div>
 
-            </div>
 
-          </article>
+                <div class="date-box">
 
-        `;
+                  <span class="date-label">
+                    📅 Date du match
+                  </span>
 
-      }).join("");
+                  <span class="date-value">
+                    ${escapeHtml(
+                      formatDate(
+                        prono.date_match
+                      )
+                    )}
+                  </span>
+
+                </div>
+
+
+                <div
+                  class="match-state
+                  ${stateClass}"
+                >
+                  ${state.label}
+                </div>
+
+
+                <div class="prediction-box">
+
+                  <div class="prediction-title">
+                    🎯 Pronostic
+                  </div>
+
+                  <div class="prediction-value">
+                    ${escapeHtml(
+                      prono.pari
+                    )}
+                  </div>
+
+                </div>
+
+
+                <div class="odds-box">
+
+                  <span class="odds-label">
+                    💰 Cote
+                  </span>
+
+                  <span class="odds-value">
+                    ${escapeHtml(
+                      prono.cote
+                    )}
+                  </span>
+
+                </div>
+
+
+                <div class="analysis-box">
+
+                  <strong>
+                    📝 Analyse
+                  </strong>
+
+                  <br><br>
+
+                  ${escapeHtml(
+                    prono.description ||
+                    "Aucune analyse disponible."
+                  )}
+
+                </div>
+
+
+                <div
+                  class="status
+                  ${statusClass(
+                    prono.statut
+                  )}"
+                >
+
+                  ${safeStatus}
+
+                </div>
+
+              </article>
+
+            `;
+
+          }
+        )
+        .join("");
+
   }
 
 
@@ -1192,72 +1278,141 @@
     const total =
       allPronostics.length;
 
+
     const upcoming =
-      allPronostics.filter(function(prono) {
+      allPronostics.filter(
+        function(prono) {
 
-        return getMatchState(prono.date_match).type === "upcoming";
+          return (
+            getMatchState(
+              prono.date_match
+            ).type ===
+            "upcoming"
+          );
 
-      }).length;
+        }
+      ).length;
+
 
     const past =
-      allPronostics.filter(function(prono) {
+      allPronostics.filter(
+        function(prono) {
 
-        return getMatchState(prono.date_match).type === "past";
+          return (
+            getMatchState(
+              prono.date_match
+            ).type ===
+            "past"
+          );
 
-      }).length;
+        }
+      ).length;
 
 
-    document.getElementById("totalCount").textContent =
-      total;
+    document.getElementById(
+      "totalCount"
+    ).textContent = total;
 
-    document.getElementById("upcomingCount").textContent =
-      upcoming;
 
-    document.getElementById("pastCount").textContent =
-      past;
+    document.getElementById(
+      "upcomingCount"
+    ).textContent = upcoming;
+
+
+    document.getElementById(
+      "pastCount"
+    ).textContent = past;
+
   }
 
 
   /* ============================================================
-     CHANGER FILTRE
+     FILTRE
   ============================================================ */
 
-  function changeFilter(filter, button) {
+  function changeFilter(
+    filter,
+    button
+  ) {
 
-    currentFilter = filter;
+    currentFilter =
+      filter;
 
 
     document
-      .querySelectorAll(".filter-btn")
-      .forEach(function(btn) {
+      .querySelectorAll(
+        ".filter-btn"
+      )
+      .forEach(
+        function(btn) {
 
-        btn.classList.remove("active");
+          btn.classList.remove(
+            "active"
+          );
 
-      });
+        }
+      );
 
 
     if (button) {
-      button.classList.add("active");
+
+      button.classList.add(
+        "active"
+      );
+
     }
 
 
     renderPronostics();
+
   }
 
 
   /* ============================================================
-     CHARGER LES PRONOSTICS
+     CHARGEMENT SUPABASE
   ============================================================ */
 
   async function loadPronostics() {
 
     const container =
-      document.getElementById("pronostics");
+      document.getElementById(
+        "pronostics"
+      );
+
+
+    if (!supabaseClient) {
+
+      container.innerHTML = `
+
+        <div class="message error">
+
+          ❌ Supabase n'est pas initialisé.
+
+          <br><br>
+
+          La bibliothèque Supabase
+          n'a pas pu être chargée.
+
+        </div>
+
+      `;
+
+      return;
+    }
+
+
+    container.innerHTML = `
+
+      <div class="message">
+        🔄 Chargement des pronostics...
+      </div>
+
+    `;
 
 
     try {
 
-      const { data, error } =
+      const result =
         await supabaseClient
           .from("pronostics")
           .select(
@@ -1265,8 +1420,23 @@
           );
 
 
+      const data =
+        result.data;
+
+      const error =
+        result.error;
+
+
+      console.log(
+        "Réponse Supabase :",
+        result
+      );
+
+
       if (error) {
+
         throw error;
+
       }
 
 
@@ -1284,22 +1454,84 @@
     } catch (error) {
 
       console.error(
-        "Erreur Supabase :",
+        "ERREUR SUPABASE :",
         error
       );
+
+
+      const message =
+        error &&
+        error.message
+          ? error.message
+          : "Erreur inconnue";
+
+
+      const code =
+        error &&
+        error.code
+          ? error.code
+          : "Aucun code";
+
+
+      const details =
+        error &&
+        error.details
+          ? error.details
+          : "";
+
+
+      const hint =
+        error &&
+        error.hint
+          ? error.hint
+          : "";
 
 
       container.innerHTML = `
 
         <div class="message error">
 
-          ❌ Impossible de charger les pronostics.
+          ❌ ERREUR SUPABASE
 
           <br><br>
 
-          Vérifie la connexion à Supabase
-          et les règles RLS de la table
-          <strong>pronostics</strong>.
+          <strong>
+            ${escapeHtml(message)}
+          </strong>
+
+          <br><br>
+
+          <strong>
+            Code :
+          </strong>
+
+          ${escapeHtml(code)}
+
+          ${
+            details
+              ? `
+                <br><br>
+                <strong>
+                  Détails :
+                </strong>
+                <br>
+                ${escapeHtml(details)}
+              `
+              : ""
+          }
+
+          ${
+            hint
+              ? `
+                <br><br>
+                <strong>
+                  Indication :
+                </strong>
+                <br>
+                ${escapeHtml(hint)}
+              `
+              : ""
+          }
 
         </div>
 
@@ -1311,23 +1543,27 @@
 
 
   /* ============================================================
-     COPIER LE CODE PROMO
+     COPIER CODE PROMO
   ============================================================ */
 
   async function copyCode(code) {
 
     try {
 
-      await navigator.clipboard.writeText(code);
+      await navigator.clipboard.writeText(
+        code
+      );
 
       alert(
-        "Code promo copié : " + code
+        "Code promo copié : " +
+        code
       );
 
     } catch (error) {
 
       alert(
-        "Code promo : " + code
+        "Code promo : " +
+        code
       );
 
     }
@@ -1342,11 +1578,7 @@
   loadPronostics();
 
 
-  /*
-    Actualisation automatique toutes les 60 secondes.
-    Les données restent entièrement réelles :
-    elles sont relues depuis Supabase.
-  */
+  /* Actualisation toutes les 60 secondes */
 
   setInterval(
     loadPronostics,

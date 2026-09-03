@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,14 +16,14 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0b0f14;
+      background: #0b1220;
       color: white;
+      padding: 20px;
     }
 
     .container {
-      max-width: 850px;
+      max-width: 900px;
       margin: auto;
-      padding: 20px;
     }
 
     h1 {
@@ -33,128 +32,151 @@
     }
 
     .box {
-      background: #151c24;
-      border: 1px solid #293542;
+      background: #111827;
+      border: 1px solid #263244;
       border-radius: 14px;
       padding: 20px;
       margin-bottom: 20px;
     }
 
-    label {
-      display: block;
-      font-weight: bold;
-      margin-top: 14px;
-      font-size: 17px;
-    }
-
     input,
-    textarea,
-    select {
+    select,
+    textarea {
       width: 100%;
-      padding: 14px;
-      margin-top: 8px;
-      border: 1px solid #364453;
-      border-radius: 10px;
-      background: #0b0f14;
+      padding: 12px;
+      margin-top: 7px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #374151;
+      background: #0f172a;
       color: white;
-      font-size: 16px;
-    }
-
-    select {
-      appearance: auto;
+      font-size: 15px;
     }
 
     textarea {
+      min-height: 100px;
       resize: vertical;
-      min-height: 130px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
     }
 
     button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border: 0;
-      border-radius: 10px;
-      background: #e6e6e6;
-      color: #111;
-      font-size: 17px;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 8px;
     }
 
-    button:hover {
-      opacity: 0.9;
+    .primary {
+      background: #22c55e;
+      color: white;
     }
 
-    .logout {
-      background: #702020;
+    .secondary {
+      background: #374151;
+      color: white;
+    }
+
+    .danger {
+      background: #ef4444;
       color: white;
     }
 
     .edit {
-      background: #304b68;
+      background: #f59e0b;
       color: white;
     }
 
-    .delete {
-      background: #702020;
+    .logout {
+      background: #dc2626;
       color: white;
-    }
-
-    .cancel {
-      background: #555;
-      color: white;
-    }
-
-    .prediction {
-      border: 1px solid #364453;
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 15px;
-      background: #111820;
-    }
-
-    .teams {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
-
-    .message {
-      padding: 13px;
-      margin-top: 15px;
-      border-radius: 9px;
-      background: #202b36;
-      line-height: 1.4;
     }
 
     .hidden {
       display: none;
     }
 
-    #adminPanel {
-      display: none;
+    .message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background: #172033;
     }
 
-    .small {
-      color: #9ca8b5;
-      font-size: 13px;
+    .success {
+      background: #14532d;
+    }
+
+    .error {
+      background: #7f1d1d;
+    }
+
+    .pronostic {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+
+    .teams {
+      font-size: 19px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .info {
+      margin: 7px 0;
+      color: #d1d5db;
+    }
+
+    .odds {
+      display: inline-block;
+      background: #16a34a;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin: 8px 0;
     }
 
     .status {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 8px;
+      margin-top: 8px;
       font-weight: bold;
     }
 
-    .status-pending {
-      color: #ffd166;
+    .pending {
+      background: #92400e;
     }
 
-    .status-won {
-      color: #50fa7b;
+    .won {
+      background: #166534;
     }
 
-    .status-lost {
-      color: #ff5555;
+    .lost {
+      background: #991b1b;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .edit-title {
+      color: #f59e0b;
     }
   </style>
 </head>
@@ -163,41 +185,43 @@
 
 <div class="container">
 
-  <h1>🔐 CISSE PRONOS</h1>
+  <div class="topbar">
+    <h1>🔥 CISSE PRONOS — ADMIN</h1>
+
+    <button
+      type="button"
+      class="logout"
+      onclick="logout()">
+      Déconnexion
+    </button>
+  </div>
 
 
-  <!-- =========================
-       CONNEXION
-  ========================== -->
+  <!-- ============================= -->
+  <!-- CONNEXION -->
+  <!-- ============================= -->
 
   <div id="loginBox" class="box">
 
-    <h2>Connexion</h2>
+    <h2>🔐 Connexion administrateur</h2>
 
-    <p class="small">
-      Connecte-toi avec ton compte Supabase.
-    </p>
-
-    <label>📧 Email</label>
-
+    <label>Email</label>
     <input
-      id="email"
       type="email"
-      autocomplete="username"
-      placeholder="Ton adresse email">
+      id="email"
+      placeholder="Ton email">
 
-
-    <label>🔑 Mot de passe</label>
-
+    <label>Mot de passe</label>
     <input
-      id="password"
       type="password"
-      autocomplete="current-password"
+      id="password"
       placeholder="Ton mot de passe">
 
-
-    <button onclick="login()">
-      🔐 Se connecter
+    <button
+      type="button"
+      class="primary"
+      onclick="login()">
+      Se connecter
     </button>
 
     <div id="loginMessage"></div>
@@ -205,230 +229,174 @@
   </div>
 
 
+  <!-- ============================= -->
+  <!-- ADMIN -->
+  <!-- ============================= -->
 
-  <!-- =========================
-       ADMIN
-  ========================== -->
+  <div id="adminBox" class="hidden">
 
-  <div id="adminPanel">
+    <!-- MESSAGE -->
+    <div id="message"></div>
 
 
-    <!-- =========================
-         FORMULAIRE
-    ========================== -->
+    <!-- ============================= -->
+    <!-- FORMULAIRE -->
+    <!-- ============================= -->
 
     <div class="box">
 
-      <h2 id="formTitle">
-        ➕ Ajouter un pronostic
-      </h2>
+      <h2 id="formTitle">➕ Publier un pronostic</h2>
 
+      <label>Équipe 1</label>
       <input
-        type="hidden"
-        id="editId">
-
-
-      <!-- EQUIPE 1 -->
-
-      <label>⚽ Équipe 1</label>
-
-      <input
+        type="text"
         id="equipe1"
-        type="text"
-        placeholder="Ex : Arsenal">
+        placeholder="Exemple : Toulouse">
 
-
-      <!-- EQUIPE 2 -->
-
-      <label>⚽ Équipe 2</label>
-
+      <label>Équipe 2</label>
       <input
-        id="equipe2"
         type="text"
-        placeholder="Ex : Chelsea">
+        id="equipe2"
+        placeholder="Exemple : Lille">
 
 
-      <!-- TYPE DE PARI -->
-
-      <label>🎯 Type de pari</label>
+      <label>Type de pari</label>
 
       <select id="pari">
 
-        <option value="">
-          -- Choisir un pari --
-        </option>
-
         <option value="Victoire équipe 1">
-          🏆 Victoire équipe 1
+          Victoire équipe 1
         </option>
 
         <option value="Victoire équipe 2">
-          🏆 Victoire équipe 2
+          Victoire équipe 2
         </option>
 
         <option value="Match nul">
-          🤝 Match nul
+          Match nul
         </option>
 
         <option value="Plus de 2 buts">
-          ⚽ Plus de 2 buts
+          Plus de 2 buts
         </option>
 
         <option value="3 buts ou plus">
-          ⚽ 3 buts ou plus
+          3 buts ou plus
         </option>
 
         <option value="Moins de 2 buts">
-          ⚽ Moins de 2 buts
+          Moins de 2 buts
         </option>
 
         <option value="Nombre de corners">
-          🚩 Nombre de corners
+          Nombre de corners
         </option>
 
         <option value="Nombre de fautes">
-          🟨 Nombre de fautes
+          Nombre de fautes
         </option>
 
         <option value="Cartons jaunes">
-          🟨 Cartons jaunes
+          Cartons jaunes
         </option>
 
         <option value="Carton rouge">
-          🟥 Carton rouge
+          Carton rouge
         </option>
 
         <option value="Les deux équipes marquent">
-          🎯 Les deux équipes marquent
+          Les deux équipes marquent
         </option>
 
         <option value="Autre pari">
-          ✏️ Autre pari
+          Autre pari
         </option>
 
       </select>
 
 
-      <!-- PRECISION DU PARI -->
-
-      <label>🎯 Précision du pari</label>
+      <label>Précision du pari</label>
 
       <input
-        id="precision"
         type="text"
-        placeholder="Ex : Plus de 8.5 corners">
+        id="precision"
+        placeholder="Exemple : Plus de 8,5 corners">
 
 
-      <!-- COTE -->
-
-      <label>💰 Cote</label>
+      <label>Cote</label>
 
       <input
-        id="cote"
         type="number"
+        id="cote"
         step="0.01"
         min="1"
-        placeholder="Ex : 1.85">
+        placeholder="Exemple : 2.22">
 
 
-      <!-- ANALYSE -->
+      <label>Date et heure du match</label>
 
-      <label>📝 Analyse</label>
+      <input
+        type="datetime-local"
+        id="date_match">
+
+
+      <label>Description / analyse</label>
 
       <textarea
         id="description"
-        rows="5"
-        placeholder="Écris ton analyse du match..."></textarea>
+        placeholder="Écris ton analyse ici..."></textarea>
 
 
-      <!-- DATE -->
-
-      <label>📅 Date et heure du match</label>
-
-      <input
-        id="date_match"
-        type="datetime-local">
-
-
-      <!-- STATUT -->
-
-      <label>📌 Statut</label>
+      <label>Statut</label>
 
       <select id="statut">
 
-        <option value="Pending">
-          ⏳ Pending
+        <option value="En attente">
+          ⏳ En attente
         </option>
 
-        <option value="Won">
-          ✅ Won
+        <option value="Gagné">
+          🟢 Gagné
         </option>
 
-        <option value="Lost">
-          ❌ Lost
+        <option value="Perdu">
+          🔴 Perdu
         </option>
 
       </select>
 
 
-      <!-- BOUTON -->
-
       <button
+        type="button"
+        class="primary"
         id="saveButton"
         onclick="savePronostic()">
-
-        ➕ Publier le pronostic
-
+        Publier le pronostic
       </button>
 
 
       <button
+        type="button"
+        class="secondary hidden"
         id="cancelButton"
-        class="cancel hidden"
         onclick="cancelEdit()">
-
-        ❌ Annuler la modification
-
+        Annuler la modification
       </button>
-
-
-      <div id="formMessage"></div>
 
     </div>
 
 
-
-    <!-- =========================
-         LISTE DES PRONOSTICS
-    ========================== -->
+    <!-- ============================= -->
+    <!-- LISTE DES PRONOSTICS -->
+    <!-- ============================= -->
 
     <div class="box">
 
-      <h2>
-        📋 Mes pronostics
-      </h2>
+      <h2>📋 Mes pronostics</h2>
 
-      <div id="list">
+      <div id="pronosticsList">
         Chargement...
       </div>
-
-    </div>
-
-
-
-    <!-- =========================
-         DECONNEXION
-    ========================== -->
-
-    <div class="box">
-
-      <button
-        class="logout"
-        onclick="logout()">
-
-        🚪 Se déconnecter
-
-      </button>
 
     </div>
 
@@ -437,12 +405,11 @@
 </div>
 
 
-
 <script>
 
-/* ==========================================================
+/* ============================================================
    SUPABASE
-========================================================== */
+============================================================ */
 
 const SUPABASE_URL =
   "https://avonpsmoruevwlokkfjg.supabase.co";
@@ -450,16 +417,187 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uR8WnqfR";
 
+
 const supabaseClient =
-  supabase.createClient(
+  window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
   );
 
 
-/* ==========================================================
-   UTILITAIRE : ID UNIQUE
-========================================================== */
+/* ============================================================
+   VARIABLES
+============================================================ */
+
+let currentUser = null;
+
+let editId = null;
+
+
+/* ============================================================
+   ELEMENTS
+============================================================ */
+
+const loginBox =
+  document.getElementById("loginBox");
+
+const adminBox =
+  document.getElementById("adminBox");
+
+const loginMessage =
+  document.getElementById("loginMessage");
+
+const message =
+  document.getElementById("message");
+
+const pronosticsList =
+  document.getElementById("pronosticsList");
+
+
+/* ============================================================
+   MESSAGE
+============================================================ */
+
+function showMessage(text, type = "") {
+
+  message.className = "message " + type;
+
+  message.textContent = text;
+
+}
+
+
+/* ============================================================
+   CONNEXION
+============================================================ */
+
+async function login() {
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+
+  if (!email || !password) {
+
+    loginMessage.className = "message error";
+
+    loginMessage.textContent =
+      "Veuillez remplir l'email et le mot de passe.";
+
+    return;
+  }
+
+
+  loginMessage.className = "message";
+
+  loginMessage.textContent =
+    "Connexion en cours...";
+
+
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+
+      email: email,
+
+      password: password
+
+    });
+
+
+  if (error) {
+
+    loginMessage.className =
+      "message error";
+
+    loginMessage.textContent =
+      "Connexion impossible : " +
+      error.message;
+
+    return;
+  }
+
+
+  currentUser = data.user;
+
+
+  loginMessage.textContent = "";
+
+
+  showAdmin();
+
+
+  await loadPronostics();
+
+}
+
+
+/* ============================================================
+   AFFICHER ADMIN
+============================================================ */
+
+function showAdmin() {
+
+  loginBox.classList.add("hidden");
+
+  adminBox.classList.remove("hidden");
+
+}
+
+
+/* ============================================================
+   DÉCONNEXION
+============================================================ */
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+
+  editId = null;
+
+  adminBox.classList.add("hidden");
+
+  loginBox.classList.remove("hidden");
+
+  clearForm();
+
+}
+
+
+/* ============================================================
+   SESSION AU CHARGEMENT
+============================================================ */
+
+async function checkSession() {
+
+  const { data } =
+    await supabaseClient.auth.getSession();
+
+
+  if (data.session) {
+
+    currentUser =
+      data.session.user;
+
+    showAdmin();
+
+    await loadPronostics();
+
+  }
+
+}
+
+
+checkSession();
+
+
+/* ============================================================
+   GÉNÉRER ID
+============================================================ */
 
 function generateId() {
 
@@ -472,550 +610,200 @@ function generateId() {
 
   }
 
-  return (
-    Date.now().toString(36) +
-    Math.random().toString(36).substring(2)
-  );
+
+  return Date.now().toString(36) +
+         Math.random().toString(36).substring(2);
 
 }
 
 
-/* ==========================================================
-   SECURITE HTML
-========================================================== */
-
-function escapeHtml(value) {
-
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-
-/* ==========================================================
-   DATE
-========================================================== */
-
-function formatDate(value) {
-
-  if (!value) {
-
-    return "Date non indiquée";
-
-  }
-
-  const date = new Date(value);
-
-  if (isNaN(date.getTime())) {
-
-    return String(value);
-
-  }
-
-  return date.toLocaleString(
-    "fr-FR",
-    {
-      dateStyle: "medium",
-      timeStyle: "short"
-    }
-  );
-
-}
-
-
-/* ==========================================================
-   MESSAGE
-========================================================== */
-
-function setMessage(
-  elementId,
-  text
-) {
-
-  document.getElementById(
-    elementId
-  ).innerHTML =
-    `<div class="message">
-      ${escapeHtml(text)}
-    </div>`;
-
-}
-
-
-/* ==========================================================
-   AFFICHAGE LOGIN
-========================================================== */
-
-function showLogin() {
-
-  document.getElementById(
-    "loginBox"
-  ).style.display = "block";
-
-  document.getElementById(
-    "adminPanel"
-  ).style.display = "none";
-
-}
-
-
-/* ==========================================================
-   AFFICHAGE ADMIN
-========================================================== */
-
-function showAdmin() {
-
-  document.getElementById(
-    "loginBox"
-  ).style.display = "none";
-
-  document.getElementById(
-    "adminPanel"
-  ).style.display = "block";
-
-  loadPronostics();
-
-}
-
-
-/* ==========================================================
-   SESSION
-========================================================== */
-
-async function checkSession() {
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.getSession();
-
-
-  if (error) {
-
-    console.error(error);
-
-    showLogin();
-
-    return;
-
-  }
-
-
-  if (data.session) {
-
-    showAdmin();
-
-  } else {
-
-    showLogin();
-
-  }
-
-}
-
-
-/* ==========================================================
-   CONNEXION
-========================================================== */
-
-async function login() {
-
-  const email =
-    document.getElementById(
-      "email"
-    ).value.trim();
-
-
-  const password =
-    document.getElementById(
-      "password"
-    ).value;
-
-
-  if (!email || !password) {
-
-    setMessage(
-      "loginMessage",
-      "⚠️ Entre ton email et ton mot de passe."
-    );
-
-    return;
-
-  }
-
-
-  const {
-    error
-  } =
-    await supabaseClient.auth
-      .signInWithPassword({
-
-        email: email,
-
-        password: password
-
-      });
-
-
-  if (error) {
-
-    console.error(error);
-
-    setMessage(
-      "loginMessage",
-      "❌ Connexion impossible : " +
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    "password"
-  ).value = "";
-
-
-  document.getElementById(
-    "loginMessage"
-  ).innerHTML = "";
-
-
-  showAdmin();
-
-}
-
-
-/* ==========================================================
-   DECONNEXION
-========================================================== */
-
-async function logout() {
-
-  await supabaseClient.auth.signOut();
-
-  cancelEdit();
-
-  showLogin();
-
-}
-
-
-/* ==========================================================
-   UTILISATEUR CONNECTE
-========================================================== */
-
-async function getCurrentUser() {
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.getUser();
-
-
-  if (error) {
-
-    console.error(error);
-
-    return null;
-
-  }
-
-
-  return data.user;
-
-}
-
-
-/* ==========================================================
-   ENREGISTRER PRONOSTIC
-========================================================== */
+/* ============================================================
+   SAUVEGARDER / MODIFIER
+============================================================ */
 
 async function savePronostic() {
 
-  const user =
-    await getCurrentUser();
+  if (!currentUser) {
 
-
-  if (!user) {
-
-    showLogin();
+    showMessage(
+      "Tu dois être connecté.",
+      "error"
+    );
 
     return;
-
   }
 
 
   const equipe1 =
-    document.getElementById(
-      "equipe1"
-    ).value.trim();
-
+    document.getElementById("equipe1")
+      .value.trim();
 
   const equipe2 =
-    document.getElementById(
-      "equipe2"
-    ).value.trim();
+    document.getElementById("equipe2")
+      .value.trim();
 
-
-  const pari =
-    document.getElementById(
-      "pari"
-    ).value;
-
+  const pariBase =
+    document.getElementById("pari")
+      .value;
 
   const precision =
-    document.getElementById(
-      "precision"
-    ).value.trim();
-
+    document.getElementById("precision")
+      .value.trim();
 
   const cote =
-    document.getElementById(
-      "cote"
-    ).value.trim();
+    document.getElementById("cote")
+      .value;
 
+  const dateMatch =
+    document.getElementById("date_match")
+      .value;
 
   const description =
-    document.getElementById(
-      "description"
-    ).value.trim();
-
-
-  const dateInput =
-    document.getElementById(
-      "date_match"
-    ).value;
-
+    document.getElementById("description")
+      .value.trim();
 
   const statut =
-    document.getElementById(
-      "statut"
-    ).value;
+    document.getElementById("statut")
+      .value;
 
 
-  const editId =
-    document.getElementById(
-      "editId"
-    ).value;
-
-
-  /* ==========================
-     VERIFICATION
-  ========================== */
+  /* ============================
+     VALIDATION
+  ============================ */
 
   if (
     !equipe1 ||
     !equipe2 ||
-    !pari ||
+    !pariBase ||
     !cote ||
-    !dateInput
+    !dateMatch
   ) {
 
-    setMessage(
-      "formMessage",
-      "⚠️ Remplis tous les champs obligatoires."
+    showMessage(
+      "Remplis tous les champs obligatoires.",
+      "error"
     );
 
     return;
+  }
+
+
+  /* ============================
+     PARI FINAL
+  ============================ */
+
+  let pariFinal = pariBase;
+
+
+  if (precision) {
+
+    pariFinal =
+      pariBase +
+      " — " +
+      precision;
 
   }
 
 
-  const coteNumber =
-    Number(cote);
+  /* ============================
+     DONNÉES
+  ============================ */
 
+  const dataToSave = {
 
-  if (
-    !Number.isFinite(coteNumber) ||
-    coteNumber <= 0
-  ) {
+    equipe1: equipe1,
 
-    setMessage(
-      "formMessage",
-      "⚠️ La cote doit être un nombre valide."
-    );
+    equipe2: equipe2,
 
-    return;
+    pari: pariFinal,
 
-  }
+    cote: parseFloat(cote),
 
+    description: description,
 
-  /* ==========================
-     DATE
-  ========================== */
+    date_match:
+      dateMatch.replace("T", " ") + ":00",
 
-  const dateMatch =
-    dateInput.replace(
-      "T",
-      " "
-    ) + ":00";
+    statut: statut,
+
+    user_id: currentUser.id
+
+  };
 
 
   let result;
 
 
-  /* ========================================================
+  /* ============================
      MODIFICATION
-  ======================================================== */
+  ============================ */
 
   if (editId) {
 
     result =
       await supabaseClient
         .from("pronostics")
-        .update({
-
-          equipe1:
-            equipe1,
-
-          equipe2:
-            equipe2,
-
-          pari:
-            pari,
-
-          cote:
-            coteNumber,
-
-          description:
-            description,
-
-          date_match:
-            dateMatch,
-
-          statut:
-            statut
-
-        })
-        .eq(
-          "id",
-          editId
-        )
-        .eq(
-          "user_id",
-          user.id
-        );
+        .update(dataToSave)
+        .eq("id", editId)
+        .eq("user_id", currentUser.id);
 
   }
 
 
-  /* ========================================================
+  /* ============================
      NOUVEAU PRONOSTIC
-  ======================================================== */
+  ============================ */
 
   else {
 
-    /*
-      IMPORTANT :
-      Ta colonne "id" est obligatoire.
-      On génère donc un ID automatiquement.
-    */
-
-    const newId =
+    dataToSave.id =
       generateId();
-
-
-    /*
-      On ajoute la précision au texte du pari
-      pour ne pas avoir besoin d'une nouvelle
-      colonne dans Supabase.
-    */
-
-    let pariFinal =
-      pari;
-
-
-    if (precision) {
-
-      pariFinal =
-        pari +
-        " — " +
-        precision;
-
-    }
 
 
     result =
       await supabaseClient
         .from("pronostics")
-        .insert({
-
-          id:
-            newId,
-
-          equipe1:
-            equipe1,
-
-          equipe2:
-            equipe2,
-
-          pari:
-            pariFinal,
-
-          cote:
-            coteNumber,
-
-          description:
-            description,
-
-          date_match:
-            dateMatch,
-
-          statut:
-            statut,
-
-          user_id:
-            user.id
-
-        });
+        .insert([dataToSave]);
 
   }
 
 
-  /* ========================================================
+  /* ============================
      ERREUR
-  ======================================================== */
+  ============================ */
 
   if (result.error) {
 
-    console.error(
-      result.error
+    showMessage(
+      "Erreur : " +
+      result.error.message,
+      "error"
     );
 
-    setMessage(
-      "formMessage",
-      "❌ Erreur Supabase : " +
-      result.error.message
-    );
+    console.error(result.error);
 
     return;
-
   }
 
 
-  /* ========================================================
-     SUCCES
-  ======================================================== */
+  /* ============================
+     SUCCÈS
+  ============================ */
 
   if (editId) {
 
-    setMessage(
-      "formMessage",
-      "✅ Pronostic modifié avec succès."
+    showMessage(
+      "Pronostic modifié avec succès. ✅",
+      "success"
     );
 
-  } else {
+  }
 
-    setMessage(
-      "formMessage",
-      "✅ Pronostic publié avec succès."
+  else {
+
+    showMessage(
+      "Pronostic publié avec succès. ✅",
+      "success"
     );
 
   }
@@ -1028,41 +816,438 @@ async function savePronostic() {
 }
 
 
-/* ==========================================================
-   CHARGER LES PRONOSTICS
-========================================================== */
+/* ============================================================
+   CONVERTIR DATE SUPABASE → DATETIME LOCAL
+============================================================ */
 
-async function loadPronostics() {
+function toDatetimeLocal(value) {
 
-  const list =
-    document.getElementById(
-      "list"
+  if (!value) {
+    return "";
+  }
+
+
+  const s =
+    String(value)
+      .trim()
+      .replace(" ", "T");
+
+
+  const match =
+    s.match(
+      /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/
     );
 
 
-  const user =
-    await getCurrentUser();
+  if (match) {
+
+    return match[1];
+
+  }
 
 
-  if (!user) {
+  const d =
+    new Date(value);
 
-    showLogin();
+
+  if (isNaN(d.getTime())) {
+
+    return "";
+
+  }
+
+
+  const pad =
+    n => String(n).padStart(2, "0");
+
+
+  return (
+    d.getFullYear() +
+    "-" +
+    pad(d.getMonth() + 1) +
+    "-" +
+    pad(d.getDate()) +
+    "T" +
+    pad(d.getHours()) +
+    ":" +
+    pad(d.getMinutes())
+  );
+
+}
+
+
+/* ============================================================
+   MODIFIER
+============================================================ */
+
+async function editPronostic(id) {
+
+  if (!id) {
+
+    showMessage(
+      "ID du pronostic introuvable.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  showMessage(
+    "Chargement du pronostic..."
+  );
+
+
+  const { data, error } =
+    await supabaseClient
+      .from("pronostics")
+      .select(
+        "id,equipe1,equipe2,pari,cote,description,date_match,statut"
+      )
+      .eq("id", id)
+      .single();
+
+
+  if (error) {
+
+    showMessage(
+      "Impossible de charger le pronostic : " +
+      error.message,
+      "error"
+    );
+
+    console.error(error);
+
+    return;
+  }
+
+
+  if (!data) {
+
+    showMessage(
+      "Pronostic introuvable.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  /* ============================
+     ID DE MODIFICATION
+  ============================ */
+
+  editId = data.id;
+
+
+  /* ============================
+     CHAMPS
+  ============================ */
+
+  document.getElementById("equipe1").value =
+    data.equipe1 || "";
+
+
+  document.getElementById("equipe2").value =
+    data.equipe2 || "";
+
+
+  /* ============================
+     PARI + PRÉCISION
+  ============================ */
+
+  const pariValue =
+    data.pari || "";
+
+
+  const separator =
+    " — ";
+
+
+  let basePari =
+    pariValue;
+
+
+  let precision =
+    "";
+
+
+  const index =
+    pariValue.indexOf(separator);
+
+
+  if (index !== -1) {
+
+    basePari =
+      pariValue.slice(
+        0,
+        index
+      );
+
+    precision =
+      pariValue.slice(
+        index + separator.length
+      );
+
+  }
+
+
+  const pariSelect =
+    document.getElementById("pari");
+
+
+  const optionExists =
+    [...pariSelect.options]
+      .some(
+        option =>
+          option.value === basePari
+      );
+
+
+  if (optionExists) {
+
+    pariSelect.value =
+      basePari;
+
+  }
+
+  else {
+
+    pariSelect.value =
+      "Autre pari";
+
+  }
+
+
+  document.getElementById("precision").value =
+    precision;
+
+
+  /* ============================
+     COTE
+  ============================ */
+
+  document.getElementById("cote").value =
+    data.cote ?? "";
+
+
+  /* ============================
+     DATE
+  ============================ */
+
+  document.getElementById("date_match").value =
+    toDatetimeLocal(data.date_match);
+
+
+  /* ============================
+     DESCRIPTION
+  ============================ */
+
+  document.getElementById("description").value =
+    data.description || "";
+
+
+  /* ============================
+     STATUT
+  ============================ */
+
+  document.getElementById("statut").value =
+    data.statut || "En attente";
+
+
+  /* ============================
+     INTERFACE
+  ============================ */
+
+  document.getElementById("formTitle")
+    .textContent =
+      "✏️ Modifier le pronostic";
+
+
+  document.getElementById("formTitle")
+    .classList.add("edit-title");
+
+
+  document.getElementById("saveButton")
+    .textContent =
+      "💾 Enregistrer la modification";
+
+
+  document.getElementById("cancelButton")
+    .classList.remove("hidden");
+
+
+  /* ============================
+     REMONTER AU FORMULAIRE
+  ============================ */
+
+  window.scrollTo({
+
+    top: 0,
+
+    behavior: "smooth"
+
+  });
+
+
+  showMessage(
+    "Mode modification activé. ✏️",
+    "success"
+  );
+
+}
+
+
+/* ============================================================
+   SUPPRIMER
+============================================================ */
+
+async function deletePronostic(id) {
+
+  if (!id) {
+
+    showMessage(
+      "ID du pronostic introuvable.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const confirmation =
+    confirm(
+      "Voulez-vous vraiment supprimer ce pronostic ?"
+    );
+
+
+  if (!confirmation) {
 
     return;
 
   }
 
 
-  const {
-    data,
-    error
-  } =
+  const { error } =
     await supabaseClient
       .from("pronostics")
-      .select("*")
-      .eq(
-        "user_id",
-        user.id
+      .delete()
+      .eq("id", id)
+      .eq("user_id", currentUser.id);
+
+
+  if (error) {
+
+    showMessage(
+      "Erreur lors de la suppression : " +
+      error.message,
+      "error"
+    );
+
+    console.error(error);
+
+    return;
+  }
+
+
+  showMessage(
+    "Pronostic supprimé avec succès. ✅",
+    "success"
+  );
+
+
+  if (editId === id) {
+
+    cancelEdit();
+
+  }
+
+
+  await loadPronostics();
+
+}
+
+
+/* ============================================================
+   ANNULER MODIFICATION
+============================================================ */
+
+function cancelEdit() {
+
+  editId = null;
+
+
+  document.getElementById("formTitle")
+    .textContent =
+      "➕ Publier un pronostic";
+
+
+  document.getElementById("formTitle")
+    .classList.remove("edit-title");
+
+
+  document.getElementById("saveButton")
+    .textContent =
+      "Publier le pronostic";
+
+
+  document.getElementById("cancelButton")
+    .classList.add("hidden");
+
+
+  clearForm();
+
+}
+
+
+/* ============================================================
+   VIDER FORMULAIRE
+============================================================ */
+
+function clearForm() {
+
+  document.getElementById("equipe1").value =
+    "";
+
+  document.getElementById("equipe2").value =
+    "";
+
+  document.getElementById("pari").value =
+    "Victoire équipe 1";
+
+  document.getElementById("precision").value =
+    "";
+
+  document.getElementById("cote").value =
+    "";
+
+  document.getElementById("date_match").value =
+    "";
+
+  document.getElementById("description").value =
+    "";
+
+  document.getElementById("statut").value =
+    "En attente";
+
+}
+
+
+/* ============================================================
+   CHARGER PRONOSTICS
+============================================================ */
+
+async function loadPronostics() {
+
+  pronosticsList.textContent =
+    "Chargement...";
+
+
+  const { data, error } =
+    await supabaseClient
+      .from("pronostics")
+      .select(
+        "id,equipe1,equipe2,pari,cote,description,date_match,statut"
       )
       .order(
         "date_match",
@@ -1074,568 +1259,203 @@ async function loadPronostics() {
 
   if (error) {
 
-    console.error(error);
-
-    list.innerHTML =
-      `<div class="message">
-        ❌ ${escapeHtml(error.message)}
-      </div>`;
-
-    return;
-
-  }
-
-
-  if (
-    !data ||
-    data.length === 0
-  ) {
-
-    list.innerHTML =
-      `<div class="message">
-        📋 Aucun pronostic publié pour le moment.
-      </div>`;
-
-    return;
-
-  }
-
-
-  list.innerHTML = "";
-
-
-  data.forEach(
-    p => {
-
-      const item =
-        document.createElement(
-          "div"
-        );
-
-
-      item.className =
-        "prediction";
-
-
-      let statusText =
-        "⏳ En attente";
-
-      let statusClass =
-        "status-pending";
-
-
-      if (
-        p.statut === "Won"
-      ) {
-
-        statusText =
-          "✅ Gagné";
-
-        statusClass =
-          "status-won";
-
-      }
-
-
-      if (
-        p.statut === "Lost"
-      ) {
-
-        statusText =
-          "❌ Perdu";
-
-        statusClass =
-          "status-lost";
-
-      }
-
-
-      item.innerHTML = `
-
-        <div class="teams">
-          ${escapeHtml(p.equipe1)}
-          🆚
-          ${escapeHtml(p.equipe2)}
-        </div>
-
-        <p>
-          🎯 <strong>Pari :</strong>
-          ${escapeHtml(p.pari)}
-        </p>
-
-        <p>
-          💰 <strong>Cote :</strong>
-          ${escapeHtml(p.cote)}
-        </p>
-
-        <p>
-          📅 <strong>Match :</strong>
-          ${escapeHtml(
-            formatDate(p.date_match)
-          )}
-        </p>
-
-        <p>
-          📝 <strong>Analyse :</strong><br>
-          ${escapeHtml(
-            p.description ||
-            "Aucune analyse"
-          )}
-        </p>
-
-        <p class="status ${statusClass}">
-          📌 <strong>Statut :</strong>
-          ${statusText}
-        </p>
-
-        <button
-          class="edit"
-          onclick="editPronostic(${JSON.stringify(p.id)})">
-
-          ✏️ Modifier
-
-        </button>
-
-        <button
-          class="delete"
-          onclick="deletePronostic(${JSON.stringify(p.id)})">
-
-          🗑️ Supprimer
-
-        </button>
-
+    pronosticsList.innerHTML =
+      `
+      <div class="message error">
+        Erreur de chargement :
+        ${escapeHtml(error.message)}
+      </div>
       `;
 
-
-      list.appendChild(
-        item
-      );
-
-    }
-  );
-
-}
-
-
-/* ==========================================================
-   MODIFIER
-========================================================== */
-
-async function editPronostic(id) {
-
-  const user =
-    await getCurrentUser();
-
-
-  if (!user) {
-
-    showLogin();
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("pronostics")
-      .select("*")
-      .eq(
-        "id",
-        id
-      )
-      .eq(
-        "user_id",
-        user.id
-      )
-      .single();
-
-
-  if (
-    error ||
-    !data
-  ) {
-
-    alert(
-      "❌ Impossible de récupérer ce pronostic."
-    );
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    "editId"
-  ).value =
-    data.id;
-
-
-  document.getElementById(
-    "equipe1"
-  ).value =
-    data.equipe1 || "";
-
-
-  document.getElementById(
-    "equipe2"
-  ).value =
-    data.equipe2 || "";
-
-
-  /*
-    Comme le pari peut maintenant contenir
-    une précision, on affiche le texte complet
-    dans le champ select seulement si une option
-    correspond.
-  */
-
-  const pariSelect =
-    document.getElementById(
-      "pari"
-    );
-
-
-  const pariValue =
-    data.pari || "";
-
-
-  let found =
-    false;
-
-
-  for (
-    const option of pariSelect.options
-  ) {
-
-    if (
-      option.value ===
-      pariValue
-    ) {
-
-      pariSelect.value =
-        option.value;
-
-      found = true;
-
-      break;
-
-    }
-
-  }
-
-
-  if (!found) {
-
-    pariSelect.value =
-      "Autre pari";
-
-  }
-
-
-  document.getElementById(
-    "precision"
-  ).value = "";
-
-
-  document.getElementById(
-    "cote"
-  ).value =
-    data.cote || "";
-
-
-  document.getElementById(
-    "description"
-  ).value =
-    data.description || "";
-
-
-  document.getElementById(
-    "statut"
-  ).value =
-    data.statut ||
-    "Pending";
-
-
-  /* ==========================
-     DATE
-  ========================== */
-
-  if (
-    data.date_match
-  ) {
-
-    const d =
-      new Date(
-        data.date_match
-      );
-
-
-    if (
-      !isNaN(
-        d.getTime()
-      )
-    ) {
-
-      const year =
-        d.getFullYear();
-
-
-      const month =
-        String(
-          d.getMonth() + 1
-        ).padStart(
-          2,
-          "0"
-        );
-
-
-      const day =
-        String(
-          d.getDate()
-        ).padStart(
-          2,
-          "0"
-        );
-
-
-      const hours =
-        String(
-          d.getHours()
-        ).padStart(
-          2,
-          "0"
-        );
-
-
-      const minutes =
-        String(
-          d.getMinutes()
-        ).padStart(
-          2,
-          "0"
-        );
-
-
-      document.getElementById(
-        "date_match"
-      ).value =
-        `${year}-${month}-${day}T${hours}:${minutes}`;
-
-    }
-
-  }
-
-
-  document.getElementById(
-    "formTitle"
-  ).textContent =
-    "✏️ Modifier le pronostic";
-
-
-  document.getElementById(
-    "saveButton"
-  ).textContent =
-    "💾 Enregistrer les modifications";
-
-
-  document.getElementById(
-    "cancelButton"
-  ).classList.remove(
-    "hidden"
-  );
-
-
-  window.scrollTo({
-
-    top: 0,
-
-    behavior: "smooth"
-
-  });
-
-}
-
-
-/* ==========================================================
-   ANNULER MODIFICATION
-========================================================== */
-
-function cancelEdit() {
-
-  document.getElementById(
-    "editId"
-  ).value = "";
-
-
-  document.getElementById(
-    "equipe1"
-  ).value = "";
-
-
-  document.getElementById(
-    "equipe2"
-  ).value = "";
-
-
-  document.getElementById(
-    "pari"
-  ).value = "";
-
-
-  document.getElementById(
-    "precision"
-  ).value = "";
-
-
-  document.getElementById(
-    "cote"
-  ).value = "";
-
-
-  document.getElementById(
-    "description"
-  ).value = "";
-
-
-  document.getElementById(
-    "date_match"
-  ).value = "";
-
-
-  document.getElementById(
-    "statut"
-  ).value =
-    "Pending";
-
-
-  document.getElementById(
-    "formTitle"
-  ).textContent =
-    "➕ Ajouter un pronostic";
-
-
-  document.getElementById(
-    "saveButton"
-  ).textContent =
-    "➕ Publier le pronostic";
-
-
-  document.getElementById(
-    "cancelButton"
-  ).classList.add(
-    "hidden"
-  );
-
-}
-
-
-/* ==========================================================
-   SUPPRIMER
-========================================================== */
-
-async function deletePronostic(id) {
-
-  const confirmation =
-    confirm(
-      "⚠️ Veux-tu vraiment supprimer ce pronostic ?"
-    );
-
-
-  if (!confirmation) {
-
-    return;
-
-  }
-
-
-  const user =
-    await getCurrentUser();
-
-
-  if (!user) {
-
-    showLogin();
-
-    return;
-
-  }
-
-
-  const {
-    error
-  } =
-    await supabaseClient
-      .from("pronostics")
-      .delete()
-      .eq(
-        "id",
-        id
-      )
-      .eq(
-        "user_id",
-        user.id
-      );
-
-
-  if (error) {
-
     console.error(error);
 
-    alert(
-      "❌ Erreur : " +
-      error.message
-    );
-
     return;
-
   }
 
 
-  alert(
-    "✅ Pronostic supprimé."
-  );
+  if (!data || data.length === 0) {
+
+    pronosticsList.innerHTML =
+      `
+      <div class="message">
+        Aucun pronostic pour le moment.
+      </div>
+      `;
+
+    return;
+  }
 
 
-  await loadPronostics();
+  pronosticsList.innerHTML =
+    data.map(
+      p => createPronosticHTML(p)
+    ).join("");
 
 }
 
 
-/* ==========================================================
-   AUTHENTIFICATION
-========================================================== */
+/* ============================================================
+   AFFICHAGE D'UN PRONOSTIC
+============================================================ */
 
-supabaseClient.auth.onAuthStateChange(
-  (
-    event,
-    session
-  ) => {
+function createPronosticHTML(p) {
 
-    if (session) {
+  const status =
+    String(p.statut || "En attente");
 
-      showAdmin();
 
-    } else {
+  let statusClass =
+    "pending";
 
-      showLogin();
 
-    }
+  if (
+    status.toLowerCase()
+      .includes("gagn")
+  ) {
+
+    statusClass =
+      "won";
 
   }
-);
+
+  else if (
+    status.toLowerCase()
+      .includes("perdu")
+  ) {
+
+    statusClass =
+      "lost";
+
+  }
 
 
-/* ==========================================================
-   DEMARRAGE
-========================================================== */
+  const date =
+    formatDate(p.date_match);
 
-checkSession();
+
+  return `
+
+    <div class="pronostic">
+
+      <div class="teams">
+        ⚽ ${escapeHtml(p.equipe1 || "")}
+        🆚
+        ${escapeHtml(p.equipe2 || "")}
+      </div>
+
+
+      <div class="info">
+        🎯 <strong>Pronostic :</strong>
+        ${escapeHtml(p.pari || "")}
+      </div>
+
+
+      <div class="odds">
+        Cote :
+        ${escapeHtml(p.cote ?? "")}
+      </div>
+
+
+      <div class="info">
+        📅 ${escapeHtml(date)}
+      </div>
+
+
+      <div class="info">
+        📝
+        ${escapeHtml(p.description || "Aucune analyse")}
+      </div>
+
+
+      <div class="status ${statusClass}">
+        ${escapeHtml(status)}
+      </div>
+
+
+      <div style="margin-top:15px;">
+
+        <!-- IMPORTANT :
+             guillemets simples autour de l'attribut
+             pour éviter le bug de JSON.stringify -->
+
+        <button
+          type="button"
+          class="edit"
+          onclick='editPronostic(${JSON.stringify(p.id)})'>
+          ✏️ Modifier
+        </button>
+
+
+        <button
+          type="button"
+          class="danger"
+          onclick='deletePronostic(${JSON.stringify(p.id)})'>
+          🗑️ Supprimer
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   FORMAT DATE
+============================================================ */
+
+function formatDate(value) {
+
+  if (!value) {
+
+    return "Date inconnue";
+
+  }
+
+
+  const d =
+    new Date(
+      String(value)
+        .replace(" ", "T")
+    );
+
+
+  if (isNaN(d.getTime())) {
+
+    return String(value);
+
+  }
+
+
+  return d.toLocaleString(
+    "fr-FR",
+    {
+      dateStyle: "full",
+      timeStyle: "short"
+    }
+  );
+
+}
+
+
+/* ============================================================
+   SÉCURITÉ HTML
+============================================================ */
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
 
 </script>
 
 </body>
-  </html>
+</html>

@@ -1,7 +1,10 @@
 from flask import Flask, jsonify
+import os
+import requests
 
 app = Flask(__name__)
 
+API_FOOTBALL_URL = "https://v3.football.api-sports.io"
 
 @app.route("/")
 def home():
@@ -12,9 +15,25 @@ def home():
 
 @app.route("/api/matches")
 def matches():
-    return jsonify({
-        "matches": []
-    })
+    api_key = os.getenv("API_FOOTBALL_KEY")
+
+    if not api_key:
+        return jsonify({
+            "error": "API_FOOTBALL_KEY manquante"
+        }), 500
+
+    headers = {
+        "x-apisports-key": api_key
+    }
+
+    response = requests.get(
+        f"{API_FOOTBALL_URL}/fixtures",
+        headers=headers,
+        params={"live": "all"},
+        timeout=20
+    )
+
+    return jsonify(response.json()), response.status_code
 
 
 if __name__ == "__main__":

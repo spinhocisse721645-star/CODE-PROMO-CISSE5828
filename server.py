@@ -33,18 +33,22 @@ def matches():
         "sports": ["football"],
         "matchStatuses": ["all"],
         "leagues": [],
-        "dayOffsets": ["0"],
+        "dayOffsets": ["0"]
+    }
+
+    params = {
         "maxItems": 500
     }
 
     response = requests.post(
         APIFY_URL,
         headers=headers,
+        params=params,
         json=data,
         timeout=300
     )
 
-    if response.status_code != 200:
+    if response.status_code not in [200, 201]:
         return jsonify({
             "error": "Erreur Apify",
             "details": response.text

@@ -4,36 +4,52 @@ import requests
 
 app = Flask(__name__)
 
-API_FOOTBALL_URL = "https://v3.football.api-sports.io"
+APIFY_URL = "https://api.apify.com/v2/acts/dataizi-srl~flashscore-data-extractor/run-sync-get-dataset-items"
+
 
 @app.route("/")
 def home():
     return jsonify({
-        "message": "CISSE PRONOS API fonctionne !"
+        "message": "CISSE PRONOS API fonctionne avec Apify !"
     })
 
 
 @app.route("/api/matches")
 def matches():
-    api_key = os.getenv("API_FOOTBALL_KEY")
+    token = os.getenv("APIFY_API_TOKEN")
 
-    if not api_key:
+    if not token:
         return jsonify({
-            "error": "API_FOOTBALL_KEY manquante"
+            "error": "APIFY_API_TOKEN manquante"
         }), 500
 
     headers = {
-        "x-apisports-key": api_key
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
     }
 
-    response = requests.get(
-        f"{API_FOOTBALL_URL}/fixtures",
+    data = {
+        "mode": "score_mode",
+        "sports": ["football"],
+        "matchStatuses": ["all"],
+        "leagues": [],
+        "dayOffsets": ["0"]
+    }
+
+    response = requests.post(
+        APIFY_URL,
         headers=headers,
-        params={"live": "all"},
-        timeout=20
+        json=data,
+        timeout=300
     )
 
-    return jsonify(response.json()), response.status_code
+    if response.status_code != 200:
+        return jsonify({
+            "error": "Erreur Apify",
+            "details": response.text
+        }), response.status_code
+
+    return jsonify(response.json())
 
 
 if __name__ == "__main__":

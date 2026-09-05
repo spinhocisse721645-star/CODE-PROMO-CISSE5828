@@ -33,7 +33,8 @@ def matches():
         "sports": ["football"],
         "matchStatuses": ["all"],
         "leagues": [],
-        "dayOffsets": ["0"]
+        "dayOffsets": ["0"],
+        "maxItems": 500
     }
 
     response = requests.post(

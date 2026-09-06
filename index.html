@@ -59,8 +59,9 @@
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 4px;
-      justify-content: flex-start; /* Aligné à gauche pour faciliter le défilement */
+      justify-content: flex-start;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
 
     .date-scroll::-webkit-scrollbar {
@@ -77,6 +78,7 @@
       cursor: pointer;
       color: #9fa9c6;
       transition: all 0.2s ease;
+      user-select: none;
     }
 
     .date-tab.active {
@@ -319,6 +321,7 @@
       width: 33.33%;
       height: 100%;
       transition: color 0.2s;
+      user-select: none;
     }
 
     .nav-item .icon {
@@ -421,7 +424,7 @@
           <p>Code promo :</p>
           <div class="promo">CISSE5828</div>
           <div class="partner-buttons">
-            <button class="btn btn-secondary" onclick="copyCode()">📋 Copier</button>
+            <button class="btn btn-secondary" onclick="copyCode('CISSE5828')">📋 Copier</button>
             <a class="btn btn-primary" href="https://refpa3665.com/L?tag=d_2940087m_45415c_&site=2940087&ad=45415" target="_blank" rel="noopener noreferrer">🚀 Inscription</a>
           </div>
         </div>
@@ -431,7 +434,7 @@
           <p>Code promo :</p>
           <div class="promo">CISSE5828</div>
           <div class="partner-buttons">
-            <button class="btn btn-secondary" onclick="copyCode()">📋 Copier</button>
+            <button class="btn btn-secondary" onclick="copyCode('CISSE5828')">📋 Copier</button>
             <a class="btn btn-primary" href="https://reffpa.com/L?tag=d_2237095m_97c_&site=2237095&ad=97" target="_blank" rel="noopener noreferrer">🚀 Inscription</a>
           </div>
         </div>
@@ -474,10 +477,10 @@
         .replace(/'/g, "&#039;");
     }
 
-    function copyCode() {
-      navigator.clipboard.writeText("CISSE5828")
-        .then(() => alert("✅ Code promo CISSE5828 copié !"))
-        .catch(() => alert("Code promo : CISSE5828"));
+    function copyCode(code = "CISSE5828") {
+      navigator.clipboard.writeText(code)
+        .then(() => alert(`✅ Code promo ${code} copié !`))
+        .catch(() => alert(`Code promo : ${code}`));
     }
 
     function switchTab(tabId, element) {
@@ -495,10 +498,16 @@
       renderPronostics();
     }
 
+    function parseMatchDate(dateValue) {
+      if (!dateValue) return null;
+      const cleanStr = String(dateValue).replace(" ", "T");
+      const d = new Date(cleanStr);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
     function formatDate(dateValue) {
-      if (!dateValue) return "Date non définie";
-      const date = new Date(String(dateValue).replace(" ", "T"));
-      if (isNaN(date.getTime())) return escapeHtml(dateValue);
+      const date = parseMatchDate(dateValue);
+      if (!date) return escapeHtml(dateValue || "Date non définie");
 
       return date.toLocaleString("fr-FR", {
         day: "2-digit",
@@ -515,9 +524,9 @@
       if (statut.includes("perdu") || statut === "lost") return "lost";
       if (statut.includes("attente") || statut === "pending") return "pending";
 
-      if (pronostic.date_match) {
-        const matchDate = new Date(String(pronostic.date_match).replace(" ", "T"));
-        if (!isNaN(matchDate.getTime()) && matchDate > new Date()) return "upcoming";
+      const matchDate = parseMatchDate(pronostic.date_match);
+      if (matchDate && matchDate > new Date()) {
+        return "upcoming";
       }
 
       return "pending";
@@ -551,8 +560,9 @@
         const matchStatus = selectedStatus === "all" || status === selectedStatus;
 
         let matchDateFilter = true;
-        if (p.date_match) {
-          const mDate = new Date(String(p.date_match).replace(" ", "T"));
+        const mDate = parseMatchDate(p.date_match);
+
+        if (mDate) {
           if (selectedDateFilter === 'today') matchDateFilter = isSameDay(mDate, today);
           else if (selectedDateFilter === 'tomorrow') matchDateFilter = isSameDay(mDate, tomorrow);
           else if (selectedDateFilter === 'after_tomorrow') matchDateFilter = isSameDay(mDate, afterTomorrow);
@@ -663,7 +673,8 @@
         renderTop10();
 
       } catch (error) {
-        document.getElementById("pronostics").innerHTML = `<div class="message error">❌ Erreur lors du chargement.</div>`;
+        console.error("Erreur Supabase :", error);
+        document.getElementById("pronostics").innerHTML = `<div class="message error">❌ Erreur lors du chargement des données.</div>`;
       }
     }
 

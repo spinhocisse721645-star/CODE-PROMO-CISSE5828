@@ -21,7 +21,7 @@
       background: #0b1020;
       color: #ffffff;
       line-height: 1.5;
-      padding-bottom: 75px; /* Espace réservé pour la barre fixe en bas */
+      padding-bottom: 75px;
     }
 
     a {
@@ -59,7 +59,7 @@
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 4px;
-      justify-content: center;
+      justify-content: flex-start; /* Aligné à gauche pour faciliter le défilement */
       scrollbar-width: none;
     }
 
@@ -360,14 +360,14 @@
 
 <body>
 
-  <!-- HEADER + CHOIX DES DATES -->
+  <!-- HEADER + CHOIX DES DATES ("Tous" à gauche) -->
   <header>
     <h1>🔥 CISSE PRONOS</h1>
     <div class="date-scroll">
+      <div class="date-tab" onclick="setDateFilter('all', this)">Tous</div>
       <div class="date-tab active" onclick="setDateFilter('today', this)">Aujourd'hui</div>
       <div class="date-tab" onclick="setDateFilter('tomorrow', this)">Demain</div>
       <div class="date-tab" onclick="setDateFilter('after_tomorrow', this)">Après-demain</div>
-      <div class="date-tab" onclick="setDateFilter('all', this)">Tous</div>
     </div>
   </header>
 
@@ -440,7 +440,7 @@
 
   </main>
 
-  <!-- BARRE DE NAVIGATION FIXE EN BAS (BOTTOM NAV) -->
+  <!-- BARRE DE NAVIGATION FIXE EN BAS -->
   <nav class="bottom-nav">
     <div class="nav-item active" onclick="switchTab('tab-matchs', this)">
       <div class="icon">⚽</div>

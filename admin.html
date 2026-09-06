@@ -170,11 +170,35 @@
     .won { background: #166534; }
     .lost { background: #991b1b; }
 
-    /* BOUTONS SUR UNE MÊME LIGNE */
+    /* BOUTONS D'ACTION RAPIDE DES STATUTS */
+    .quick-status-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+
+    .btn-quick-status {
+      padding: 6px 4px;
+      font-size: 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-quick-status.won { background: #166534; border-color: #22c55e; }
+    .btn-quick-status.lost { background: #991b1b; border-color: #ef4444; }
+    .btn-quick-status.pending { background: #92400e; border-color: #f59e0b; }
+
+    /* BOUTONS D'ÉDITION / SUPPRESSION SUR UNE MÊME LIGNE */
     .action-buttons {
       display: flex;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .action-buttons button {
@@ -469,6 +493,24 @@ async function editPronostic(id) {
   showMessage("Mode modification activé. ✏️", "success");
 }
 
+// CHANGER LE STATUT EN UN CLIC
+async function quickUpdateStatus(id, newStatus) {
+  if (!currentUser) return showMessage("Tu dois être connecté.", "error");
+
+  const { error } = await supabaseClient
+    .from("pronostics")
+    .update({ statut: newStatus })
+    .eq("id", id)
+    .eq("user_id", currentUser.id);
+
+  if (error) {
+    showMessage("Erreur lors de la mise à jour : " + error.message, "error");
+  } else {
+    showMessage(`Statut mis à jour en : ${newStatus} ✅`, "success");
+    await loadPronostics();
+  }
+}
+
 async function deletePronostic(id) {
   if (!id) return showMessage("ID du pronostic introuvable.", "error");
 
@@ -561,6 +603,19 @@ function createPronosticHTML(p) {
 
       <div class="info-line">
         📝 <em>${escapeHtml(p.description || "Aucune analyse")}</em>
+      </div>
+
+      <!-- BOUTONS MISE À JOUR RAPIDE DUS STATUT -->
+      <div class="quick-status-row">
+        <button type="button" class="btn-quick-status won" onclick='quickUpdateStatus(${JSON.stringify(p.id)}, "Gagné")'>
+          🟢 Gagné
+        </button>
+        <button type="button" class="btn-quick-status lost" onclick='quickUpdateStatus(${JSON.stringify(p.id)}, "Perdu")'>
+          🔴 Perdu
+        </button>
+        <button type="button" class="btn-quick-status pending" onclick='quickUpdateStatus(${JSON.stringify(p.id)}, "En attente")'>
+          ⏳ Attente
+        </button>
       </div>
 
       <div class="action-buttons">

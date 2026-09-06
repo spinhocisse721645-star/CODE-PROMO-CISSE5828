@@ -21,7 +21,7 @@
       background: #0b1020;
       color: #ffffff;
       line-height: 1.5;
-      padding-bottom: 20px;
+      padding-bottom: 75px; /* Espace réservé pour la barre fixe en bas */
     }
 
     a {
@@ -36,32 +36,62 @@
     }
 
     /* =========================
-       HEADER
+       HEADER & DEFILEMENT DATES
     ========================= */
     header {
       background: linear-gradient(135deg, #111936, #18244a);
-      padding: 20px 15px;
+      padding: 14px 10px 10px;
       text-align: center;
       border-bottom: 1px solid #26345f;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     header h1 {
-      font-size: 26px;
+      font-size: 20px;
       color: #00ff9d;
-      margin-bottom: 4px;
+      margin-bottom: 10px;
     }
 
-    header p {
-      color: #b9c2dc;
-      font-size: 14px;
+    .date-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      justify-content: center;
+      scrollbar-width: none;
+    }
+
+    .date-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .date-tab {
+      background: #11182d;
+      border: 1px solid #33416d;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      cursor: pointer;
+      color: #9fa9c6;
+      transition: all 0.2s ease;
+    }
+
+    .date-tab.active {
+      border-color: #ff4757;
+      background: #1e293b;
+      color: #ffffff;
+      font-weight: bold;
     }
 
     /* =========================
-       PUBLICITE
+       PUBLICITE & TITRES
     ========================= */
     .ad {
-      margin: 16px 0;
-      min-height: 70px;
+      margin: 12px 0;
+      min-height: 55px;
       border: 1px dashed #52618d;
       border-radius: 10px;
       display: flex;
@@ -70,16 +100,13 @@
       text-align: center;
       color: #9fa9c6;
       background: #10172c;
-      padding: 10px;
-      font-size: 0.85rem;
+      padding: 8px;
+      font-size: 0.8rem;
     }
 
-    /* =========================
-       TITRES
-    ========================= */
     .section-title {
-      margin: 20px 0 12px;
-      font-size: 18px;
+      margin: 16px 0 10px;
+      font-size: 16px;
       color: #00ff9d;
     }
 
@@ -89,61 +116,55 @@
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin: 15px 0;
+      gap: 6px;
+      margin: 12px 0;
     }
 
     .stat {
       background: #121a31;
       border: 1px solid #26345f;
-      border-radius: 10px;
-      padding: 10px 6px;
+      border-radius: 8px;
+      padding: 8px 4px;
       text-align: center;
     }
 
     .stat-number {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
       color: #00ff9d;
     }
 
     .stat-label {
       color: #9fa9c6;
-      font-size: 11px;
-      margin-top: 2px;
+      font-size: 10px;
     }
 
     /* =========================
-       FILTRES
+       FILTRES ET RECHERCHE
     ========================= */
     .filters {
       display: grid;
-      grid-template-columns: 1fr 160px;
-      gap: 10px;
-      margin-bottom: 16px;
+      grid-template-columns: 1fr 130px;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .filters input,
     .filters select {
       width: 100%;
-      padding: 10px;
+      padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid #33416d;
       background: #11182d;
       color: white;
       outline: none;
-      font-size: 13px;
-    }
-
-    .filters input:focus,
-    .filters select:focus {
-      border-color: #00ff9d;
+      font-size: 12px;
     }
 
     /* =========================
        PRONOSTICS COMPACTS
     ========================= */
-    #pronostics {
+    #pronostics, #top10List {
       display: grid;
       gap: 10px;
     }
@@ -156,7 +177,7 @@
     }
 
     .teams {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: bold;
       margin-bottom: 6px;
     }
@@ -166,7 +187,7 @@
     }
 
     .info-line {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #d1d5db;
       margin-bottom: 4px;
     }
@@ -176,23 +197,23 @@
       gap: 8px;
       align-items: center;
       flex-wrap: wrap;
-      margin: 8px 0;
+      margin: 6px 0;
     }
 
     .cote {
       background: #16a34a;
       color: white;
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 2px 8px;
+      border-radius: 5px;
       font-weight: bold;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
     }
 
     .status {
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 2px 8px;
+      border-radius: 5px;
       font-weight: bold;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
     }
 
     .status-pending { background: #92400e; color: white; }
@@ -201,13 +222,13 @@
     .status-upcoming { background: #1e3a8a; color: white; }
 
     .description {
-      margin-top: 8px;
-      padding: 8px 10px;
+      margin-top: 6px;
+      padding: 8px;
       border-left: 3px solid #00ff9d;
       background: #0d1428;
       color: #c8d0e4;
       border-radius: 4px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
 
     /* =========================
@@ -217,38 +238,37 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .partner {
       background: #121a31;
       border: 1px solid #26345f;
       border-radius: 10px;
-      padding: 14px;
+      padding: 12px;
       text-align: center;
     }
 
     .partner h3 {
-      font-size: 18px;
-      margin-bottom: 4px;
+      font-size: 15px;
+      margin-bottom: 2px;
     }
 
     .partner p {
       color: #aeb7cf;
-      font-size: 12px;
-      margin-bottom: 6px;
+      font-size: 11px;
+      margin-bottom: 4px;
     }
 
     .promo {
       display: inline-block;
       background: #0c1428;
       border: 1px solid #33416d;
-      padding: 6px 10px;
+      padding: 4px 8px;
       border-radius: 6px;
-      margin: 4px 0 8px;
+      margin-bottom: 6px;
       font-weight: bold;
-      letter-spacing: 1px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
 
     .partner-buttons {
@@ -259,13 +279,12 @@
 
     .btn {
       flex: 1;
-      display: inline-block;
-      padding: 8px 10px;
+      padding: 6px 8px;
       border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
       border: none;
-      font-size: 12px;
+      font-size: 11px;
       text-align: center;
     }
 
@@ -273,8 +292,53 @@
     .btn-secondary { background: #26345f; color: white; }
 
     /* =========================
-       MESSAGES & FOOTER
+       BARRE DE NAVIGATION DU BAS (BOTTOM NAV)
     ========================= */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #090d18;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 11px;
+      cursor: pointer;
+      width: 33.33%;
+      height: 100%;
+      transition: color 0.2s;
+    }
+
+    .nav-item .icon {
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    .nav-item.active {
+      color: #ff4757;
+      font-weight: bold;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
     .message {
       padding: 12px;
       background: #121a31;
@@ -287,22 +351,8 @@
 
     .error { color: #ff7a86; border-color: #63303a; }
 
-    footer {
-      margin-top: 30px;
-      padding: 15px;
-      text-align: center;
-      background: #080d1b;
-      border-top: 1px solid #202b4e;
-      color: #7f89a6;
-      font-size: 12px;
-    }
-
-    /* =========================
-       RESPONSIVE MOBILE
-    ========================= */
     @media (max-width: 600px) {
       .stats { grid-template-columns: repeat(2, 1fr); }
-      .filters { grid-template-columns: 1fr; }
       .partners { grid-template-columns: 1fr; }
     }
   </style>
@@ -310,90 +360,101 @@
 
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER + CHOIX DES DATES -->
   <header>
-    <div class="container">
-      <h1>🔥 CISSE PRONOS</h1>
-      <p>Pronostics & analyses sportives</p>
+    <h1>🔥 CISSE PRONOS</h1>
+    <div class="date-scroll">
+      <div class="date-tab active" onclick="setDateFilter('today', this)">Aujourd'hui</div>
+      <div class="date-tab" onclick="setDateFilter('tomorrow', this)">Demain</div>
+      <div class="date-tab" onclick="setDateFilter('after_tomorrow', this)">Après-demain</div>
+      <div class="date-tab" onclick="setDateFilter('all', this)">Tous</div>
     </div>
   </header>
 
   <main class="container">
 
-    <!-- PUBLICITE -->
-    <div class="ad">📢 ESPACE PUBLICITAIRE</div>
+    <!-- ONGLET 1 : MATCHS -->
+    <div id="tab-matchs" class="tab-content active">
+      <div class="ad">📢 ESPACE PUBLICITAIRE</div>
 
-    <!-- STATISTIQUES -->
-    <h2 class="section-title">📊 Statistiques</h2>
-    <div class="stats">
-      <div class="stat"><div class="stat-number" id="totalStats">0</div><div class="stat-label">Total</div></div>
-      <div class="stat"><div class="stat-number" id="pendingStats">0</div><div class="stat-label">En attente</div></div>
-      <div class="stat"><div class="stat-number" id="wonStats">0</div><div class="stat-label">Gagnés</div></div>
-      <div class="stat"><div class="stat-number" id="lostStats">0</div><div class="stat-label">Perdus</div></div>
-      <div class="stat"><div class="stat-number" id="upcomingStats">0</div><div class="stat-label">À venir</div></div>
-      <div class="stat"><div class="stat-number" id="finishedStats">0</div><div class="stat-label">Terminés</div></div>
-      <div class="stat"><div class="stat-number" id="winRateStats">0%</div><div class="stat-label">Réussite</div></div>
-    </div>
-
-    <!-- PRONOSTICS -->
-    <h2 class="section-title">🎯 Derniers pronostics</h2>
-
-    <div class="filters">
-      <input type="text" id="searchInput" placeholder="🔎 Rechercher une équipe ou un pari...">
-      <select id="statusFilter">
-        <option value="all">Tous les statuts</option>
-        <option value="upcoming">À venir</option>
-        <option value="pending">En attente</option>
-        <option value="won">Gagnés</option>
-        <option value="lost">Perdus</option>
-      </select>
-    </div>
-
-    <div id="pronostics">
-      <div class="message">⏳ Chargement des pronostics...</div>
-    </div>
-
-    <!-- PUBLICITE -->
-    <div class="ad">📢 ESPACE PUBLICITAIRE</div>
-
-    <!-- PARTENAIRES -->
-    <h2 class="section-title">🤝 Nos partenaires</h2>
-    <div class="partners">
-      <!-- MELBET -->
-      <div class="partner">
-        <h3>🎰 MelBet</h3>
-        <p>Code promo d'inscription :</p>
-        <div class="promo">CISSE5828</div>
-        <div class="partner-buttons">
-          <button class="btn btn-secondary" onclick="copyCode()">📋 Copier</button>
-          <a class="btn btn-primary" href="https://refpa3665.com/L?tag=d_2940087m_45415c_&site=2940087&ad=45415" target="_blank" rel="noopener noreferrer">🚀 S'inscrire</a>
-        </div>
+      <div class="filters">
+        <input type="text" id="searchInput" placeholder="🔎 Recherche équipe / pari...">
+        <select id="statusFilter">
+          <option value="all">Tous les statuts</option>
+          <option value="upcoming">À venir</option>
+          <option value="pending">En attente</option>
+          <option value="won">Gagnés</option>
+          <option value="lost">Perdus</option>
+        </select>
       </div>
 
-      <!-- 1XBET -->
-      <div class="partner">
-        <h3>⚽ 1xBet</h3>
-        <p>Code promo d'inscription :</p>
-        <div class="promo">CISSE5828</div>
-        <div class="partner-buttons">
-          <button class="btn btn-secondary" onclick="copyCode()">📋 Copier</button>
-          <a class="btn btn-primary" href="https://reffpa.com/L?tag=d_2237095m_97c_&site=2237095&ad=97" target="_blank" rel="noopener noreferrer">🚀 S'inscrire</a>
-        </div>
+      <div id="pronostics">
+        <div class="message">⏳ Chargement des pronostics...</div>
       </div>
     </div>
 
-    <!-- INFORMATION -->
-    <div class="message">
-      <p>ℹ️ Les pronostics affichés sur ce site sont des analyses et ne garantissent aucun résultat.</p>
-      <p style="margin-top:4px;">🎯 Jouez de manière responsable.</p>
+    <!-- ONGLET 2 : TOP 10 -->
+    <div id="tab-top10" class="tab-content">
+      <h2 class="section-title">🏆 Top 10 des meilleures cotes</h2>
+      <div id="top10List">
+        <div class="message">Chargement du Top 10...</div>
+      </div>
+    </div>
+
+    <!-- ONGLET 3 : TIPS DU JOUR -->
+    <div id="tab-tips" class="tab-content">
+      <h2 class="section-title">📊 Statistiques générales</h2>
+      <div class="stats">
+        <div class="stat"><div class="stat-number" id="totalStats">0</div><div class="stat-label">Total</div></div>
+        <div class="stat"><div class="stat-number" id="pendingStats">0</div><div class="stat-label">En attente</div></div>
+        <div class="stat"><div class="stat-number" id="wonStats">0</div><div class="stat-label">Gagnés</div></div>
+        <div class="stat"><div class="stat-number" id="lostStats">0</div><div class="stat-label">Perdus</div></div>
+        <div class="stat"><div class="stat-number" id="upcomingStats">0</div><div class="stat-label">À venir</div></div>
+        <div class="stat"><div class="stat-number" id="finishedStats">0</div><div class="stat-label">Terminés</div></div>
+        <div class="stat"><div class="stat-number" id="winRateStats">0%</div><div class="stat-label">Réussite</div></div>
+      </div>
+
+      <h2 class="section-title">🤝 Nos partenaires recommandés</h2>
+      <div class="partners">
+        <div class="partner">
+          <h3>🎰 MelBet</h3>
+          <p>Code promo :</p>
+          <div class="promo">CISSE5828</div>
+          <div class="partner-buttons">
+            <button class="btn btn-secondary" onclick="copyCode()">📋 Copier</button>
+            <a class="btn btn-primary" href="https://refpa3665.com/L?tag=d_2940087m_45415c_&site=2940087&ad=45415" target="_blank" rel="noopener noreferrer">🚀 Inscription</a>
+          </div>
+        </div>
+
+        <div class="partner">
+          <h3>⚽ 1xBet</h3>
+          <p>Code promo :</p>
+          <div class="promo">CISSE5828</div>
+          <div class="partner-buttons">
+            <button class="btn btn-secondary" onclick="copyCode()">📋 Copier</button>
+            <a class="btn btn-primary" href="https://reffpa.com/L?tag=d_2237095m_97c_&site=2237095&ad=97" target="_blank" rel="noopener noreferrer">🚀 Inscription</a>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2026 CISSE PRONOS — Analyses sportives & Affiliation</p>
-  </footer>
+  <!-- BARRE DE NAVIGATION FIXE EN BAS (BOTTOM NAV) -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('tab-matchs', this)">
+      <div class="icon">⚽</div>
+      <div>Matchs</div>
+    </div>
+    <div class="nav-item" onclick="switchTab('tab-top10', this)">
+      <div class="icon">🏆</div>
+      <div>Top 10</div>
+    </div>
+    <div class="nav-item" onclick="switchTab('tab-tips', this)">
+      <div class="icon">📄</div>
+      <div>Tips du jour</div>
+    </div>
+  </nav>
 
   <script>
     const SUPABASE_URL = "https://avonpsmoruevwlokkfjg.supabase.co";
@@ -401,6 +462,7 @@
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let allPronostics = [];
+    let selectedDateFilter = 'today';
 
     function escapeHtml(value) {
       if (value === null || value === undefined) return "";
@@ -413,10 +475,24 @@
     }
 
     function copyCode() {
-      const code = "CISSE5828";
-      navigator.clipboard.writeText(code)
+      navigator.clipboard.writeText("CISSE5828")
         .then(() => alert("✅ Code promo CISSE5828 copié !"))
         .catch(() => alert("Code promo : CISSE5828"));
+    }
+
+    function switchTab(tabId, element) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      element.classList.add('active');
+    }
+
+    function setDateFilter(filter, element) {
+      document.querySelectorAll('.date-tab').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      selectedDateFilter = filter;
+      renderPronostics();
     }
 
     function formatDate(dateValue) {
@@ -427,7 +503,6 @@
       return date.toLocaleString("fr-FR", {
         day: "2-digit",
         month: "2-digit",
-        year: "numeric",
         hour: "2-digit",
         minute: "2-digit"
       });
@@ -448,18 +523,10 @@
       return "pending";
     }
 
-    function getStatusLabel(status) {
-      if (status === "won") return "🟢 Gagné";
-      if (status === "lost") return "🔴 Perdu";
-      if (status === "upcoming") return "🕒 À venir";
-      return "⏳ En attente";
-    }
-
-    function getStatusClass(status) {
-      if (status === "won") return "status-won";
-      if (status === "lost") return "status-lost";
-      if (status === "upcoming") return "status-upcoming";
-      return "status-pending";
+    function isSameDay(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() &&
+             d1.getMonth() === d2.getMonth() &&
+             d1.getDate() === d2.getDate();
     }
 
     function renderPronostics() {
@@ -467,59 +534,102 @@
       const search = document.getElementById("searchInput").value.toLowerCase().trim();
       const selectedStatus = document.getElementById("statusFilter").value;
 
-      const filtered = allPronostics.filter(pronostic => {
-        const equipe1 = String(pronostic.equipe1 || "").toLowerCase();
-        const equipe2 = String(pronostic.equipe2 || "").toLowerCase();
-        const pari = String(pronostic.pari || "").toLowerCase();
+      const today = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDate() + 1);
+
+      const afterTomorrow = new Date();
+      afterTomorrow.setDate(today.getDate() + 2);
+
+      const filtered = allPronostics.filter(p => {
+        const equipe1 = String(p.equipe1 || "").toLowerCase();
+        const equipe2 = String(p.equipe2 || "").toLowerCase();
+        const pari = String(p.pari || "").toLowerCase();
 
         const matchSearch = !search || equipe1.includes(search) || equipe2.includes(search) || pari.includes(search);
-        const status = getPronosticStatus(pronostic);
+        const status = getPronosticStatus(p);
         const matchStatus = selectedStatus === "all" || status === selectedStatus;
 
-        return matchSearch && matchStatus;
+        let matchDateFilter = true;
+        if (p.date_match) {
+          const mDate = new Date(String(p.date_match).replace(" ", "T"));
+          if (selectedDateFilter === 'today') matchDateFilter = isSameDay(mDate, today);
+          else if (selectedDateFilter === 'tomorrow') matchDateFilter = isSameDay(mDate, tomorrow);
+          else if (selectedDateFilter === 'after_tomorrow') matchDateFilter = isSameDay(mDate, afterTomorrow);
+        }
+
+        return matchSearch && matchStatus && matchDateFilter;
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="message">Aucun pronostic trouvé.</div>`;
+        container.innerHTML = `<div class="message">Aucun pronostic disponible pour ce filtre.</div>`;
         return;
       }
 
-      container.innerHTML = filtered.map(pronostic => {
-        const status = getPronosticStatus(pronostic);
-        const statusLabel = getStatusLabel(status);
-        const statusClass = getStatusClass(status);
+      container.innerHTML = filtered.map(p => {
+        const status = getPronosticStatus(p);
+        let statusClass = "status-pending";
+        let statusLabel = "⏳ En attente";
+
+        if (status === "won") { statusClass = "status-won"; statusLabel = "🟢 Gagné"; }
+        else if (status === "lost") { statusClass = "status-lost"; statusLabel = "🔴 Perdu"; }
+        else if (status === "upcoming") { statusClass = "status-upcoming"; statusLabel = "🕒 À venir"; }
 
         return `
           <article class="pronostic">
             <div class="teams">
-              ⚽ <span>${escapeHtml(pronostic.equipe1)}</span> 🆚 <span>${escapeHtml(pronostic.equipe2)}</span>
+              ⚽ <span>${escapeHtml(p.equipe1)}</span> 🆚 <span>${escapeHtml(p.equipe2)}</span>
             </div>
 
             <div class="info-line">
-              🎯 <strong>Pronostic :</strong> ${escapeHtml(pronostic.pari)}
+              🎯 <strong>Pronostic :</strong> ${escapeHtml(p.pari)}
             </div>
 
             <div class="tags-row">
-              <span class="cote">Cote : ${escapeHtml(pronostic.cote)}</span>
+              <span class="cote">Cote : ${escapeHtml(p.cote)}</span>
               <span class="status ${statusClass}">${statusLabel}</span>
             </div>
 
             <div class="info-line">
-              📅 ${formatDate(pronostic.date_match)}
+              📅 ${formatDate(p.date_match)}
             </div>
 
-            ${pronostic.description ? `<div class="description">📝 <em>${escapeHtml(pronostic.description)}</em></div>` : ""}
+            ${p.description ? `<div class="description">📝 <em>${escapeHtml(p.description)}</em></div>` : ""}
           </article>
         `;
       }).join("");
+    }
+
+    function renderTop10() {
+      const top10Container = document.getElementById("top10List");
+      const top10 = [...allPronostics]
+        .sort((a, b) => (parseFloat(b.cote) || 0) - (parseFloat(a.cote) || 0))
+        .slice(0, 10);
+
+      if (top10.length === 0) {
+        top10Container.innerHTML = `<div class="message">Aucun pronostic disponible.</div>`;
+        return;
+      }
+
+      top10Container.innerHTML = top10.map((p, index) => `
+        <article class="pronostic">
+          <div class="teams">
+            #${index + 1} ⚽ ${escapeHtml(p.equipe1)} 🆚 ${escapeHtml(p.equipe2)}
+          </div>
+          <div class="info-line">🎯 ${escapeHtml(p.pari)}</div>
+          <div class="tags-row">
+            <span class="cote">Cote : ${escapeHtml(p.cote)}</span>
+          </div>
+        </article>
+      `).join("");
     }
 
     function updateStats() {
       const total = allPronostics.length;
       let pending = 0, won = 0, lost = 0, upcoming = 0, finished = 0;
 
-      allPronostics.forEach(pronostic => {
-        const status = getPronosticStatus(pronostic);
+      allPronostics.forEach(p => {
+        const status = getPronosticStatus(p);
         if (status === "pending") pending++;
         if (status === "won") { won++; finished++; }
         if (status === "lost") { lost++; finished++; }
@@ -539,25 +649,21 @@
     }
 
     async function loadPronostics() {
-      const container = document.getElementById("pronostics");
-
       try {
         const { data, error } = await supabaseClient
           .from("pronostics")
           .select("id, equipe1, equipe2, pari, cote, description, date_match, statut")
-          .order("date_match", { ascending: false });
+          .order("date_match", { ascending: true });
 
-        if (error) {
-          container.innerHTML = `<div class="message error">❌ Impossible de charger les pronostics.<br>${escapeHtml(error.message)}</div>`;
-          return;
-        }
+        if (error) throw error;
 
         allPronostics = data || [];
         updateStats();
         renderPronostics();
+        renderTop10();
 
       } catch (error) {
-        container.innerHTML = `<div class="message error">❌ Une erreur est survenue lors du chargement.</div>`;
+        document.getElementById("pronostics").innerHTML = `<div class="message error">❌ Erreur lors du chargement.</div>`;
       }
     }
 

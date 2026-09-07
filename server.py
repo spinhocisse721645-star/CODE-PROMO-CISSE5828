@@ -102,7 +102,7 @@ def save_matches_to_supabase(data):
     try:
 
         response = requests.post(
-            f"{supabase_url}/rest/v1/matches",
+            f"{supabase_url}/rest/v1/matchs",
             headers=headers,
             json=rows,
             timeout=20
@@ -340,4 +340,4 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=5000
-        )
+    )

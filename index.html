@@ -413,8 +413,16 @@
 
   <main class="container">
 
-    <!-- ONGLET 1 : PRONOSTICS -->
-    <div id="tab-matchs" class="tab-content active">
+    <!-- ONGLET 1 : LIVE (vrais matchs) -->
+    <div id="tab-real-matches" class="tab-content active">
+      <h2 class="section-title">🔴 Live</h2>
+      <div id="realMatchesList">
+        <div class="message">⏳ Chargement des matchs...</div>
+      </div>
+    </div>
+
+    <!-- ONGLET 2 : PRONOSTICS -->
+    <div id="tab-matchs" class="tab-content">
       <div class="ad">📢 ESPACE PUBLICITAIRE</div>
 
       <div class="filters">
@@ -430,14 +438,6 @@
 
       <div id="pronostics">
         <div class="message">⏳ Chargement des pronostics...</div>
-      </div>
-    </div>
-
-    <!-- ONGLET 2 : LIVE (vrais matchs) -->
-    <div id="tab-real-matches" class="tab-content">
-      <h2 class="section-title">🔴 Live</h2>
-      <div id="realMatchesList">
-        <div class="message">⏳ Chargement des matchs...</div>
       </div>
     </div>
 
@@ -490,13 +490,13 @@
 
   <!-- BARRE DE NAVIGATION FIXE EN BAS -->
   <nav class="bottom-nav">
-    <div class="nav-item active" onclick="switchTab('tab-matchs', this)">
-      <div class="icon">🎯</div>
-      <div>Pronostics</div>
-    </div>
-    <div class="nav-item" onclick="switchTab('tab-real-matches', this)">
+    <div class="nav-item active" onclick="switchTab('tab-real-matches', this)">
       <div class="icon">🔴</div>
       <div>Live</div>
+    </div>
+    <div class="nav-item" onclick="switchTab('tab-matchs', this)">
+      <div class="icon">🎯</div>
+      <div>Pronostics</div>
     </div>
     <div class="nav-item" onclick="switchTab('tab-top10', this)">
       <div class="icon">🏆</div>

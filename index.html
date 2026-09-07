@@ -182,10 +182,30 @@
       font-size: 0.95rem;
       font-weight: bold;
       margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
     }
 
     .teams span {
       color: #00ff9d;
+    }
+
+    .team-logo {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      vertical-align: middle;
+    }
+
+    .vs-badge {
+      background: #f59e0b;
+      color: #07120d;
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-size: 0.72rem;
+      font-weight: bold;
     }
 
     .info-line {
@@ -413,9 +433,9 @@
       </div>
     </div>
 
-    <!-- ONGLET 2 : CALENDRIER DES VRAIS MATCHS -->
+    <!-- ONGLET 2 : LIVE (vrais matchs) -->
     <div id="tab-real-matches" class="tab-content">
-      <h2 class="section-title">📅 Matchs du jour (données réelles)</h2>
+      <h2 class="section-title">🔴 Live</h2>
       <div id="realMatchesList">
         <div class="message">⏳ Chargement des matchs...</div>
       </div>
@@ -475,8 +495,8 @@
       <div>Pronostics</div>
     </div>
     <div class="nav-item" onclick="switchTab('tab-real-matches', this)">
-      <div class="icon">📅</div>
-      <div>Calendrier</div>
+      <div class="icon">🔴</div>
+      <div>Live</div>
     </div>
     <div class="nav-item" onclick="switchTab('tab-top10', this)">
       <div class="icon">🏆</div>
@@ -716,7 +736,7 @@
     }
 
     // ============================================================
-    // VRAIS MATCHS (Football-Data.org via table "matchs")
+    // VRAIS MATCHS / LIVE (Football-Data.org via table "matchs")
     // ============================================================
 
     function getRealMatchStatusInfo(statut) {
@@ -765,10 +785,20 @@
         const { cls, label } = getRealMatchStatusInfo(m.statut);
         const showScore = m.statut === "IN_PLAY" || m.statut === "PAUSED" || m.statut === "FINISHED";
 
+        const logo1Html = m.logo1
+          ? `<img src="${escapeHtml(m.logo1)}" alt="" class="team-logo" onerror="this.style.display='none'">`
+          : "⚽";
+
+        const logo2Html = m.logo2
+          ? `<img src="${escapeHtml(m.logo2)}" alt="" class="team-logo" onerror="this.style.display='none'">`
+          : "⚽";
+
         return `
           <article class="pronostic">
             <div class="teams">
-              ⚽ <span>${escapeHtml(m.equipe1)}</span> 🆚 <span>${escapeHtml(m.equipe2)}</span>
+              ${logo1Html} <span>${escapeHtml(m.equipe1)}</span>
+              <span class="vs-badge">VS</span>
+              ${logo2Html} <span>${escapeHtml(m.equipe2)}</span>
             </div>
 
             ${showScore ? `
@@ -793,7 +823,7 @@
       try {
         const { data, error } = await supabaseClient
           .from("matchs")
-          .select("id, equipe1, equipe2, date_match, statut, score1, score2")
+          .select("id, equipe1, equipe2, date_match, statut, score1, score2, logo1, logo2")
           .order("date_match", { ascending: true });
 
         if (error) throw error;
@@ -825,4 +855,4 @@
   </script>
 
 </body>
-</html>
+  </html>

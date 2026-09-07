@@ -57,7 +57,6 @@ def matches():
     ):
         return jsonify(matches_cache["data"])
 
-
     # --------------------------------------------------------
     # Dates : aujourd'hui + demain
     # --------------------------------------------------------
@@ -67,7 +66,6 @@ def matches():
 
     date_from = today.strftime("%Y-%m-%d")
     date_to = tomorrow.strftime("%Y-%m-%d")
-
 
     # --------------------------------------------------------
     # Appel Football-Data.org
@@ -98,6 +96,79 @@ def matches():
             "details": str(e)
         }), 502
 
+    # --------------------------------------------------------
+    # Gestion des erreurs
+    # --------------------------------------------------------
+
+    if response.status_code != 200:
+
+        return jsonify({
+            "error": "Erreur Football-Data.org",
+            "status": response.status_code,
+            "details": response.text
+        }), response.status_code
+
+    # --------------------------------------------------------
+    # Lecture de la réponse
+    # --------------------------------------------------------
+
+    data = response.json()
+
+    # --------------------------------------------------------
+    # Sauvegarde dans le cache
+    # --------------------------------------------------------
+
+    matches_cache["data"] = data
+    matches_cache["timestamp"] = now
+
+    # --------------------------------------------------------
+    # Réponse
+    # --------------------------------------------------------
+
+    return jsonify(data)
+
+
+# ============================================================
+# MATCHS LIVE
+# ============================================================
+
+@app.route("/api/live")
+def live_matches():
+
+    token = os.getenv("FOOTBALL_DATA_TOKEN")
+
+    if not token:
+        return jsonify({
+            "error": "FOOTBALL_DATA_TOKEN manquante"
+        }), 500
+
+    # --------------------------------------------------------
+    # Appel Football-Data.org avec le filtre LIVE
+    # --------------------------------------------------------
+
+    headers = {
+        "X-Auth-Token": token
+    }
+
+    params = {
+        "status": "LIVE"
+    }
+
+    try:
+
+        response = requests.get(
+            f"{FOOTBALL_DATA_URL}/matches",
+            headers=headers,
+            params=params,
+            timeout=20
+        )
+
+    except requests.RequestException as e:
+
+        return jsonify({
+            "error": "Impossible de contacter Football-Data.org",
+            "details": str(e)
+        }), 502
 
     # --------------------------------------------------------
     # Gestion des erreurs
@@ -111,27 +182,11 @@ def matches():
             "details": response.text
         }), response.status_code
 
-
     # --------------------------------------------------------
-    # Lecture de la réponse
-    # --------------------------------------------------------
-
-    data = response.json()
-
-
-    # --------------------------------------------------------
-    # Sauvegarde dans le cache
+    # Réponse LIVE
     # --------------------------------------------------------
 
-    matches_cache["data"] = data
-    matches_cache["timestamp"] = now
-
-
-    # --------------------------------------------------------
-    # Réponse
-    # --------------------------------------------------------
-
-    return jsonify(data)
+    return jsonify(response.json())
 
 
 # ============================================================

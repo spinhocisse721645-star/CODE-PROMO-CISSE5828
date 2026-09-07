@@ -69,12 +69,17 @@ def save_matches_to_supabase(data):
         if away_score is None:
             away_score = 0
 
+        home_logo = home_team.get("crest")
+        away_logo = away_team.get("crest")
+
         status = match.get("status", "SCHEDULED")
 
         row = {
             "id": str(match.get("id")),
             "equipe1": home_name,
             "equipe2": away_name,
+            "logo1": home_logo,
+            "logo2": away_logo,
             "date_match": match.get("utcDate"),
             "statut": status,
             "minute": 0,
@@ -340,4 +345,4 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=5000
-    )
+        )

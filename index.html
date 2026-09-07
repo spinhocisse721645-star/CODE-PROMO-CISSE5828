@@ -164,9 +164,9 @@
     }
 
     /* =========================
-       PRONOSTICS COMPACTS
+       PRONOSTICS / MATCHS COMPACTS
     ========================= */
-    #pronostics, #top10List {
+    #pronostics, #top10List, #realMatchesList {
       display: grid;
       gap: 10px;
     }
@@ -222,6 +222,23 @@
     .status-won { background: #166534; color: white; }
     .status-lost { background: #991b1b; color: white; }
     .status-upcoming { background: #1e3a8a; color: white; }
+    .status-live { background: #dc2626; color: white; animation: pulse 1.5s infinite; }
+    .status-finished { background: #374151; color: white; }
+    .status-other { background: #4b5563; color: white; }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    .score-line {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ffffff;
+      text-align: center;
+      margin: 6px 0;
+    }
 
     .description {
       margin-top: 6px;
@@ -316,16 +333,16 @@
       align-items: center;
       justify-content: center;
       color: #64748b;
-      font-size: 11px;
+      font-size: 10px;
       cursor: pointer;
-      width: 33.33%;
+      width: 25%;
       height: 100%;
       transition: color 0.2s;
       user-select: none;
     }
 
     .nav-item .icon {
-      font-size: 18px;
+      font-size: 17px;
       margin-bottom: 2px;
     }
 
@@ -376,7 +393,7 @@
 
   <main class="container">
 
-    <!-- ONGLET 1 : MATCHS -->
+    <!-- ONGLET 1 : PRONOSTICS -->
     <div id="tab-matchs" class="tab-content active">
       <div class="ad">📢 ESPACE PUBLICITAIRE</div>
 
@@ -396,7 +413,15 @@
       </div>
     </div>
 
-    <!-- ONGLET 2 : TOP 10 -->
+    <!-- ONGLET 2 : CALENDRIER DES VRAIS MATCHS -->
+    <div id="tab-real-matches" class="tab-content">
+      <h2 class="section-title">📅 Matchs du jour (données réelles)</h2>
+      <div id="realMatchesList">
+        <div class="message">⏳ Chargement des matchs...</div>
+      </div>
+    </div>
+
+    <!-- ONGLET 3 : TOP 10 -->
     <div id="tab-top10" class="tab-content">
       <h2 class="section-title">🏆 Top 10 des meilleures cotes</h2>
       <div id="top10List">
@@ -404,7 +429,7 @@
       </div>
     </div>
 
-    <!-- ONGLET 3 : TIPS DU JOUR -->
+    <!-- ONGLET 4 : TIPS DU JOUR -->
     <div id="tab-tips" class="tab-content">
       <h2 class="section-title">📊 Statistiques générales</h2>
       <div class="stats">
@@ -446,8 +471,12 @@
   <!-- BARRE DE NAVIGATION FIXE EN BAS -->
   <nav class="bottom-nav">
     <div class="nav-item active" onclick="switchTab('tab-matchs', this)">
-      <div class="icon">⚽</div>
-      <div>Matchs</div>
+      <div class="icon">🎯</div>
+      <div>Pronostics</div>
+    </div>
+    <div class="nav-item" onclick="switchTab('tab-real-matches', this)">
+      <div class="icon">📅</div>
+      <div>Calendrier</div>
     </div>
     <div class="nav-item" onclick="switchTab('tab-top10', this)">
       <div class="icon">🏆</div>
@@ -465,6 +494,7 @@
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let allPronostics = [];
+    let allRealMatches = [];
     let selectedDateFilter = 'today';
 
     function escapeHtml(value) {
@@ -496,6 +526,7 @@
       element.classList.add('active');
       selectedDateFilter = filter;
       renderPronostics();
+      renderRealMatches();
     }
 
     function parseMatchDate(dateValue) {
@@ -517,6 +548,24 @@
       });
     }
 
+    function isSameDay(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() &&
+             d1.getMonth() === d2.getMonth() &&
+             d1.getDate() === d2.getDate();
+    }
+
+    function matchesDateFilter(mDate, today, tomorrow, afterTomorrow) {
+      if (!mDate) return true;
+      if (selectedDateFilter === 'today') return isSameDay(mDate, today);
+      if (selectedDateFilter === 'tomorrow') return isSameDay(mDate, tomorrow);
+      if (selectedDateFilter === 'after_tomorrow') return isSameDay(mDate, afterTomorrow);
+      return true;
+    }
+
+    // ============================================================
+    // PRONOSTICS (paris manuels)
+    // ============================================================
+
     function getPronosticStatus(pronostic) {
       const statut = String(pronostic.statut || "").toLowerCase().trim();
 
@@ -530,12 +579,6 @@
       }
 
       return "pending";
-    }
-
-    function isSameDay(d1, d2) {
-      return d1.getFullYear() === d2.getFullYear() &&
-             d1.getMonth() === d2.getMonth() &&
-             d1.getDate() === d2.getDate();
     }
 
     function renderPronostics() {
@@ -559,14 +602,8 @@
         const status = getPronosticStatus(p);
         const matchStatus = selectedStatus === "all" || status === selectedStatus;
 
-        let matchDateFilter = true;
         const mDate = parseMatchDate(p.date_match);
-
-        if (mDate) {
-          if (selectedDateFilter === 'today') matchDateFilter = isSameDay(mDate, today);
-          else if (selectedDateFilter === 'tomorrow') matchDateFilter = isSameDay(mDate, tomorrow);
-          else if (selectedDateFilter === 'after_tomorrow') matchDateFilter = isSameDay(mDate, afterTomorrow);
-        }
+        const matchDateFilter = matchesDateFilter(mDate, today, tomorrow, afterTomorrow);
 
         return matchSearch && matchStatus && matchDateFilter;
       });
@@ -673,16 +710,118 @@
         renderTop10();
 
       } catch (error) {
-        console.error("Erreur Supabase :", error);
+        console.error("Erreur Supabase (pronostics) :", error);
         document.getElementById("pronostics").innerHTML = `<div class="message error">❌ Erreur lors du chargement des données.</div>`;
       }
     }
+
+    // ============================================================
+    // VRAIS MATCHS (Football-Data.org via table "matchs")
+    // ============================================================
+
+    function getRealMatchStatusInfo(statut) {
+      const s = String(statut || "").toUpperCase();
+
+      if (s === "IN_PLAY" || s === "PAUSED") {
+        return { cls: "status-live", label: "🔴 En direct" };
+      }
+      if (s === "FINISHED") {
+        return { cls: "status-finished", label: "✅ Terminé" };
+      }
+      if (s === "SCHEDULED" || s === "TIMED") {
+        return { cls: "status-upcoming", label: "🕒 À venir" };
+      }
+      if (s === "POSTPONED") {
+        return { cls: "status-other", label: "⏸️ Reporté" };
+      }
+      if (s === "CANCELLED" || s === "SUSPENDED") {
+        return { cls: "status-other", label: "❌ Annulé" };
+      }
+      return { cls: "status-other", label: s || "Inconnu" };
+    }
+
+    function renderRealMatches() {
+      const container = document.getElementById("realMatchesList");
+      if (!container) return;
+
+      const today = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDate() + 1);
+
+      const afterTomorrow = new Date();
+      afterTomorrow.setDate(today.getDate() + 2);
+
+      const filtered = allRealMatches.filter(m => {
+        const mDate = parseMatchDate(m.date_match);
+        return matchesDateFilter(mDate, today, tomorrow, afterTomorrow);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="message">Aucun match trouvé pour ce filtre.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(m => {
+        const { cls, label } = getRealMatchStatusInfo(m.statut);
+        const showScore = m.statut === "IN_PLAY" || m.statut === "PAUSED" || m.statut === "FINISHED";
+
+        return `
+          <article class="pronostic">
+            <div class="teams">
+              ⚽ <span>${escapeHtml(m.equipe1)}</span> 🆚 <span>${escapeHtml(m.equipe2)}</span>
+            </div>
+
+            ${showScore ? `
+              <div class="score-line">
+                ${escapeHtml(m.score1 ?? 0)} — ${escapeHtml(m.score2 ?? 0)}
+              </div>
+            ` : ""}
+
+            <div class="tags-row">
+              <span class="status ${cls}">${label}</span>
+            </div>
+
+            <div class="info-line">
+              📅 ${formatDate(m.date_match)}
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function loadRealMatches() {
+      try {
+        const { data, error } = await supabaseClient
+          .from("matchs")
+          .select("id, equipe1, equipe2, date_match, statut, score1, score2")
+          .order("date_match", { ascending: true });
+
+        if (error) throw error;
+
+        allRealMatches = data || [];
+        renderRealMatches();
+
+      } catch (error) {
+        console.error("Erreur Supabase (matchs) :", error);
+        const container = document.getElementById("realMatchesList");
+        if (container) {
+          container.innerHTML = `<div class="message error">❌ Erreur lors du chargement des matchs.</div>`;
+        }
+      }
+    }
+
+    // ============================================================
+    // INITIALISATION
+    // ============================================================
 
     document.getElementById("searchInput").addEventListener("input", renderPronostics);
     document.getElementById("statusFilter").addEventListener("change", renderPronostics);
 
     loadPronostics();
+    loadRealMatches();
+
     setInterval(loadPronostics, 60000);
+    setInterval(loadRealMatches, 60000);
   </script>
 
 </body>

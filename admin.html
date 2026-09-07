@@ -117,6 +117,13 @@
 
     .edit-title { color: #f59e0b; }
 
+    .helper-text {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: -8px;
+      margin-bottom: 12px;
+    }
+
     /* =========================================================
        CARTES PRONOSTICS COMPACTES (OPTIMISÉES MOBILE)
     ========================================================= */
@@ -169,6 +176,14 @@
     .pending { background: #92400e; }
     .won { background: #166534; }
     .lost { background: #991b1b; }
+
+    .linked-badge {
+      background: #1e3a8a;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.75rem;
+    }
 
     /* BOUTONS D'ACTION RAPIDE DES STATUTS */
     .quick-status-row {
@@ -245,6 +260,12 @@
     <div class="box">
       <h2 id="formTitle" style="font-size:1.1rem; margin-top:0;">➕ Publier un pronostic</h2>
 
+      <label>Match réel (optionnel)</label>
+      <select id="matchSelect" onchange="onMatchSelected()">
+        <option value="">— Aucun match lié (saisie libre) —</option>
+      </select>
+      <div class="helper-text">Sélectionne un match pour lier ce pronostic aux vraies données (score en direct, etc.)</div>
+
       <label>Équipe 1</label>
       <input type="text" id="equipe1" placeholder="Exemple : Toulouse">
 
@@ -307,6 +328,7 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUser = null;
 let editId = null;
+let availableMatches = [];
 
 const loginBox = document.getElementById("loginBox");
 const adminBox = document.getElementById("adminBox");
@@ -343,6 +365,7 @@ async function login() {
   currentUser = data.user;
   loginMessage.textContent = "";
   showAdmin();
+  await loadMatches();
   await loadPronostics();
 }
 
@@ -365,10 +388,63 @@ async function checkSession() {
   if (data.session) {
     currentUser = data.session.user;
     showAdmin();
+    await loadMatches();
     await loadPronostics();
   }
 }
 checkSession();
+
+// ============================================================
+// CHARGEMENT DES VRAIS MATCHS (pour la liste déroulante)
+// ============================================================
+
+async function loadMatches() {
+  const { data, error } = await supabaseClient
+    .from("matchs")
+    .select("id, equipe1, equipe2, date_match")
+    .order("date_match", { ascending: true });
+
+  if (error) {
+    console.error("Erreur chargement matchs :", error);
+    return;
+  }
+
+  availableMatches = data || [];
+
+  const select = document.getElementById("matchSelect");
+  select.innerHTML = `<option value="">— Aucun match lié (saisie libre) —</option>`;
+
+  availableMatches.forEach(m => {
+    const dateLabel = formatDateShort(m.date_match);
+    const option = document.createElement("option");
+    option.value = m.id;
+    option.textContent = `${m.equipe1} vs ${m.equipe2} (${dateLabel})`;
+    select.appendChild(option);
+  });
+}
+
+function formatDateShort(value) {
+  if (!value) return "";
+  const d = new Date(String(value).replace(" ", "T"));
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+}
+
+function onMatchSelected() {
+  const matchId = document.getElementById("matchSelect").value;
+
+  if (!matchId) return;
+
+  const match = availableMatches.find(m => String(m.id) === String(matchId));
+  if (!match) return;
+
+  document.getElementById("equipe1").value = match.equipe1 || "";
+  document.getElementById("equipe2").value = match.equipe2 || "";
+
+  if (match.date_match) {
+    document.getElementById("date_match").value = toDatetimeLocal(match.date_match);
+  }
+}
 
 async function savePronostic() {
   if (!currentUser) {
@@ -376,6 +452,7 @@ async function savePronostic() {
     return;
   }
 
+  const matchId = document.getElementById("matchSelect").value || null;
   const equipe1 = document.getElementById("equipe1").value.trim();
   const equipe2 = document.getElementById("equipe2").value.trim();
   const pariBase = document.getElementById("pari").value;
@@ -400,7 +477,8 @@ async function savePronostic() {
     description: description,
     date_match: dateMatch.replace("T", " ") + ":00",
     statut: statut,
-    user_id: currentUser.id
+    user_id: currentUser.id,
+    match_id: matchId
   };
 
   let result;
@@ -450,7 +528,7 @@ async function editPronostic(id) {
 
   const { data, error } = await supabaseClient
     .from("pronostics")
-    .select("id,equipe1,equipe2,pari,cote,description,date_match,statut")
+    .select("id,equipe1,equipe2,pari,cote,description,date_match,statut,match_id")
     .eq("id", id)
     .single();
 
@@ -460,6 +538,8 @@ async function editPronostic(id) {
   }
 
   editId = data.id;
+
+  document.getElementById("matchSelect").value = data.match_id || "";
   document.getElementById("equipe1").value = data.equipe1 || "";
   document.getElementById("equipe2").value = data.equipe2 || "";
 
@@ -542,6 +622,7 @@ function cancelEdit() {
 }
 
 function clearForm() {
+  document.getElementById("matchSelect").value = "";
   document.getElementById("equipe1").value = "";
   document.getElementById("equipe2").value = "";
   document.getElementById("pari").value = "Victoire équipe 1";
@@ -557,7 +638,7 @@ async function loadPronostics() {
 
   const { data, error } = await supabaseClient
     .from("pronostics")
-    .select("id,equipe1,equipe2,pari,cote,description,date_match,statut")
+    .select("id,equipe1,equipe2,pari,cote,description,date_match,statut,match_id")
     .order("date_match", { ascending: false });
 
   if (error) {
@@ -595,6 +676,7 @@ function createPronosticHTML(p) {
       <div class="tags-row">
         <span class="odds">Cote : ${escapeHtml(p.cote ?? "")}</span>
         <span class="status ${statusClass}">${escapeHtml(status)}</span>
+        ${p.match_id ? `<span class="linked-badge">🔗 Lié au match</span>` : ""}
       </div>
 
       <div class="info-line">
@@ -649,4 +731,4 @@ function escapeHtml(value) {
 </script>
 
 </body>
-</html>
+  </html>

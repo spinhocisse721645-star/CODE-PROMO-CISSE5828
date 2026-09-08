@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from datetime import datetime, timezone, timedelta
 import os
 import requests
@@ -10,6 +11,9 @@ import requests
 
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
+
+# Autorise le site CISSE PRONOS à appeler l'API Render
+CORS(app)
 
 
 # ============================================================
@@ -39,6 +43,7 @@ def parse_utc_date(value):
     Transforme une date ISO Football-Data.org en datetime UTC.
     Retourne None si la date est invalide.
     """
+
     if not value:
         return None
 
@@ -159,7 +164,7 @@ def convert_match(match):
         "minute": minute,
 
         # IMPORTANT :
-        # On conserve None si aucun score réel n'est disponible.
+        # None si aucun score réel n'est disponible.
         # Un match programmé ne devient donc pas artificiellement 0-0.
         "score1": home_score,
         "score2": away_score,
@@ -218,6 +223,10 @@ def save_matches_to_supabase(data):
             "count": 0
         }
 
+    # SUPABASE_URL doit être uniquement :
+    # https://xxxxxxxx.supabase.co
+    #
+    # Le /rest/v1/matchs est ajouté ici.
     url = (
         supabase_url.rstrip("/")
         + "/rest/v1/matchs"
@@ -457,10 +466,10 @@ def calculate_statistics(matches):
         elif status == "FINISHED":
             finished += 1
 
-        elif status in ["POSTPONED"]:
+        elif status == "POSTPONED":
             postponed += 1
 
-        elif status in ["CANCELLED"]:
+        elif status == "CANCELLED":
             cancelled += 1
 
         else:
@@ -482,8 +491,6 @@ def calculate_statistics(matches):
             or ""
         )
 
-        # Football-Data.org fournit la zone/pays
-        # au niveau du match.
         area = match.get("area") or {}
 
         country = area.get("name")
@@ -727,7 +734,6 @@ def calculate_statistics(matches):
 
         competition_list.append(comp)
 
-    # Tri : plus grandes compétitions d'abord
     competition_list.sort(
         key=lambda item: item["matches"],
         reverse=True
@@ -902,7 +908,6 @@ def api_matches():
 
     save_result = save_matches_to_supabase(data)
 
-    # Toujours retourner une structure identique.
     return jsonify({
         "source": "Football-Data.org",
 
@@ -1036,4 +1041,4 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=port
-    )
+            )

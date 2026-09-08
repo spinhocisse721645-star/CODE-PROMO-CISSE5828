@@ -2563,7 +2563,6 @@
 
     /* ============================================================
        STATISTIQUES PRONOSTICS
-       CONSERVATION DE LA FONCTIONNALITE EXISTANTE
     ============================================================ */
 
     async function loadPronostics() {
@@ -2731,8 +2730,7 @@
               "won",
               "win",
               "gagné",
-              "gagne",
-              "gagné"
+              "gagne"
             ].includes(status)
           ) {
             won++;
@@ -2816,6 +2814,17 @@
 
 
     /* ============================================================
+       AUTO REFRESH MATCHS
+    ============================================================ */
+
+    function startMatchesRefresh() {
+      setInterval(() => {
+        loadRealMatches();
+      }, 30000);
+    }
+
+
+    /* ============================================================
        AUTO REFRESH STATISTIQUES
     ============================================================ */
 
@@ -2866,6 +2875,7 @@
       ]);
 
       startStatisticsRefresh();
+      startMatchesRefresh();
     }
 
 
@@ -2874,4 +2884,4 @@
   </script>
 
 </body>
-  </html>
+</html>

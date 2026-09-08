@@ -428,6 +428,17 @@
       line-height: 1.5;
     }
 
+    .fallback-note {
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #10202f;
+      border: 1px solid #1c3a52;
+      color: #7fd8ff;
+      font-size: 11px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
     /* =========================
        PRONOSTICS
     ========================= */
@@ -927,6 +938,8 @@
     let generalStatsData = null;
 
     let statsAutoRefresh = null;
+
+    let matchesAutoRefresh = null;
 
 
     /* ============================================================
@@ -1564,6 +1577,37 @@
         const events =
           eventsResult.data || [];
 
+        // Charge les statistiques générales du jour
+        // si elles ne sont pas encore disponibles,
+        // pour servir de contenu de repli.
+        if (!generalStatsData) {
+
+          try {
+
+            const response =
+              await fetch(
+                `${API_BASE_URL}/api/statistics/today`,
+                {
+                  method: "GET",
+                  cache: "no-store"
+                }
+              );
+
+            if (response.ok) {
+
+              generalStatsData =
+                await response.json();
+            }
+
+          } catch (fallbackError) {
+
+            console.warn(
+              "Stats générales indisponibles :",
+              fallbackError
+            );
+          }
+        }
+
         const logo1 =
           match.logo1
             ? `
@@ -1658,12 +1702,7 @@
                   ? renderDetailStatistics(
                       statistics
                     )
-                  : `
-                    <div class="no-data">
-                      Aucune statistique réelle
-                      disponible pour ce match.
-                    </div>
-                  `
+                  : renderFallbackGeneralStats()
               }
 
             </div>
@@ -1710,6 +1749,137 @@
           </div>
         `;
       }
+    }
+
+
+    function renderFallbackGeneralStats() {
+
+      if (!generalStatsData) {
+
+        return `
+          <div class="no-data">
+            Aucune statistique réelle
+            disponible pour ce match, et les
+            statistiques générales du jour
+            n'ont pas pu être chargées.
+          </div>
+        `;
+      }
+
+      const overview =
+        generalStatsData.overview || {};
+
+      const goals =
+        generalStatsData.goals || {};
+
+      const results =
+        generalStatsData.results || {};
+
+      const btts =
+        generalStatsData.btts || {};
+
+      return `
+
+        <div class="fallback-note">
+          ℹ️ Aucune statistique spécifique
+          n'est disponible pour ce match.
+          Voici les statistiques générales
+          du jour (${escapeHtml(
+            formatStatsDate(
+              generalStatsData.date
+            )
+          )}), à titre indicatif.
+        </div>
+
+        <div class="stat-grid">
+
+          ${statCard(
+            "⚽",
+            overview.total_matches,
+            "Total matchs"
+          )}
+
+          ${statCard(
+            "🔴",
+            overview.live,
+            "En direct"
+          )}
+
+          ${statCard(
+            "🏁",
+            overview.finished,
+            "Terminés"
+          )}
+
+          ${statCard(
+            "⏳",
+            overview.upcoming,
+            "À venir"
+          )}
+
+        </div>
+
+        <div class="detail-table" style="margin-top:10px;">
+
+          <div class="detail-row">
+            <span>Total buts marqués</span>
+            <strong>${numberValue(goals.total)}</strong>
+          </div>
+
+          <div class="detail-row">
+            <span>Moyenne / match terminé</span>
+            <strong>${
+              goals.average_per_finished_match === null ||
+              goals.average_per_finished_match === undefined
+                ? "—"
+                : Number(
+                    goals.average_per_finished_match
+                  ).toFixed(2)
+            }</strong>
+          </div>
+
+          <div class="detail-row">
+            <span>🏠 Victoires domicile</span>
+            <strong>${numberValue(results.home_wins)} ${
+              results.home_wins_percentage !== null &&
+              results.home_wins_percentage !== undefined
+                ? `(${percentage(results.home_wins_percentage)})`
+                : ""
+            }</strong>
+          </div>
+
+          <div class="detail-row">
+            <span>🤝 Matchs nuls</span>
+            <strong>${numberValue(results.draws)} ${
+              results.draws_percentage !== null &&
+              results.draws_percentage !== undefined
+                ? `(${percentage(results.draws_percentage)})`
+                : ""
+            }</strong>
+          </div>
+
+          <div class="detail-row">
+            <span>✈️ Victoires extérieur</span>
+            <strong>${numberValue(results.away_wins)} ${
+              results.away_wins_percentage !== null &&
+              results.away_wins_percentage !== undefined
+                ? `(${percentage(results.away_wins_percentage)})`
+                : ""
+            }</strong>
+          </div>
+
+          <div class="detail-row">
+            <span>⚔️ BTTS Oui</span>
+            <strong>${numberValue(btts.yes)} ${
+              btts.yes_percentage !== null &&
+              btts.yes_percentage !== undefined
+                ? `(${percentage(btts.yes_percentage)})`
+                : ""
+            }</strong>
+          </div>
+
+        </div>
+      `;
     }
 
 
@@ -2563,6 +2733,7 @@
 
     /* ============================================================
        STATISTIQUES PRONOSTICS
+       CONSERVATION DE LA FONCTIONNALITE EXISTANTE
     ============================================================ */
 
     async function loadPronostics() {
@@ -2730,7 +2901,8 @@
               "won",
               "win",
               "gagné",
-              "gagne"
+              "gagne",
+              "gagné"
             ].includes(status)
           ) {
             won++;
@@ -2814,17 +2986,6 @@
 
 
     /* ============================================================
-       AUTO REFRESH MATCHS
-    ============================================================ */
-
-    function startMatchesRefresh() {
-      setInterval(() => {
-        loadRealMatches();
-      }, 30000);
-    }
-
-
-    /* ============================================================
        AUTO REFRESH STATISTIQUES
     ============================================================ */
 
@@ -2863,6 +3024,28 @@
 
 
     /* ============================================================
+       AUTO REFRESH MATCHS
+    ============================================================ */
+
+    function startMatchesRefresh() {
+
+      if (matchesAutoRefresh) {
+        clearInterval(
+          matchesAutoRefresh
+        );
+      }
+
+      matchesAutoRefresh =
+        setInterval(
+          () => {
+            loadRealMatches();
+          },
+          30000
+        );
+    }
+
+
+    /* ============================================================
        INITIALISATION
     ============================================================ */
 
@@ -2884,4 +3067,4 @@
   </script>
 
 </body>
-</html>
+                </html>

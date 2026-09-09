@@ -24,10 +24,18 @@ CORS(app)
 FOOTBALL_DATA_URL = "https://api.football-data.org/v4"
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
-SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
-FOOTBALL_DATA_TOKEN = os.getenv("FOOTBALL_DATA_TOKEN", "")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv(
+    "SUPABASE_SERVICE_ROLE_KEY",
+    ""
+)
+FOOTBALL_DATA_TOKEN = os.getenv(
+    "FOOTBALL_DATA_TOKEN",
+    ""
+)
 
-SUPABASE_MATCHS_URL = f"{SUPABASE_URL}/rest/v1/matchs"
+SUPABASE_MATCHS_URL = (
+    f"{SUPABASE_URL}/rest/v1/matchs"
+)
 
 
 # ============================================================
@@ -66,81 +74,48 @@ def parse_utc_date(value):
         return datetime.fromisoformat(
             value.replace("Z", "+00:00")
         )
+
     except (ValueError, TypeError):
         return None
 
 
 # ============================================================
-# CALCUL DE LA MINUTE
+# MINUTE OFFICIELLE FOOTBALL-DATA.ORG
 # ============================================================
 
-def calculate_match_minute(match):
-    status = match.get("status")
+def get_match_minute(match):
+    """
+    Utilise uniquement la minute fournie par
+    Football-Data.org.
 
-    # Match pas encore commencé
-    if status in [
-        "SCHEDULED",
-        "TIMED",
-        "POSTPONED",
-        "CANCELLED"
-    ]:
-        return 0
+    IMPORTANT :
+    On ne calcule plus la minute avec utcDate.
 
-    # Match terminé / suspendu / attribué
-    if status in [
-        "FINISHED",
-        "SUSPENDED",
-        "AWARDED"
-    ]:
-        return 0
+    Exemple :
+        Football-Data.org -> minute = 68
+        CISSE PRONOS     -> minute = 68
+    """
 
-    # Seuls ces statuts correspondent à un match en cours
-    if status not in [
-        "IN_PLAY",
-        "PAUSED"
-    ]:
-        return 0
+    value = match.get("minute")
 
-    utc_date = match.get("utcDate")
-
-    if not utc_date:
-        return 0
-
-    kickoff = parse_utc_date(utc_date)
-
-    if not kickoff:
+    if value is None:
         return 0
 
     try:
-        now = utc_now()
+        minute = int(value)
 
-        elapsed_seconds = (
-            now - kickoff
-        ).total_seconds()
-
-        if elapsed_seconds < 0:
-            return 0
-
-        elapsed_minutes = int(
-            elapsed_seconds // 60
-        )
-
-        # Mi-temps
-        if status == "PAUSED":
-            return min(elapsed_minutes, 45)
-
-        # Première minute
-        if elapsed_minutes < 1:
-            return 1
-
-        # Maximum affiché
-        if elapsed_minutes > 90:
-            return 90
-
-        return elapsed_minutes
-
-    except (ValueError, TypeError):
+    except (TypeError, ValueError):
         return 0
+
+    # Protection contre une valeur invalide
+    if minute < 0:
+        return 0
+
+    # La partie normale du match est limitée à 90
+    if minute > 90:
+        return 90
+
+    return minute
 
 
 # ============================================================
@@ -148,38 +123,38 @@ def calculate_match_minute(match):
 # ============================================================
 
 def convert_match(match):
+
     home_team = match.get("homeTeam") or {}
     away_team = match.get("awayTeam") or {}
 
     score = match.get("score") or {}
+
     full_time = score.get("fullTime") or {}
 
     home_score = full_time.get("home")
     away_score = full_time.get("away")
 
     # --------------------------------------------------------
-    # Fallback éventuel si fullTime n'est pas encore renseigné
+    # Fallback éventuel sur regularTime
     # --------------------------------------------------------
 
     if home_score is None:
-        regular_time = score.get("regularTime") or {}
+
+        regular_time = (
+            score.get("regularTime") or {}
+        )
+
         home_score = regular_time.get("home")
 
     if away_score is None:
-        regular_time = score.get("regularTime") or {}
+
+        regular_time = (
+            score.get("regularTime") or {}
+        )
+
         away_score = regular_time.get("away")
 
     status = match.get("status")
-
-    # --------------------------------------------------------
-    # Score
-    # --------------------------------------------------------
-
-    if home_score is None:
-        home_score = 0
-
-    if away_score is None:
-        away_score = 0
 
     # --------------------------------------------------------
     # Logos
@@ -195,16 +170,17 @@ def convert_match(match):
     utc_date = match.get("utcDate")
 
     # --------------------------------------------------------
-    # Minute
+    # MINUTE OFFICIELLE
     # --------------------------------------------------------
 
-    minute = calculate_match_minute(match)
+    minute = get_match_minute(match)
 
     # --------------------------------------------------------
-    # Objet final
+    # Objet CISSE PRONOS
     # --------------------------------------------------------
 
     converted = {
+
         "id": str(match.get("id")),
 
         "equipe1": home_team.get("name"),
@@ -233,27 +209,33 @@ def convert_match(match):
 # ============================================================
 
 def get_existing_created_at(match_ids):
-    """
-    Récupère les created_at déjà présents dans Supabase.
-
-    Cela permet de ne pas remplacer created_at à chaque
-    synchronisation automatique.
-    """
 
     if not SUPABASE_URL:
-        print("❌ SUPABASE_URL manquant")
+
+        print(
+            "❌ SUPABASE_URL manquant"
+        )
+
         return {}
 
     if not SUPABASE_SERVICE_ROLE_KEY:
-        print("❌ SUPABASE_SERVICE_ROLE_KEY manquant")
+
+        print(
+            "❌ SUPABASE_SERVICE_ROLE_KEY manquant"
+        )
+
         return {}
 
     if not match_ids:
+
         return {}
 
     headers = {
+
         "apikey": SUPABASE_SERVICE_ROLE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
+
+        "Authorization":
+            f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
     }
 
     ids_string = ",".join(
@@ -262,19 +244,27 @@ def get_existing_created_at(match_ids):
     )
 
     params = {
+
         "select": "id,created_at",
+
         "id": f"in.({ids_string})"
     }
 
     try:
+
         response = requests.get(
+
             SUPABASE_MATCHS_URL,
+
             headers=headers,
+
             params=params,
+
             timeout=20
         )
 
         if response.status_code != 200:
+
             print(
                 "❌ Erreur récupération created_at:",
                 response.status_code,
@@ -288,7 +278,10 @@ def get_existing_created_at(match_ids):
         result = {}
 
         for row in rows:
-            match_id = str(row.get("id"))
+
+            match_id = str(
+                row.get("id")
+            )
 
             result[match_id] = row.get(
                 "created_at"
@@ -297,6 +290,7 @@ def get_existing_created_at(match_ids):
         return result
 
     except requests.RequestException as error:
+
         print(
             "❌ Erreur réseau Supabase:",
             error
@@ -310,16 +304,29 @@ def get_existing_created_at(match_ids):
 # ============================================================
 
 def save_matches_to_supabase(matches):
+
     if not SUPABASE_URL:
-        print("❌ SUPABASE_URL manquant")
+
+        print(
+            "❌ SUPABASE_URL manquant"
+        )
+
         return False
 
     if not SUPABASE_SERVICE_ROLE_KEY:
-        print("❌ SUPABASE_SERVICE_ROLE_KEY manquant")
+
+        print(
+            "❌ SUPABASE_SERVICE_ROLE_KEY manquant"
+        )
+
         return False
 
     if not matches:
-        print("ℹ️ Aucun match à sauvegarder")
+
+        print(
+            "ℹ️ Aucun match à sauvegarder"
+        )
+
         return True
 
     # --------------------------------------------------------
@@ -327,17 +334,22 @@ def save_matches_to_supabase(matches):
     # --------------------------------------------------------
 
     match_ids = [
+
         str(match.get("id"))
+
         for match in matches
+
         if match.get("id") is not None
     ]
 
     # --------------------------------------------------------
-    # Récupération des created_at existants
+    # created_at existants
     # --------------------------------------------------------
 
-    existing_created_at = get_existing_created_at(
-        match_ids
+    existing_created_at = (
+        get_existing_created_at(
+            match_ids
+        )
     )
 
     # --------------------------------------------------------
@@ -350,19 +362,41 @@ def save_matches_to_supabase(matches):
 
     for match in matches:
 
-        match_id = str(match.get("id"))
+        match_id = str(
+            match.get("id")
+        )
 
         row = {
+
             "id": match_id,
-            "equipe1": match.get("equipe1"),
-            "equipe2": match.get("equipe2"),
-            "date_match": match.get("date_match"),
-            "statut": match.get("statut"),
-            "minute": match.get("minute"),
-            "score1": match.get("score1"),
-            "score2": match.get("score2"),
-            "logo1": match.get("logo1"),
-            "logo2": match.get("logo2"),
+
+            "equipe1":
+                match.get("equipe1"),
+
+            "equipe2":
+                match.get("equipe2"),
+
+            "date_match":
+                match.get("date_match"),
+
+            "statut":
+                match.get("statut"),
+
+            "minute":
+                match.get("minute"),
+
+            "score1":
+                match.get("score1"),
+
+            "score2":
+                match.get("score2"),
+
+            "logo1":
+                match.get("logo1"),
+
+            "logo2":
+                match.get("logo2"),
+
             "updated_at": now
         }
 
@@ -371,11 +405,15 @@ def save_matches_to_supabase(matches):
         # ----------------------------------------------------
 
         if match_id in existing_created_at:
-            row["created_at"] = existing_created_at[
-                match_id
-            ]
+
+            row["created_at"] = (
+                existing_created_at[
+                    match_id
+                ]
+            )
 
         else:
+
             row["created_at"] = now
 
         rows.append(row)
@@ -385,22 +423,35 @@ def save_matches_to_supabase(matches):
     # --------------------------------------------------------
 
     headers = {
-        "apikey": SUPABASE_SERVICE_ROLE_KEY,
-        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
-        "Content-Type": "application/json",
-        "Prefer": "resolution=merge-duplicates,return=minimal"
+
+        "apikey":
+            SUPABASE_SERVICE_ROLE_KEY,
+
+        "Authorization":
+            f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+
+        "Content-Type":
+            "application/json",
+
+        "Prefer":
+            "resolution=merge-duplicates,"
+            "return=minimal"
     }
 
     # --------------------------------------------------------
-    # Upsert
+    # UPSERT
     # --------------------------------------------------------
 
     try:
 
         response = requests.post(
+
             SUPABASE_MATCHS_URL,
+
             headers=headers,
+
             json=rows,
+
             timeout=30
         )
 
@@ -409,12 +460,15 @@ def save_matches_to_supabase(matches):
             201,
             204
         ]:
+
             print(
                 "❌ Erreur Supabase upsert:",
                 response.status_code
             )
 
-            print(response.text)
+            print(
+                response.text
+            )
 
             return False
 
@@ -441,35 +495,52 @@ def save_matches_to_supabase(matches):
 # ============================================================
 
 def fetch_matches_from_football_data():
+
     if not FOOTBALL_DATA_TOKEN:
-        print("❌ FOOTBALL_DATA_TOKEN manquant")
+
+        print(
+            "❌ FOOTBALL_DATA_TOKEN manquant"
+        )
+
         return []
 
     today = utc_now().date()
 
-    tomorrow = today + timedelta(days=1)
+    tomorrow = today + timedelta(
+        days=1
+    )
 
     date_from = today.isoformat()
 
     date_to = tomorrow.isoformat()
 
     headers = {
-        "X-Auth-Token": FOOTBALL_DATA_TOKEN
+
+        "X-Auth-Token":
+            FOOTBALL_DATA_TOKEN
     }
 
     params = {
+
         "dateFrom": date_from,
+
         "dateTo": date_to
     }
 
-    url = f"{FOOTBALL_DATA_URL}/matches"
+    url = (
+        f"{FOOTBALL_DATA_URL}/matches"
+    )
 
     try:
 
         response = requests.get(
+
             url,
+
             headers=headers,
+
             params=params,
+
             timeout=30
         )
 
@@ -497,7 +568,9 @@ def fetch_matches_from_football_data():
                 response.status_code
             )
 
-            print(response.text)
+            print(
+                response.text
+            )
 
             return []
 
@@ -514,8 +587,8 @@ def fetch_matches_from_football_data():
 
             try:
 
-                converted = convert_match(
-                    match
+                converted = (
+                    convert_match(match)
                 )
 
                 converted_matches.append(
@@ -532,7 +605,8 @@ def fetch_matches_from_football_data():
 
         print(
             f"⚽ Football-Data.org : "
-            f"{len(converted_matches)} matchs récupérés"
+            f"{len(converted_matches)} "
+            f"matchs récupérés"
         )
 
         return converted_matches
@@ -550,7 +624,8 @@ def fetch_matches_from_football_data():
     except Exception as error:
 
         print(
-            "❌ Erreur inattendue Football-Data.org:",
+            "❌ Erreur inattendue "
+            "Football-Data.org:",
             error
         )
 
@@ -562,24 +637,17 @@ def fetch_matches_from_football_data():
 # ============================================================
 
 def sync_matches_once():
-    """
-    Effectue une synchronisation complète :
-
-    Football-Data.org
-          ↓
-    conversion
-          ↓
-    Supabase matchs
-          ↓
-    cache local
-    """
 
     global matches_cache
 
-    # Évite deux synchronisations simultanées
+    # --------------------------------------------------------
+    # Empêcher deux synchronisations simultanées
+    # --------------------------------------------------------
+
     if not sync_lock.acquire(
         blocking=False
     ):
+
         print(
             "⏳ Synchronisation déjà en cours..."
         )
@@ -589,10 +657,16 @@ def sync_matches_once():
     try:
 
         print(
-            "🔄 Début synchronisation automatique..."
+            "🔄 Début synchronisation..."
         )
 
-        matches = fetch_matches_from_football_data()
+        # ----------------------------------------------------
+        # Football-Data.org
+        # ----------------------------------------------------
+
+        matches = (
+            fetch_matches_from_football_data()
+        )
 
         if not matches:
 
@@ -603,27 +677,32 @@ def sync_matches_once():
             return False
 
         # ----------------------------------------------------
-        # Sauvegarde Supabase
+        # Supabase
         # ----------------------------------------------------
 
-        saved = save_matches_to_supabase(
-            matches
+        saved = (
+            save_matches_to_supabase(
+                matches
+            )
         )
 
         if not saved:
 
             print(
-                "❌ Synchronisation Supabase échouée."
+                "❌ Synchronisation "
+                "Supabase échouée."
             )
 
             return False
 
         # ----------------------------------------------------
-        # Mise à jour cache
+        # Cache
         # ----------------------------------------------------
 
         matches_cache = {
+
             "data": matches,
+
             "timestamp": time.time()
         }
 
@@ -651,15 +730,20 @@ def sync_matches_once():
 # CACHE
 # ============================================================
 
-def get_matches_data(force_refresh=False):
+def get_matches_data(
+    force_refresh=False
+):
 
     global matches_cache
 
     current_time = time.time()
 
     cache_is_valid = (
+
         matches_cache["data"] is not None
+
         and
+
         current_time
         - matches_cache["timestamp"]
         < CACHE_DURATION
@@ -669,7 +753,10 @@ def get_matches_data(force_refresh=False):
     # Cache valide
     # --------------------------------------------------------
 
-    if not force_refresh and cache_is_valid:
+    if (
+        not force_refresh
+        and cache_is_valid
+    ):
 
         return matches_cache["data"]
 
@@ -677,29 +764,38 @@ def get_matches_data(force_refresh=False):
     # Nouvelle récupération
     # --------------------------------------------------------
 
-    matches = fetch_matches_from_football_data()
+    matches = (
+        fetch_matches_from_football_data()
+    )
 
     if matches:
 
-        save_matches_to_supabase(
-            matches
+        saved = (
+            save_matches_to_supabase(
+                matches
+            )
         )
 
-        matches_cache = {
-            "data": matches,
-            "timestamp": time.time()
-        }
+        if saved:
+
+            matches_cache = {
+
+                "data": matches,
+
+                "timestamp": time.time()
+            }
 
         return matches
 
     # --------------------------------------------------------
-    # Si l'API ne répond pas mais qu'on possède un cache
+    # Dernier cache disponible
     # --------------------------------------------------------
 
     if matches_cache["data"] is not None:
 
         print(
-            "⚠️ Utilisation du dernier cache disponible."
+            "⚠️ Utilisation du dernier "
+            "cache disponible."
         )
 
         return matches_cache["data"]
@@ -708,7 +804,7 @@ def get_matches_data(force_refresh=False):
 
 
 # ============================================================
-# THREAD DE SYNCHRONISATION AUTOMATIQUE
+# SYNCHRONISATION AUTOMATIQUE
 # ============================================================
 
 def automatic_sync_loop():
@@ -717,7 +813,10 @@ def automatic_sync_loop():
         "🚀 Synchronisation automatique activée."
     )
 
-    # Petite pause au démarrage
+    # --------------------------------------------------------
+    # Petite pause après le démarrage de Render
+    # --------------------------------------------------------
+
     time.sleep(5)
 
     while True:
@@ -741,7 +840,7 @@ def automatic_sync_loop():
 
 
 # ============================================================
-# DÉMARRER LE THREAD UNE SEULE FOIS
+# DÉMARRER LE THREAD
 # ============================================================
 
 def start_background_sync():
@@ -753,12 +852,18 @@ def start_background_sync():
         and
         background_thread.is_alive()
     ):
+
         return
 
-    background_thread = threading.Thread(
-        target=automatic_sync_loop,
-        daemon=True,
-        name="cisse-pronos-sync"
+    background_thread = (
+        threading.Thread(
+
+            target=automatic_sync_loop,
+
+            daemon=True,
+
+            name="cisse-pronos-sync"
+        )
     )
 
     background_thread.start()
@@ -772,18 +877,30 @@ def start_background_sync():
 # API MATCHS
 # ============================================================
 
-@app.route("/api/matches", methods=["GET"])
+@app.route(
+    "/api/matches",
+    methods=["GET"]
+)
 def api_matches():
 
     try:
 
-        matches = get_matches_data()
+        matches = (
+            get_matches_data()
+        )
 
         return jsonify({
+
             "success": True,
-            "source": "Football-Data.org",
-            "count": len(matches),
-            "matches": matches
+
+            "source":
+                "Football-Data.org",
+
+            "count":
+                len(matches),
+
+            "matches":
+                matches
         })
 
     except Exception as error:
@@ -794,9 +911,14 @@ def api_matches():
         )
 
         return jsonify({
+
             "success": False,
-            "error": str(error),
-            "matches": []
+
+            "error":
+                str(error),
+
+            "matches":
+                []
         }), 500
 
 
@@ -804,20 +926,31 @@ def api_matches():
 # API LIVE
 # ============================================================
 
-@app.route("/api/live", methods=["GET"])
+@app.route(
+    "/api/live",
+    methods=["GET"]
+)
 def api_live():
 
     try:
 
-        # Force une nouvelle récupération pour avoir
-        # les derniers statuts et scores disponibles.
-        matches = get_matches_data(
-            force_refresh=True
+        # ----------------------------------------------------
+        # On utilise le cache.
+        #
+        # Le thread automatique actualise les données
+        # toutes les 60 secondes.
+        # ----------------------------------------------------
+
+        matches = (
+            get_matches_data()
         )
 
         live_matches = [
+
             match
+
             for match in matches
+
             if match.get("statut")
             in [
                 "IN_PLAY",
@@ -826,10 +959,17 @@ def api_live():
         ]
 
         return jsonify({
+
             "success": True,
-            "source": "Football-Data.org",
-            "count": len(live_matches),
-            "matches": live_matches
+
+            "source":
+                "Football-Data.org",
+
+            "count":
+                len(live_matches),
+
+            "matches":
+                live_matches
         })
 
     except Exception as error:
@@ -840,9 +980,14 @@ def api_live():
         )
 
         return jsonify({
+
             "success": False,
-            "error": str(error),
-            "matches": []
+
+            "error":
+                str(error),
+
+            "matches":
+                []
         }), 500
 
 
@@ -880,8 +1025,6 @@ def calculate_statistics(matches):
 
     zero_zero = 0
 
-    competitions = {}
-
     for match in matches:
 
         status = match.get(
@@ -904,23 +1047,26 @@ def calculate_statistics(matches):
             "IN_PLAY",
             "PAUSED"
         ]:
+
             live += 1
 
         elif status == "FINISHED":
+
             finished += 1
 
         elif status == "CANCELLED":
+
             cancelled += 1
 
         elif status in [
             "SCHEDULED",
             "TIMED"
         ]:
+
             upcoming += 1
 
         # ----------------------------------------------------
-        # Les statistiques de résultats sont calculées
-        # uniquement sur les matchs terminés.
+        # Résultats uniquement pour les matchs terminés
         # ----------------------------------------------------
 
         if status != "FINISHED":
@@ -943,7 +1089,9 @@ def calculate_statistics(matches):
 
         matches_with_scores += 1
 
-        goals = score1 + score2
+        goals = (
+            score1 + score2
+        )
 
         total_goals += goals
 
@@ -952,12 +1100,15 @@ def calculate_statistics(matches):
         # ----------------------------------------------------
 
         if score1 > score2:
+
             home_wins += 1
 
         elif score1 == score2:
+
             draws += 1
 
         else:
+
             away_wins += 1
 
         # ----------------------------------------------------
@@ -984,6 +1135,7 @@ def calculate_statistics(matches):
         # ----------------------------------------------------
 
         if score1 > 0 and score2 > 0:
+
             btts_yes += 1
 
         # ----------------------------------------------------
@@ -991,20 +1143,27 @@ def calculate_statistics(matches):
         # ----------------------------------------------------
 
         if score2 == 0:
+
             clean_sheet_home += 1
 
         if score1 == 0:
+
             clean_sheet_away += 1
 
         # ----------------------------------------------------
         # 0-0
         # ----------------------------------------------------
 
-        if score1 == 0 and score2 == 0:
+        if (
+            score1 == 0
+            and
+            score2 == 0
+        ):
+
             zero_zero += 1
 
     # ========================================================
-    # STATISTIQUES
+    # MOYENNE DE BUTS
     # ========================================================
 
     average_goals = 0
@@ -1012,61 +1171,113 @@ def calculate_statistics(matches):
     if matches_with_scores > 0:
 
         average_goals = round(
+
             total_goals
-            / matches_with_scores,
+            /
+            matches_with_scores,
+
             2
         )
+
+    # ========================================================
+    # RÉSULTAT
+    # ========================================================
 
     return {
 
         "overview": {
-            "total_matches": total,
-            "upcoming": upcoming,
-            "live": live,
-            "finished": finished,
-            "cancelled": cancelled
+
+            "total_matches":
+                total,
+
+            "upcoming":
+                upcoming,
+
+            "live":
+                live,
+
+            "finished":
+                finished,
+
+            "cancelled":
+                cancelled
         },
 
         "goals": {
-            "total_goals": total_goals,
-            "matches_with_scores": matches_with_scores,
-            "average_goals": average_goals
+
+            "total_goals":
+                total_goals,
+
+            "matches_with_scores":
+                matches_with_scores,
+
+            "average_goals":
+                average_goals
         },
 
         "results": {
-            "home_wins": home_wins,
-            "draws": draws,
-            "away_wins": away_wins
+
+            "home_wins":
+                home_wins,
+
+            "draws":
+                draws,
+
+            "away_wins":
+                away_wins
         },
 
         "over": {
-            "over_0_5": over_05,
-            "over_1_5": over_15,
-            "over_2_5": over_25,
-            "over_3_5": over_35,
-            "over_4_5": over_45
+
+            "over_0_5":
+                over_05,
+
+            "over_1_5":
+                over_15,
+
+            "over_2_5":
+                over_25,
+
+            "over_3_5":
+                over_35,
+
+            "over_4_5":
+                over_45
         },
 
         "btts": {
-            "yes": btts_yes,
+
+            "yes":
+                btts_yes,
+
             "no": (
                 matches_with_scores
-                - btts_yes
+                -
+                btts_yes
             )
             if matches_with_scores > 0
             else 0
         },
 
         "clean_sheets": {
-            "home": clean_sheet_home,
-            "away": clean_sheet_away
+
+            "home":
+                clean_sheet_home,
+
+            "away":
+                clean_sheet_away
         },
 
-        "zero_zero": zero_zero,
+        "zero_zero":
+            zero_zero,
 
         "data_policy": {
-            "real_data_only": True,
-            "source": "Football-Data.org"
+
+            "real_data_only":
+                True,
+
+            "source":
+                "Football-Data.org"
         }
     }
 
@@ -1083,8 +1294,12 @@ def filter_matches_for_today(matches):
 
     for match in matches:
 
-        date_match = parse_utc_date(
-            match.get("date_match")
+        date_match = (
+            parse_utc_date(
+                match.get(
+                    "date_match"
+                )
+            )
         )
 
         if not date_match:
@@ -1109,43 +1324,53 @@ def api_statistics_today():
 
     try:
 
-        # Utilise les données réelles disponibles
-        # et rafraîchit si nécessaire.
-        matches = get_matches_data()
-
-        today_matches = filter_matches_for_today(
-            matches
+        matches = (
+            get_matches_data()
         )
 
-        statistics = calculate_statistics(
-            today_matches
+        today_matches = (
+            filter_matches_for_today(
+                matches
+            )
+        )
+
+        statistics = (
+            calculate_statistics(
+                today_matches
+            )
         )
 
         # ----------------------------------------------------
-        # Ajouter les compétitions présentes
+        # Pas de compétition inventée.
         # ----------------------------------------------------
 
         competitions = {}
 
-        for match in today_matches:
-
-            # Football-Data.org n'envoie pas forcément
-            # toutes les informations de compétition
-            # dans notre table matchs.
-            #
-            # On ne fabrique donc rien ici.
-            pass
-
-        statistics["competitions"] = competitions
+        statistics[
+            "competitions"
+        ] = competitions
 
         return jsonify({
-            "success": True,
-            "date": utc_now().date().isoformat(),
-            "source": "Football-Data.org",
+
+            "success":
+                True,
+
+            "date":
+                utc_now()
+                .date()
+                .isoformat(),
+
+            "source":
+                "Football-Data.org",
+
             "data_policy": {
-                "real_data_only": True
+
+                "real_data_only":
+                    True
             },
-            "statistics": statistics
+
+            "statistics":
+                statistics
         })
 
     except Exception as error:
@@ -1156,8 +1381,12 @@ def api_statistics_today():
         )
 
         return jsonify({
-            "success": False,
-            "error": str(error)
+
+            "success":
+                False,
+
+            "error":
+                str(error)
         }), 500
 
 
@@ -1165,21 +1394,36 @@ def api_statistics_today():
 # ROUTE PRINCIPALE
 # ============================================================
 
-@app.route("/", methods=["GET"])
+@app.route(
+    "/",
+    methods=["GET"]
+)
 def home():
 
     return jsonify({
-        "success": True,
-        "message": "CISSE PRONOS API",
-        "status": "online",
-        "source": "Football-Data.org",
-        "automatic_sync": True,
-        "sync_interval_seconds": 60
+
+        "success":
+            True,
+
+        "message":
+            "CISSE PRONOS API",
+
+        "status":
+            "online",
+
+        "source":
+            "Football-Data.org",
+
+        "automatic_sync":
+            True,
+
+        "sync_interval_seconds":
+            60
     })
 
 
 # ============================================================
-# DÉMARRAGE
+# DÉMARRAGE SYNCHRONISATION AUTOMATIQUE
 # ============================================================
 
 start_background_sync()
@@ -1192,7 +1436,9 @@ start_background_sync()
 if __name__ == "__main__":
 
     app.run(
+
         host="0.0.0.0",
+
         port=int(
             os.getenv(
                 "PORT",

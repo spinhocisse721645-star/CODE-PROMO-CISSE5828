@@ -124,6 +124,22 @@
       margin-bottom: 12px;
     }
 
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .bet-preview {
+      background: #0f172a;
+      border: 1px dashed #374151;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.85rem;
+      color: #a7f3d0;
+      margin-bottom: 12px;
+    }
+
     /* =========================================================
        CARTES PRONOSTICS COMPACTES (OPTIMISÉES MOBILE)
     ========================================================= */
@@ -142,6 +158,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+
+    .breadcrumb {
+      font-size: 0.72rem;
+      color: #6b7280;
+      margin-bottom: 6px;
     }
 
     .info-line {
@@ -179,6 +201,14 @@
 
     .linked-badge {
       background: #1e3a8a;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.75rem;
+    }
+
+    .category-badge {
+      background: #7c3aed;
       padding: 3px 8px;
       border-radius: 6px;
       font-weight: bold;
@@ -264,32 +294,79 @@
       <select id="matchSelect" onchange="onMatchSelected()">
         <option value="">— Aucun match lié (saisie libre) —</option>
       </select>
-      <div class="helper-text">Sélectionne un match pour lier ce pronostic aux vraies données (score en direct, etc.)</div>
+      <div class="helper-text">Sélectionne un match pour remplir automatiquement les équipes et la date.</div>
+
+      <div class="row-2">
+        <div>
+          <label>Pays</label>
+          <input type="text" id="pays" placeholder="Exemple : Espagne">
+        </div>
+        <div>
+          <label>Championnat</label>
+          <input type="text" id="championnat" placeholder="Exemple : La Liga">
+        </div>
+      </div>
 
       <label>Équipe 1</label>
-      <input type="text" id="equipe1" placeholder="Exemple : Toulouse">
+      <input type="text" id="equipe1" placeholder="Exemple : Real Madrid" oninput="updateBetPreview()">
 
       <label>Équipe 2</label>
-      <input type="text" id="equipe2" placeholder="Exemple : Lille">
+      <input type="text" id="equipe2" placeholder="Exemple : Rayo Vallecano" oninput="updateBetPreview()">
 
-      <label>Type de pari</label>
-      <select id="pari">
-        <option value="Victoire équipe 1">Victoire équipe 1</option>
-        <option value="Victoire équipe 2">Victoire équipe 2</option>
-        <option value="Match nul">Match nul</option>
-        <option value="Plus de 2 buts">Plus de 2 buts</option>
-        <option value="3 buts ou plus">3 buts ou plus</option>
-        <option value="Moins de 2 buts">Moins de 2 buts</option>
-        <option value="Nombre de corners">Nombre de corners</option>
-        <option value="Nombre de fautes">Nombre de fautes</option>
-        <option value="Cartons jaunes">Cartons jaunes</option>
-        <option value="Carton rouge">Carton rouge</option>
-        <option value="Les deux équipes marquent">Les deux équipes marquent</option>
-        <option value="Autre pari">Autre pari</option>
+      <label>Catégorie de pari</label>
+      <select id="categorieSelect" onchange="onCategoryChanged()">
+        <option value="">— Choisir une catégorie —</option>
+        <option value="victoire">🏆 Victoire (1X2)</option>
+        <option value="btts">⚔️ Les deux équipes marquent (BTTS)</option>
+        <option value="total_buts">⚽ Total buts (les deux équipes)</option>
+        <option value="total_equipe1">⚽ Total équipe 1</option>
+        <option value="total_equipe2">⚽ Total équipe 2</option>
+        <option value="corners">🚩 Corners (total)</option>
+        <option value="fautes">🟨 Fautes (total)</option>
+        <option value="cartons_jaunes">🟨 Cartons jaunes (total)</option>
+        <option value="touches">➡️ Touches (total)</option>
       </select>
 
-      <label>Précision du pari</label>
-      <input type="text" id="precision" placeholder="Exemple : Plus de 8,5 corners">
+      <!-- SOUS-OPTIONS : VICTOIRE (1X2) -->
+      <div id="optionsVictoire" class="hidden">
+        <label>Résultat</label>
+        <select id="victoireSelect" onchange="updateBetPreview()">
+          <option value="V1">Victoire équipe 1</option>
+          <option value="NUL">Match nul</option>
+          <option value="V2">Victoire équipe 2</option>
+        </select>
+      </div>
+
+      <!-- SOUS-OPTIONS : BTTS -->
+      <div id="optionsBtts" class="hidden">
+        <label>Les deux équipes marquent</label>
+        <select id="bttsSelect" onchange="updateBetPreview()">
+          <option value="OUI">Oui</option>
+          <option value="NON">Non</option>
+        </select>
+      </div>
+
+      <!-- SOUS-OPTIONS : SEUIL (over/under) -->
+      <div id="optionsSeuil" class="hidden">
+        <div class="row-2">
+          <div>
+            <label>Sens</label>
+            <select id="sensSelect" onchange="updateBetPreview()">
+              <option value="PLUS">Plus de</option>
+              <option value="MOINS">Moins de</option>
+            </select>
+          </div>
+          <div>
+            <label>Seuil</label>
+            <select id="seuilSelect" onchange="updateBetPreview()"></select>
+          </div>
+        </div>
+      </div>
+
+      <div id="betPreview" class="bet-preview hidden"></div>
+
+      <label>Précision (optionnel)</label>
+      <input type="text" id="precision" placeholder="Détail complémentaire si besoin">
 
       <label>Cote</label>
       <input type="number" id="cote" step="0.01" min="1" placeholder="Exemple : 2.22">
@@ -335,6 +412,32 @@ const adminBox = document.getElementById("adminBox");
 const loginMessage = document.getElementById("loginMessage");
 const message = document.getElementById("message");
 const pronosticsList = document.getElementById("pronosticsList");
+
+// ============================================================
+// LIBELLÉS DES CATÉGORIES + SEUILS DISPONIBLES
+// ============================================================
+
+const CATEGORY_LABELS = {
+  victoire: "Victoire (1X2)",
+  btts: "BTTS",
+  total_buts: "Total buts",
+  total_equipe1: "Total équipe 1",
+  total_equipe2: "Total équipe 2",
+  corners: "Corners",
+  fautes: "Fautes",
+  cartons_jaunes: "Cartons jaunes",
+  touches: "Touches"
+};
+
+const SEUILS = {
+  total_buts: [0.5, 1.5, 2.5, 3.5, 4.5, 5.5],
+  total_equipe1: [0.5, 1.5, 2.5, 3.5],
+  total_equipe2: [0.5, 1.5, 2.5, 3.5],
+  corners: [6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5],
+  fautes: [16.5, 18.5, 20.5, 22.5, 24.5, 26.5],
+  cartons_jaunes: [1.5, 2.5, 3.5, 4.5, 5.5],
+  touches: [20.5, 25.5, 30.5, 35.5, 40.5]
+};
 
 function showMessage(text, type = "") {
   message.className = "message " + type;
@@ -444,7 +547,137 @@ function onMatchSelected() {
   if (match.date_match) {
     document.getElementById("date_match").value = toDatetimeLocal(match.date_match);
   }
+
+  refreshVictoireOptions();
+  updateBetPreview();
 }
+
+// ============================================================
+// GESTION DE L'ARBORESCENCE DES CATÉGORIES DE PARI
+// ============================================================
+
+function onCategoryChanged() {
+  const category = document.getElementById("categorieSelect").value;
+
+  document.getElementById("optionsVictoire").classList.add("hidden");
+  document.getElementById("optionsBtts").classList.add("hidden");
+  document.getElementById("optionsSeuil").classList.add("hidden");
+
+  if (category === "victoire") {
+    refreshVictoireOptions();
+    document.getElementById("optionsVictoire").classList.remove("hidden");
+  }
+
+  else if (category === "btts") {
+    document.getElementById("optionsBtts").classList.remove("hidden");
+  }
+
+  else if (SEUILS[category]) {
+    populateSeuilSelect(category);
+    document.getElementById("optionsSeuil").classList.remove("hidden");
+  }
+
+  updateBetPreview();
+}
+
+function refreshVictoireOptions() {
+  const equipe1 = document.getElementById("equipe1").value.trim() || "Équipe 1";
+  const equipe2 = document.getElementById("equipe2").value.trim() || "Équipe 2";
+
+  const select = document.getElementById("victoireSelect");
+  select.innerHTML = `
+    <option value="V1">Victoire ${escapeHtml(equipe1)}</option>
+    <option value="NUL">Match nul</option>
+    <option value="V2">Victoire ${escapeHtml(equipe2)}</option>
+  `;
+}
+
+function populateSeuilSelect(category) {
+  const select = document.getElementById("seuilSelect");
+  select.innerHTML = "";
+
+  SEUILS[category].forEach(value => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    select.appendChild(option);
+  });
+}
+
+function buildBetData() {
+  const category = document.getElementById("categorieSelect").value;
+  const equipe1 = document.getElementById("equipe1").value.trim() || "Équipe 1";
+  const equipe2 = document.getElementById("equipe2").value.trim() || "Équipe 2";
+
+  if (!category) {
+    return null;
+  }
+
+  if (category === "victoire") {
+    const value = document.getElementById("victoireSelect").value;
+    let label = "Match nul";
+    if (value === "V1") label = `Victoire ${equipe1}`;
+    if (value === "V2") label = `Victoire ${equipe2}`;
+
+    return {
+      categorie_pari: category,
+      option_pari: value,
+      pari: label
+    };
+  }
+
+  if (category === "btts") {
+    const value = document.getElementById("bttsSelect").value;
+    const label = `Les deux équipes marquent : ${value === "OUI" ? "Oui" : "Non"}`;
+
+    return {
+      categorie_pari: category,
+      option_pari: value,
+      pari: label
+    };
+  }
+
+  if (SEUILS[category]) {
+    const sens = document.getElementById("sensSelect").value;
+    const seuil = document.getElementById("seuilSelect").value;
+
+    if (!seuil) return null;
+
+    const sensLabel = sens === "PLUS" ? "Plus de" : "Moins de";
+    const label = `${CATEGORY_LABELS[category]} : ${sensLabel} ${seuil}`;
+
+    return {
+      categorie_pari: category,
+      option_pari: `${sens}:${seuil}`,
+      pari: label
+    };
+  }
+
+  return null;
+}
+
+function updateBetPreview() {
+  const preview = document.getElementById("betPreview");
+  const betData = buildBetData();
+
+  if (!betData) {
+    preview.classList.add("hidden");
+    preview.textContent = "";
+    return;
+  }
+
+  const precision = document.getElementById("precision").value.trim();
+  const finalText = precision ? `${betData.pari} — ${precision}` : betData.pari;
+
+  preview.textContent = `🎯 Aperçu : ${finalText}`;
+  preview.classList.remove("hidden");
+}
+
+document.getElementById("precision").addEventListener("input", updateBetPreview);
+
+// ============================================================
+// SAUVEGARDE
+// ============================================================
 
 async function savePronostic() {
   if (!currentUser) {
@@ -453,21 +686,24 @@ async function savePronostic() {
   }
 
   const matchId = document.getElementById("matchSelect").value || null;
+  const pays = document.getElementById("pays").value.trim();
+  const championnat = document.getElementById("championnat").value.trim();
   const equipe1 = document.getElementById("equipe1").value.trim();
   const equipe2 = document.getElementById("equipe2").value.trim();
-  const pariBase = document.getElementById("pari").value;
   const precision = document.getElementById("precision").value.trim();
   const cote = document.getElementById("cote").value;
   const dateMatch = document.getElementById("date_match").value;
   const description = document.getElementById("description").value.trim();
   const statut = document.getElementById("statut").value;
 
-  if (!equipe1 || !equipe2 || !pariBase || !cote || !dateMatch) {
-    showMessage("Remplis tous les champs obligatoires.", "error");
+  const betData = buildBetData();
+
+  if (!equipe1 || !equipe2 || !betData || !cote || !dateMatch) {
+    showMessage("Remplis tous les champs obligatoires (équipes, catégorie de pari, cote, date).", "error");
     return;
   }
 
-  let pariFinal = precision ? pariBase + " — " + precision : pariBase;
+  const pariFinal = precision ? `${betData.pari} — ${precision}` : betData.pari;
 
   const dataToSave = {
     equipe1: equipe1,
@@ -478,20 +714,22 @@ async function savePronostic() {
     date_match: dateMatch.replace("T", " ") + ":00",
     statut: statut,
     user_id: currentUser.id,
-    match_id: matchId
+    match_id: matchId,
+    pays: pays || null,
+    championnat: championnat || null,
+    categorie_pari: betData.categorie_pari,
+    option_pari: betData.option_pari
   };
 
   let result;
 
   if (editId) {
-    // MODIFICATION
     result = await supabaseClient
       .from("pronostics")
       .update(dataToSave)
       .eq("id", editId)
       .eq("user_id", currentUser.id);
   } else {
-    // CRÉATION : L'ID est généré automatiquement par Supabase
     result = await supabaseClient
       .from("pronostics")
       .insert([dataToSave]);
@@ -528,7 +766,7 @@ async function editPronostic(id) {
 
   const { data, error } = await supabaseClient
     .from("pronostics")
-    .select("id,equipe1,equipe2,pari,cote,description,date_match,statut,match_id")
+    .select("id,equipe1,equipe2,pari,cote,description,date_match,statut,match_id,pays,championnat,categorie_pari,option_pari")
     .eq("id", id)
     .single();
 
@@ -540,29 +778,36 @@ async function editPronostic(id) {
   editId = data.id;
 
   document.getElementById("matchSelect").value = data.match_id || "";
+  document.getElementById("pays").value = data.pays || "";
+  document.getElementById("championnat").value = data.championnat || "";
   document.getElementById("equipe1").value = data.equipe1 || "";
   document.getElementById("equipe2").value = data.equipe2 || "";
-
-  const pariValue = data.pari || "";
-  const separator = " — ";
-  let basePari = pariValue;
-  let precision = "";
-
-  const index = pariValue.indexOf(separator);
-  if (index !== -1) {
-    basePari = pariValue.slice(0, index);
-    precision = pariValue.slice(index + separator.length);
-  }
-
-  const pariSelect = document.getElementById("pari");
-  const optionExists = [...pariSelect.options].some(option => option.value === basePari);
-  pariSelect.value = optionExists ? basePari : "Autre pari";
-
-  document.getElementById("precision").value = precision;
   document.getElementById("cote").value = data.cote ?? "";
   document.getElementById("date_match").value = toDatetimeLocal(data.date_match);
   document.getElementById("description").value = data.description || "";
   document.getElementById("statut").value = data.statut || "En attente";
+  document.getElementById("precision").value = "";
+
+  // Restauration de la catégorie et de l'option
+  const category = data.categorie_pari || "";
+  document.getElementById("categorieSelect").value = category;
+  onCategoryChanged();
+
+  if (category === "victoire") {
+    document.getElementById("victoireSelect").value = data.option_pari || "V1";
+  }
+
+  else if (category === "btts") {
+    document.getElementById("bttsSelect").value = data.option_pari || "OUI";
+  }
+
+  else if (SEUILS[category] && data.option_pari) {
+    const [sens, seuil] = data.option_pari.split(":");
+    document.getElementById("sensSelect").value = sens || "PLUS";
+    document.getElementById("seuilSelect").value = seuil || "";
+  }
+
+  updateBetPreview();
 
   document.getElementById("formTitle").textContent = "✏️ Modifier le pronostic";
   document.getElementById("formTitle").classList.add("edit-title");
@@ -623,14 +868,24 @@ function cancelEdit() {
 
 function clearForm() {
   document.getElementById("matchSelect").value = "";
+  document.getElementById("pays").value = "";
+  document.getElementById("championnat").value = "";
   document.getElementById("equipe1").value = "";
   document.getElementById("equipe2").value = "";
-  document.getElementById("pari").value = "Victoire équipe 1";
+  document.getElementById("categorieSelect").value = "";
   document.getElementById("precision").value = "";
   document.getElementById("cote").value = "";
   document.getElementById("date_match").value = "";
   document.getElementById("description").value = "";
   document.getElementById("statut").value = "En attente";
+
+  document.getElementById("optionsVictoire").classList.add("hidden");
+  document.getElementById("optionsBtts").classList.add("hidden");
+  document.getElementById("optionsSeuil").classList.add("hidden");
+
+  const preview = document.getElementById("betPreview");
+  preview.classList.add("hidden");
+  preview.textContent = "";
 }
 
 async function loadPronostics() {
@@ -638,7 +893,7 @@ async function loadPronostics() {
 
   const { data, error } = await supabaseClient
     .from("pronostics")
-    .select("id,equipe1,equipe2,pari,cote,description,date_match,statut,match_id")
+    .select("id,equipe1,equipe2,pari,cote,description,date_match,statut,match_id,pays,championnat,categorie_pari")
     .order("date_match", { ascending: false });
 
   if (error) {
@@ -663,8 +918,12 @@ function createPronosticHTML(p) {
 
   const date = formatDate(p.date_match);
 
+  const breadcrumb = [p.pays, p.championnat].filter(Boolean).join(" • ");
+
   return `
     <div class="pronostic">
+      ${breadcrumb ? `<div class="breadcrumb">🌍 ${escapeHtml(breadcrumb)}</div>` : ""}
+
       <div class="teams">
         ⚽ ${escapeHtml(p.equipe1 || "")} 🆚 ${escapeHtml(p.equipe2 || "")}
       </div>
@@ -677,6 +936,7 @@ function createPronosticHTML(p) {
         <span class="odds">Cote : ${escapeHtml(p.cote ?? "")}</span>
         <span class="status ${statusClass}">${escapeHtml(status)}</span>
         ${p.match_id ? `<span class="linked-badge">🔗 Lié au match</span>` : ""}
+        ${p.categorie_pari ? `<span class="category-badge">${escapeHtml(CATEGORY_LABELS[p.categorie_pari] || p.categorie_pari)}</span>` : ""}
       </div>
 
       <div class="info-line">
@@ -731,4 +991,4 @@ function escapeHtml(value) {
 </script>
 
 </body>
-  </html>
+</html>

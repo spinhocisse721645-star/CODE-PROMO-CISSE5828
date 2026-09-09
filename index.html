@@ -640,1408 +640,1242 @@
 
 <body>
 
+<header class="header">
+  <div class="brand">🔥 CISSE PRONOS</div>
+
+  <div class="date-tabs">
+
+    <button class="date-tab active" data-date="all">
+      Tous
+    </button>
+
+    <button class="date-tab" data-date="today">
+      Aujourd'hui
+    </button>
+
+    <button class="date-tab" data-date="tomorrow">
+      Demain
+    </button>
+
+    <button class="date-tab" data-date="after">
+      Après-demain
+    </button>
+
+  </div>
+</header>
+
+
+<main class="main">
+
   <!-- =========================
-       HEADER
+       LIVE
   ========================== -->
 
-  <header class="header">
-    <div class="brand">🔥 CISSE PRONOS</div>
+  <section id="tab-live" class="page active">
 
-    <div class="date-tabs">
-      <button class="date-tab active" data-date="all">
-        Tous
-      </button>
-
-      <button class="date-tab" data-date="today">
-        Aujourd'hui
-      </button>
-
-      <button class="date-tab" data-date="tomorrow">
-        Demain
-      </button>
-
-      <button class="date-tab" data-date="after">
-        Après-demain
-      </button>
+    <div class="section-title">
+      🔴 Matchs
     </div>
-  </header>
 
-
-  <main class="main">
-
-    <!-- =========================
-         LIVE
-    ========================== -->
-
-    <section id="tab-live" class="page active">
-
-      <div class="section-title">
-        🔴 Matchs
+    <div id="matchesContainer">
+      <div class="loading">
+        Chargement des matchs...
       </div>
+    </div>
 
-      <div id="matchesContainer">
-        <div class="loading">
-          Chargement des matchs...
-        </div>
+  </section>
+
+
+  <!-- =========================
+       PRONOSTICS
+  ========================== -->
+
+  <section id="tab-pronostics" class="page">
+
+    <div class="section-title">
+      🎯 Pronostics
+    </div>
+
+    <div id="pronosticsContainer">
+      <div class="loading">
+        Chargement des pronostics...
       </div>
+    </div>
 
-    </section>
-
-
-    <!-- =========================
-         PRONOSTICS
-    ========================== -->
-
-    <section id="tab-pronostics" class="page">
-
-      <div class="section-title">
-        🎯 Pronostics
-      </div>
-
-      <div id="pronosticsContainer">
-        <div class="loading">
-          Chargement des pronostics...
-        </div>
-      </div>
-
-    </section>
+  </section>
 
 
-    <!-- =========================
-         TOP 10
-    ========================== -->
+  <!-- =========================
+       TOP 10
+  ========================== -->
 
-    <section id="tab-top" class="page">
+  <section id="tab-top" class="page">
 
-      <div class="section-title">
-        🏆 Top 10
-      </div>
+    <div class="section-title">
+      🏆 Top 10
+    </div>
 
-      <div class="empty">
-        Le classement des meilleurs pronostiqueurs apparaîtra ici.
-      </div>
+    <div class="empty">
+      Le classement des meilleurs pronostiqueurs apparaîtra ici.
+    </div>
 
-    </section>
+  </section>
 
 
-    <!-- =========================
-         STATISTIQUES GENERALES
-    ========================== -->
+  <!-- =========================
+       STATISTIQUES
+  ========================== -->
 
-    <section id="tab-tips" class="page">
+  <section id="tab-tips" class="page">
 
-      <div id="generalStatsContainer">
+    <div id="generalStatsContainer">
 
-        <div class="stats-header">
+      <div class="stats-header">
 
-          <div class="stats-header-top">
+        <div class="stats-header-top">
 
-            <div>
-              <div class="stats-title">
-                📊 Statistiques générales
-              </div>
+          <div>
 
-              <div id="statsDate" class="stats-date">
-                Aujourd'hui
-              </div>
-
-              <div class="source-line">
-                Source : Football-Data.org
-              </div>
+            <div class="stats-title">
+              📊 Statistiques générales
             </div>
 
-            <button
-              id="refreshStatsBtn"
-              class="refresh-btn"
-              onclick="loadGeneralStatistics(true)"
-            >
-              🔄 Actualiser
-            </button>
+            <div id="statsDate" class="stats-date">
+              Aujourd'hui
+            </div>
+
+            <div class="source-line">
+              Source : Football-Data.org
+            </div>
 
           </div>
 
-          <div id="lastStatsUpdate" class="last-update">
-            Chargement...
-          </div>
+          <button
+            id="refreshStatsBtn"
+            class="refresh-btn"
+            onclick="loadGeneralStatistics(true)"
+          >
+            🔄 Actualiser
+          </button>
 
         </div>
 
-        <div id="generalStatsContent">
-          <div class="loading">
-            Chargement des statistiques...
-          </div>
-        </div>
-
-      </div>
-
-
-      <!-- =========================
-           PERFORMANCE PRONOSTICS
-      ========================== -->
-
-      <div class="sub-title">
-        📈 Performance des pronostics
-      </div>
-
-      <div id="pronosticStatsContainer">
-        <div class="loading">
+        <div id="lastStatsUpdate" class="last-update">
           Chargement...
         </div>
-      </div>
-
-
-      <!-- =========================
-           PARTENAIRES
-      ========================== -->
-
-      <div class="sub-title">
-        🤝 Partenaires
-      </div>
-
-      <div class="partner">
-        <div class="partner-title">
-          🎰 MelBet
-        </div>
-
-        <div class="partner-text">
-          Retrouvez nos partenaires officiels et leurs offres directement
-          depuis CISSE PRONOS.
-        </div>
-      </div>
-
-      <div class="partner">
-        <div class="partner-title">
-          🎰 1xBet
-        </div>
-
-        <div class="partner-text">
-          Partenaire CISSE PRONOS.
-        </div>
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- =========================
-       MODAL DETAIL MATCH
-  ========================== -->
-
-  <div id="matchModal" class="modal">
-
-    <div class="modal-content">
-
-      <div class="modal-head">
-
-        <div class="modal-title">
-          📋 Détails du match
-        </div>
-
-        <button
-          class="close-btn"
-          onclick="closeMatchModal()"
-        >
-          ×
-        </button>
 
       </div>
 
-      <div id="matchDetailsContent">
+      <div id="generalStatsContent">
+
         <div class="loading">
-          Chargement...
+          Chargement des statistiques...
         </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="sub-title">
+      📈 Performance des pronostics
+    </div>
+
+    <div id="pronosticStatsContainer">
+
+      <div class="loading">
+        Chargement...
+      </div>
+
+    </div>
+
+
+    <div class="sub-title">
+      🤝 Partenaires
+    </div>
+
+    <div class="partner">
+
+      <div class="partner-title">
+        🎰 MelBet
+      </div>
+
+      <div class="partner-text">
+        Retrouvez nos partenaires officiels et leurs offres directement
+        depuis CISSE PRONOS.
+      </div>
+
+    </div>
+
+    <div class="partner">
+
+      <div class="partner-title">
+        🎰 1xBet
+      </div>
+
+      <div class="partner-text">
+        Partenaire CISSE PRONOS.
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =========================
+     MODAL
+========================== -->
+
+<div id="matchModal" class="modal">
+
+  <div class="modal-content">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        📋 Détails du match
+      </div>
+
+      <button
+        class="close-btn"
+        onclick="closeMatchModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div id="matchDetailsContent">
+
+      <div class="loading">
+        Chargement...
       </div>
 
     </div>
 
   </div>
 
-
-  <!-- =========================
-       BOTTOM NAV
-  ========================== -->
-
-  <nav class="bottom-nav">
-
-    <button
-      class="nav-btn active"
-      data-tab="live"
-      onclick="switchTab('live')"
-    >
-      <span class="nav-icon">🔴</span>
-      Live
-    </button>
-
-    <button
-      class="nav-btn"
-      data-tab="pronostics"
-      onclick="switchTab('pronostics')"
-    >
-      <span class="nav-icon">🎯</span>
-      Pronostics
-    </button>
-
-    <button
-      class="nav-btn"
-      data-tab="top"
-      onclick="switchTab('top')"
-    >
-      <span class="nav-icon">🏆</span>
-      Top 10
-    </button>
-
-    <button
-      class="nav-btn"
-      data-tab="tips"
-      onclick="switchTab('tips')"
-    >
-      <span class="nav-icon">📊</span>
-      Stats
-    </button>
-
-  </nav>
+</div>
 
 
-  <script>
+<!-- =========================
+     NAVIGATION
+========================== -->
 
-    /* ============================================================
-       CONFIGURATION
-    ============================================================ */
+<nav class="bottom-nav">
 
-    const SUPABASE_URL =
-      "https://avonpsmoruevwlokkfjg.supabase.co";
+  <button
+    class="nav-btn active"
+    data-tab="live"
+    onclick="switchTab('live')"
+  >
+    <span class="nav-icon">🔴</span>
+    Live
+  </button>
 
-    const SUPABASE_KEY =
-      "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uR8WnqfR";
+  <button
+    class="nav-btn"
+    data-tab="pronostics"
+    onclick="switchTab('pronostics')"
+  >
+    <span class="nav-icon">🎯</span>
+    Pronostics
+  </button>
 
-    const API_BASE_URL =
-      "https://cisse-pronos-api.onrender.com";
+  <button
+    class="nav-btn"
+    data-tab="top"
+    onclick="switchTab('top')"
+  >
+    <span class="nav-icon">🏆</span>
+    Top 10
+  </button>
+
+  <button
+    class="nav-btn"
+    data-tab="tips"
+    onclick="switchTab('tips')"
+  >
+    <span class="nav-icon">📊</span>
+    Stats
+  </button>
+
+</nav>
 
 
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
+<script>
+
+/* ============================================================
+   CONFIGURATION
+============================================================ */
+
+const SUPABASE_URL =
+  "https://avonpsmoruevwlokkfjg.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_X-ymjcUkkgIBLFR8WL55DQ_uR8nqfR";
+
+const API_BASE_URL =
+  "https://cisse-pronos-api.onrender.com";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* ============================================================
+   VARIABLES
+============================================================ */
+
+let allRealMatches = [];
+let allPronostics = [];
+
+let selectedDateFilter = "all";
+
+let generalStatsData = null;
+
+let statsAutoRefresh = null;
+let matchesAutoRefresh = null;
+
+let matchesLoading = false;
+let lastMatchesSignature = "";
+
+
+/* ============================================================
+   UTILITAIRES
+============================================================ */
+
+function escapeHtml(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+function formatDate(dateValue) {
+
+  if (!dateValue) {
+    return "—";
+  }
+
+  const date = new Date(dateValue);
+
+  if (isNaN(date.getTime())) {
+    return "—";
+  }
+
+  return date.toLocaleString(
+    "fr-FR",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
+}
+
+
+function formatShortDate(dateValue) {
+
+  if (!dateValue) {
+    return "—";
+  }
+
+  const date = new Date(dateValue);
+
+  if (isNaN(date.getTime())) {
+    return "—";
+  }
+
+  return date.toLocaleString(
+    "fr-FR",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
+}
+
+
+function formatStatsDate(dateValue) {
+
+  if (!dateValue) {
+    return "Aujourd'hui";
+  }
+
+  const date =
+    new Date(
+      dateValue + "T00:00:00"
+    );
+
+  if (isNaN(date.getTime())) {
+    return dateValue;
+  }
+
+  return date.toLocaleDateString(
+    "fr-FR",
+    {
+      weekday: "long",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }
+  );
+}
+
+
+function nullable(value) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return "—";
+  }
+
+  return value;
+}
+
+
+function percentage(value) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    Number.isNaN(Number(value))
+  ) {
+    return "—";
+  }
+
+  return `${Number(value).toFixed(1)}%`;
+}
+
+
+function numberValue(value) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return "—";
+  }
+
+  return value;
+}
+
+
+function statusLabel(status) {
+
+  const labels = {
+
+    "IN_PLAY": "En direct",
+
+    "PAUSED": "Pause",
+
+    "FINISHED": "Terminé",
+
+    "SCHEDULED": "À venir",
+
+    "TIMED": "À venir",
+
+    "POSTPONED": "Reporté",
+
+    "CANCELLED": "Annulé",
+
+    "SUSPENDED": "Suspendu",
+
+    "AWARDED": "Attribué"
+
+  };
+
+  return (
+    labels[status] ||
+    status ||
+    "—"
+  );
+}
+
+
+function isLiveStatus(status) {
+
+  return [
+    "IN_PLAY",
+    "PAUSED"
+  ].includes(status);
+}
+
+
+function getScore(match) {
+
+  if (
+    match.score1 === null ||
+    match.score1 === undefined ||
+    match.score2 === null ||
+    match.score2 === undefined
+  ) {
+    return "—";
+  }
+
+  return `${match.score1} — ${match.score2}`;
+}
+
+
+/* ============================================================
+   SIGNATURE MATCHS
+   Évite de redessiner inutilement toute la page
+============================================================ */
+
+function getMatchesSignature(matches) {
+
+  return (matches || [])
+    .map(match =>
+      [
+        match.id,
+        match.statut,
+        match.minute,
+        match.score1,
+        match.score2,
+        match.date_match,
+        match.logo1,
+        match.logo2
+      ].join("|")
+    )
+    .join("||");
+}
+
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+function switchTab(tabName) {
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
+
+      page.classList.remove(
+        "active"
       );
 
-
-    /* ============================================================
-       VARIABLES
-    ============================================================ */
-
-    let allRealMatches = [];
-    let allPronostics = [];
-
-    let selectedDateFilter = "all";
-
-    let generalStatsData = null;
-
-    let statsAutoRefresh = null;
-
-    let matchesAutoRefresh = null;
+    });
 
 
-    /* ============================================================
-       UTILITAIRES
-    ============================================================ */
-
-    function escapeHtml(value) {
-
-      if (value === null || value === undefined) {
-        return "";
-      }
-
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
+  const target =
+    document.getElementById(
+      `tab-${tabName}`
+    );
 
 
-    function formatDate(dateValue) {
+  if (target) {
 
-      if (!dateValue) {
-        return "—";
-      }
+    target.classList.add(
+      "active"
+    );
 
-      const date = new Date(dateValue);
-
-      if (isNaN(date.getTime())) {
-        return "—";
-      }
-
-      return date.toLocaleString(
-        "fr-FR",
-        {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit"
-        }
-      );
-    }
+  }
 
 
-    function formatShortDate(dateValue) {
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(button => {
 
-      if (!dateValue) {
-        return "—";
-      }
-
-      const date = new Date(dateValue);
-
-      if (isNaN(date.getTime())) {
-        return "—";
-      }
-
-      return date.toLocaleString(
-        "fr-FR",
-        {
-          day: "2-digit",
-          month: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit"
-        }
-      );
-    }
-
-
-    function formatStatsDate(dateValue) {
-
-      if (!dateValue) {
-        return "Aujourd'hui";
-      }
-
-      const date = new Date(
-        dateValue + "T00:00:00"
+      button.classList.remove(
+        "active"
       );
 
-      if (isNaN(date.getTime())) {
-        return dateValue;
-      }
+    });
 
-      return date.toLocaleDateString(
-        "fr-FR",
-        {
-          weekday: "long",
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric"
-        }
-      );
-    }
 
+  const activeButton =
+    document.querySelector(
+      `.nav-btn[data-tab="${tabName}"]`
+    );
 
-    function nullable(value) {
 
-      if (
-        value === null ||
-        value === undefined ||
-        value === ""
-      ) {
-        return "—";
-      }
-
-      return value;
-    }
+  if (activeButton) {
 
-
-    function percentage(value) {
-
-      if (
-        value === null ||
-        value === undefined ||
-        Number.isNaN(Number(value))
-      ) {
-        return "—";
-      }
+    activeButton.classList.add(
+      "active"
+    );
 
-      return `${Number(value).toFixed(1)}%`;
-    }
+  }
 
 
-    function numberValue(value) {
+  if (tabName === "tips") {
 
-      if (
-        value === null ||
-        value === undefined ||
-        value === ""
-      ) {
-        return "—";
-      }
+    loadGeneralStatistics();
 
-      return value;
-    }
+    updatePronosticStats();
 
+  }
 
-    function statusLabel(status) {
+}
 
-      const labels = {
-        "IN_PLAY": "En direct",
-        "PAUSED": "Pause",
-        "FINISHED": "Terminé",
-        "SCHEDULED": "À venir",
-        "TIMED": "À venir",
-        "POSTPONED": "Reporté",
-        "CANCELLED": "Annulé",
-        "SUSPENDED": "Suspendu",
-        "AWARDED": "Attribué"
-      };
 
-      return labels[status] || status || "—";
-    }
+/* ============================================================
+   FILTRE DATE
+============================================================ */
 
+document
+  .querySelectorAll(".date-tab")
+  .forEach(button => {
 
-    function isLiveStatus(status) {
+    button.addEventListener(
+      "click",
+      () => {
 
-      return [
-        "IN_PLAY",
-        "PAUSED"
-      ].includes(status);
-    }
-
-
-    function getScore(match) {
-
-      if (
-        match.score1 === null ||
-        match.score1 === undefined ||
-        match.score2 === null ||
-        match.score2 === undefined
-      ) {
-        return "—";
-      }
-
-      return `${match.score1} — ${match.score2}`;
-    }
-
-
-    /* ============================================================
-       NAVIGATION
-    ============================================================ */
-
-    function switchTab(tabName) {
-
-      document
-        .querySelectorAll(".page")
-        .forEach(page => {
-          page.classList.remove("active");
-        });
-
-      const target =
-        document.getElementById(
-          `tab-${tabName}`
-        );
-
-      if (target) {
-        target.classList.add("active");
-      }
-
-      document
-        .querySelectorAll(".nav-btn")
-        .forEach(button => {
-          button.classList.remove("active");
-        });
-
-      const activeButton =
-        document.querySelector(
-          `.nav-btn[data-tab="${tabName}"]`
-        );
-
-      if (activeButton) {
-        activeButton.classList.add("active");
-      }
-
-      if (tabName === "tips") {
-
-        loadGeneralStatistics();
-
-        updatePronosticStats();
-      }
-    }
-
-
-    /* ============================================================
-       FILTRE DATE
-    ============================================================ */
-
-    document
-      .querySelectorAll(".date-tab")
-      .forEach(button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            document
-              .querySelectorAll(".date-tab")
-              .forEach(btn =>
-                btn.classList.remove("active")
-              );
-
-            button.classList.add("active");
-
-            selectedDateFilter =
-              button.dataset.date;
-
-            renderRealMatches();
-          }
-        );
-
-      });
-
-
-    function getDateKey(dateValue) {
-
-      if (!dateValue) {
-        return null;
-      }
-
-      const date =
-        new Date(dateValue);
-
-      if (isNaN(date.getTime())) {
-        return null;
-      }
-
-      const year =
-        date.getFullYear();
-
-      const month =
-        String(date.getMonth() + 1)
-          .padStart(2, "0");
-
-      const day =
-        String(date.getDate())
-          .padStart(2, "0");
-
-      return `${year}-${month}-${day}`;
-    }
-
-
-    function getTodayKey() {
-
-      const date = new Date();
-
-      return getDateKey(date);
-    }
-
-
-    function getTomorrowKey() {
-
-      const date = new Date();
-
-      date.setDate(
-        date.getDate() + 1
-      );
-
-      return getDateKey(date);
-    }
-
-
-    function getAfterTomorrowKey() {
-
-      const date = new Date();
-
-      date.setDate(
-        date.getDate() + 2
-      );
-
-      return getDateKey(date);
-    }
-
-
-    /* ============================================================
-       MATCHS SUPABASE
-    ============================================================ */
-
-    async function loadRealMatches() {
-
-      const container =
-        document.getElementById(
-          "matchesContainer"
-        );
-
-      try {
-
-        const {
-          data,
-          error
-        } = await supabaseClient
-          .from("matchs")
-          .select(`
-            id,
-            equipe1,
-            equipe2,
-            date_match,
-            statut,
-            minute,
-            score1,
-            score2,
-            logo1,
-            logo2
-          `)
-          .order(
-            "date_match",
-            {
-              ascending: true
-            }
+        document
+          .querySelectorAll(".date-tab")
+          .forEach(btn =>
+            btn.classList.remove(
+              "active"
+            )
           );
 
-        if (error) {
-          throw error;
-        }
 
-        allRealMatches =
-          data || [];
+        button.classList.add(
+          "active"
+        );
+
+
+        selectedDateFilter =
+          button.dataset.date;
+
 
         renderRealMatches();
 
-      } catch (error) {
-
-        console.error(
-          "Erreur matchs :",
-          error
-        );
-
-        container.innerHTML = `
-          <div class="error-box">
-            Impossible de charger les matchs.
-            <br>
-            ${escapeHtml(error.message)}
-          </div>
-        `;
       }
-    }
-
-
-    function renderRealMatches() {
-
-      const container =
-        document.getElementById(
-          "matchesContainer"
-        );
-
-      let matches =
-        [...allRealMatches];
-
-      if (
-        selectedDateFilter !==
-        "all"
-      ) {
-
-        let wantedDate = null;
-
-        if (
-          selectedDateFilter ===
-          "today"
-        ) {
-          wantedDate =
-            getTodayKey();
-        }
-
-        if (
-          selectedDateFilter ===
-          "tomorrow"
-        ) {
-          wantedDate =
-            getTomorrowKey();
-        }
-
-        if (
-          selectedDateFilter ===
-          "after"
-        ) {
-          wantedDate =
-            getAfterTomorrowKey();
-        }
-
-        matches =
-          matches.filter(match =>
-            getDateKey(
-              match.date_match
-            ) === wantedDate
-          );
-      }
-
-      if (!matches.length) {
-
-        container.innerHTML = `
-          <div class="empty">
-            Aucun match disponible
-            pour cette sélection.
-          </div>
-        `;
-
-        return;
-      }
-
-      container.innerHTML = `
-        <div class="match-list">
-          ${matches.map(
-            renderMatchCard
-          ).join("")}
-        </div>
-      `;
-    }
-
-
-    function renderMatchCard(match) {
-
-      const live =
-        isLiveStatus(
-          match.statut
-        );
-
-      const logo1 =
-        match.logo1
-          ? `
-            <img
-              class="team-logo"
-              src="${escapeHtml(match.logo1)}"
-              alt=""
-              onerror="this.style.display='none'"
-            >
-          `
-          : "";
-
-      const logo2 =
-        match.logo2
-          ? `
-            <img
-              class="team-logo"
-              src="${escapeHtml(match.logo2)}"
-              alt=""
-              onerror="this.style.display='none'"
-            >
-          `
-          : "";
-
-      const score =
-        getScore(match);
-
-      const minute =
-        live &&
-        match.minute !== null &&
-        match.minute !== undefined &&
-        match.minute > 0
-          ? ` • ${match.minute}'`
-          : "";
-
-      return `
-        <article
-          class="pronostic"
-          onclick="showMatchDetails('${escapeHtml(match.id)}')"
-        >
-
-          <div class="match-top">
-
-            <span class="status ${live ? "live" : ""}">
-              ${live ? "🔴 " : ""}
-              ${escapeHtml(
-                statusLabel(match.statut)
-              )}
-              ${minute}
-            </span>
-
-            <span class="match-date">
-              ${formatShortDate(
-                match.date_match
-              )}
-            </span>
-
-          </div>
-
-          <div class="teams">
-
-            <div class="team">
-              ${logo1}
-              ${escapeHtml(
-                match.equipe1
-              )}
-            </div>
-
-            <div class="score">
-              ${score}
-            </div>
-
-            <div class="team">
-              ${logo2}
-              ${escapeHtml(
-                match.equipe2
-              )}
-            </div>
-
-          </div>
-
-        </article>
-      `;
-    }
-
-
-    /* ============================================================
-       DETAIL MATCH
-    ============================================================ */
-
-    async function showMatchDetails(
-      matchId
-    ) {
-
-      const modal =
-        document.getElementById(
-          "matchModal"
-        );
-
-      const content =
-        document.getElementById(
-          "matchDetailsContent"
-        );
-
-      modal.classList.add("open");
-
-      content.innerHTML = `
-        <div class="loading">
-          Chargement des détails...
-        </div>
-      `;
-
-      try {
-
-        const match =
-          allRealMatches.find(
-            item =>
-              String(item.id) ===
-              String(matchId)
-          );
-
-        if (!match) {
-          throw new Error(
-            "Match introuvable."
-          );
-        }
-
-        const [
-          statisticsResult,
-          eventsResult
-        ] = await Promise.all([
-
-          supabaseClient
-            .from("match_statistics")
-            .select("*")
-            .eq(
-              "match_id",
-              match.id
-            ),
-
-          supabaseClient
-            .from("match_events")
-            .select("*")
-            .eq(
-              "match_id",
-              match.id
-            )
-            .order(
-              "minute",
-              {
-                ascending: true
-              }
-            )
-
-        ]);
-
-        if (
-          statisticsResult.error
-        ) {
-          console.warn(
-            "Statistiques :",
-            statisticsResult.error
-          );
-        }
-
-        if (
-          eventsResult.error
-        ) {
-          console.warn(
-            "Événements :",
-            eventsResult.error
-          );
-        }
-
-        const statistics =
-          statisticsResult.data || [];
-
-        const events =
-          eventsResult.data || [];
-
-        // Charge les statistiques générales du jour
-        // si elles ne sont pas encore disponibles,
-        // pour servir de contenu de repli.
-        if (!generalStatsData) {
-
-          try {
-
-            const response =
-              await fetch(
-                `${API_BASE_URL}/api/statistics/today`,
-                {
-                  method: "GET",
-                  cache: "no-store"
-                }
-              );
-
-            if (response.ok) {
-
-              generalStatsData =
-                await response.json();
-            }
-
-          } catch (fallbackError) {
-
-            console.warn(
-              "Stats générales indisponibles :",
-              fallbackError
-            );
-          }
-        }
-
-        const logo1 =
-          match.logo1
-            ? `
-              <img
-                class="detail-logo"
-                src="${escapeHtml(match.logo1)}"
-                alt=""
-                onerror="this.style.display='none'"
-              >
-            `
-            : "";
-
-        const logo2 =
-          match.logo2
-            ? `
-              <img
-                class="detail-logo"
-                src="${escapeHtml(match.logo2)}"
-                alt=""
-                onerror="this.style.display='none'"
-              >
-            `
-            : "";
-
-        content.innerHTML = `
-
-          <div class="detail-match">
-
-            <div class="detail-teams">
-
-              <div class="detail-team">
-                ${logo1}
-                ${escapeHtml(
-                  match.equipe1
-                )}
-              </div>
-
-              <div class="detail-score">
-                ${getScore(match)}
-              </div>
-
-              <div class="detail-team">
-                ${logo2}
-                ${escapeHtml(
-                  match.equipe2
-                )}
-              </div>
-
-            </div>
-
-            <div class="detail-info">
-
-              ${escapeHtml(
-                statusLabel(
-                  match.statut
-                )
-              )}
-
-              ${
-                isLiveStatus(
-                  match.statut
-                ) &&
-                match.minute
-                  ? ` • ${match.minute}'`
-                  : ""
-              }
-
-              <br>
-
-              ${formatDate(
-                match.date_match
-              )}
-
-              <br>
-
-              ID :
-              ${escapeHtml(
-                match.id
-              )}
-
-            </div>
-
-
-            <div class="detail-section">
-
-              <h3>
-                📊 Statistiques
-              </h3>
-
-              ${
-                statistics.length
-                  ? renderDetailStatistics(
-                      statistics
-                    )
-                  : renderFallbackGeneralStats()
-              }
-
-            </div>
-
-
-            <div class="detail-section">
-
-              <h3>
-                ⚡ Événements
-              </h3>
-
-              ${
-                events.length
-                  ? renderDetailEvents(
-                      events
-                    )
-                  : `
-                    <div class="no-data">
-                      Aucun événement réel
-                      disponible pour ce match.
-                    </div>
-                  `
-              }
-
-            </div>
-
-          </div>
-        `;
-
-      } catch (error) {
-
-        console.error(
-          "Erreur détail :",
-          error
-        );
-
-        content.innerHTML = `
-          <div class="error-box">
-            Impossible de charger les détails.
-            <br>
-            ${escapeHtml(
-              error.message
-            )}
-          </div>
-        `;
-      }
-    }
-
-
-    function renderFallbackGeneralStats() {
-
-      if (!generalStatsData) {
-
-        return `
-          <div class="no-data">
-            Aucune statistique réelle
-            disponible pour ce match, et les
-            statistiques générales du jour
-            n'ont pas pu être chargées.
-          </div>
-        `;
-      }
-
-      const overview =
-        generalStatsData.overview || {};
-
-      const goals =
-        generalStatsData.goals || {};
-
-      const results =
-        generalStatsData.results || {};
-
-      const btts =
-        generalStatsData.btts || {};
-
-      return `
-
-        <div class="fallback-note">
-          ℹ️ Aucune statistique spécifique
-          n'est disponible pour ce match.
-          Voici les statistiques générales
-          du jour (${escapeHtml(
-            formatStatsDate(
-              generalStatsData.date
-            )
-          )}), à titre indicatif.
-        </div>
-
-        <div class="stat-grid">
-
-          ${statCard(
-            "⚽",
-            overview.total_matches,
-            "Total matchs"
-          )}
-
-          ${statCard(
-            "🔴",
-            overview.live,
-            "En direct"
-          )}
-
-          ${statCard(
-            "🏁",
-            overview.finished,
-            "Terminés"
-          )}
-
-          ${statCard(
-            "⏳",
-            overview.upcoming,
-            "À venir"
-          )}
-
-        </div>
-
-        <div class="detail-table" style="margin-top:10px;">
-
-          <div class="detail-row">
-            <span>Total buts marqués</span>
-            <strong>${numberValue(goals.total)}</strong>
-          </div>
-
-          <div class="detail-row">
-            <span>Moyenne / match terminé</span>
-            <strong>${
-              goals.average_per_finished_match === null ||
-              goals.average_per_finished_match === undefined
-                ? "—"
-                : Number(
-                    goals.average_per_finished_match
-                  ).toFixed(2)
-            }</strong>
-          </div>
-
-          <div class="detail-row">
-            <span>🏠 Victoires domicile</span>
-            <strong>${numberValue(results.home_wins)} ${
-              results.home_wins_percentage !== null &&
-              results.home_wins_percentage !== undefined
-                ? `(${percentage(results.home_wins_percentage)})`
-                : ""
-            }</strong>
-          </div>
-
-          <div class="detail-row">
-            <span>🤝 Matchs nuls</span>
-            <strong>${numberValue(results.draws)} ${
-              results.draws_percentage !== null &&
-              results.draws_percentage !== undefined
-                ? `(${percentage(results.draws_percentage)})`
-                : ""
-            }</strong>
-          </div>
-
-          <div class="detail-row">
-            <span>✈️ Victoires extérieur</span>
-            <strong>${numberValue(results.away_wins)} ${
-              results.away_wins_percentage !== null &&
-              results.away_wins_percentage !== undefined
-                ? `(${percentage(results.away_wins_percentage)})`
-                : ""
-            }</strong>
-          </div>
-
-          <div class="detail-row">
-            <span>⚔️ BTTS Oui</span>
-            <strong>${numberValue(btts.yes)} ${
-              btts.yes_percentage !== null &&
-              btts.yes_percentage !== undefined
-                ? `(${percentage(btts.yes_percentage)})`
-                : ""
-            }</strong>
-          </div>
-
-        </div>
-      `;
-    }
-
-
-    function renderDetailStatistics(
-      statistics
-    ) {
-
-      return `
-        <div class="detail-table">
-
-          ${statistics.map(
-            stat => {
-
-              const entries =
-                Object.entries(stat)
-                  .filter(
-                    ([key]) =>
-                      ![
-                        "id",
-                        "match_id",
-                        "created_at",
-                        "updated_at"
-                      ].includes(key)
-                  );
-
-              return entries
-                .map(
-                  ([key, value]) => `
-                    <div class="detail-row">
-                      <span>
-                        ${escapeHtml(key)}
-                      </span>
-                      <strong>
-                        ${escapeHtml(
-                          nullable(value)
-                        )}
-                      </strong>
-                    </div>
-                  `
-                )
-                .join("");
-
-            }
-          ).join("")}
-
-        </div>
-      `;
-    }
-
-
-    function renderDetailEvents(
-      events
-    ) {
-
-      return `
-        <div class="detail-table">
-
-          ${events.map(
-            event => `
-
-              <div class="detail-row">
-
-                <span>
-                  ${
-                    event.minute !==
-                    null &&
-                    event.minute !==
-                    undefined
-                      ? `${event.minute}' `
-                      : ""
-                  }
-
-                  ${escapeHtml(
-                    event.type ||
-                    event.event_type ||
-                    "Événement"
-                  )}
-                </span>
-
-                <strong>
-                  ${escapeHtml(
-                    event.player ||
-                    event.description ||
-                    ""
-                  )}
-                </strong>
-
-              </div>
-
-            `
-          ).join("")}
-
-        </div>
-      `;
-    }
-
-
-    function closeMatchModal() {
-
-      document
-        .getElementById(
-          "matchModal"
-        )
-        .classList.remove("open");
-    }
-
-
-    document
-      .getElementById(
-        "matchModal"
-      )
-      .addEventListener(
-        "click",
-        event => {
-
-          if (
-            event.target.id ===
-            "matchModal"
-          ) {
-            closeMatchModal();
-          }
+    );
 
+  });
+
+
+function getDateKey(dateValue) {
+
+  if (!dateValue) {
+    return null;
+  }
+
+  const date =
+    new Date(dateValue);
+
+  if (
+    isNaN(
+      date.getTime()
+    )
+  ) {
+    return null;
+  }
+
+
+  const year =
+    date.getFullYear();
+
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
+
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, "0");
+
+
+  return `${year}-${month}-${day}`;
+}
+
+
+function getTodayKey() {
+
+  return getDateKey(
+    new Date()
+  );
+
+}
+
+
+function getTomorrowKey() {
+
+  const date =
+    new Date();
+
+  date.setDate(
+    date.getDate() + 1
+  );
+
+  return getDateKey(date);
+
+}
+
+
+function getAfterTomorrowKey() {
+
+  const date =
+    new Date();
+
+  date.setDate(
+    date.getDate() + 2
+  );
+
+  return getDateKey(date);
+
+}
+
+
+/* ============================================================
+   MATCHS SUPABASE
+============================================================ */
+
+async function loadRealMatches(
+  silent = false
+) {
+
+  if (matchesLoading) {
+    return;
+  }
+
+  matchesLoading = true;
+
+  const container =
+    document.getElementById(
+      "matchesContainer"
+    );
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+
+      .from("matchs")
+
+      .select(`
+        id,
+        equipe1,
+        equipe2,
+        date_match,
+        statut,
+        minute,
+        score1,
+        score2,
+        logo1,
+        logo2
+      `)
+
+      .order(
+        "date_match",
+        {
+          ascending: true
         }
       );
 
 
-    /* ============================================================
-       STATISTIQUES GENERALES
-       API CISSE PRONOS
-    ============================================================ */
+    if (error) {
+      throw error;
+    }
 
-    async function loadGeneralStatistics(
-      manualRefresh = false
+
+    const newMatches =
+      data || [];
+
+
+    const newSignature =
+      getMatchesSignature(
+        newMatches
+      );
+
+
+    allRealMatches =
+      newMatches;
+
+
+    /*
+     * Redessine uniquement si les données
+     * ont réellement changé.
+     */
+    if (
+      newSignature !==
+      lastMatchesSignature
     ) {
 
-      const content =
-        document.getElementById(
-          "generalStatsContent"
-        );
+      lastMatchesSignature =
+        newSignature;
 
-      const update =
-        document.getElementById(
-          "lastStatsUpdate"
-        );
+      renderRealMatches();
 
-      const button =
-        document.getElementById(
-          "refreshStatsBtn"
-        );
+    }
 
-      if (manualRefresh) {
 
-        button.disabled = true;
-        button.textContent =
-          "⏳ Chargement...";
-      }
+  } catch (error) {
 
-      content.innerHTML = `
-        <div class="loading">
-          Chargement des statistiques réelles...
+    console.error(
+      "Erreur matchs :",
+      error
+    );
+
+
+    /*
+     * Lors d'un rafraîchissement automatique,
+     * on évite d'effacer un affichage
+     * qui fonctionnait déjà.
+     */
+    if (
+      !silent ||
+      !allRealMatches.length
+    ) {
+
+      container.innerHTML = `
+
+        <div class="error-box">
+
+          Impossible de charger les matchs.
+
+          <br><br>
+
+          ${escapeHtml(
+            error.message
+          )}
+
         </div>
+
       `;
+
+    }
+
+  } finally {
+
+    matchesLoading = false;
+
+  }
+
+}
+
+
+/* ============================================================
+   AFFICHAGE MATCHS
+============================================================ */
+
+function renderRealMatches() {
+
+  const container =
+    document.getElementById(
+      "matchesContainer"
+    );
+
+
+  let matches =
+    [...allRealMatches];
+
+
+  if (
+    selectedDateFilter !==
+    "all"
+  ) {
+
+    let wantedDate = null;
+
+
+    if (
+      selectedDateFilter ===
+      "today"
+    ) {
+
+      wantedDate =
+        getTodayKey();
+
+    }
+
+
+    if (
+      selectedDateFilter ===
+      "tomorrow"
+    ) {
+
+      wantedDate =
+        getTomorrowKey();
+
+    }
+
+
+    if (
+      selectedDateFilter ===
+      "after"
+    ) {
+
+      wantedDate =
+        getAfterTomorrowKey();
+
+    }
+
+
+    matches =
+      matches.filter(
+        match =>
+          getDateKey(
+            match.date_match
+          ) === wantedDate
+      );
+
+  }
+
+
+  if (!matches.length) {
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        Aucun match disponible
+        pour cette sélection.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML = `
+
+    <div class="match-list">
+
+      ${matches
+        .map(
+          renderMatchCard
+        )
+        .join("")}
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   CARTE MATCH
+============================================================ */
+
+function renderMatchCard(match) {
+
+  const live =
+    isLiveStatus(
+      match.statut
+    );
+
+
+  const logo1 =
+    match.logo1
+
+      ? `
+
+        <img
+
+          class="team-logo"
+
+          src="${escapeHtml(
+            match.logo1
+          )}"
+
+          alt=""
+
+          onerror="
+            this.style.display='none'
+          "
+
+        >
+
+      `
+
+      : "";
+
+
+  const logo2 =
+    match.logo2
+
+      ? `
+
+        <img
+
+          class="team-logo"
+
+          src="${escapeHtml(
+            match.logo2
+          )}"
+
+          alt=""
+
+          onerror="
+            this.style.display='none'
+          "
+
+        >
+
+      `
+
+      : "";
+
+
+  const score =
+    getScore(match);
+
+
+  const minute =
+    live &&
+    match.minute !== null &&
+    match.minute !== undefined &&
+    Number(match.minute) > 0
+
+      ? ` • ${match.minute}'`
+
+      : "";
+
+
+  return `
+
+    <article
+
+      class="pronostic"
+
+      onclick="
+        showMatchDetails(
+          '${escapeHtml(match.id)}'
+        )
+      "
+
+    >
+
+      <div class="match-top">
+
+        <span
+          class="status ${
+            live ? "live" : ""
+          }"
+        >
+
+          ${
+            live
+              ? "🔴 "
+              : ""
+          }
+
+          ${escapeHtml(
+            statusLabel(
+              match.statut
+            )
+          )}
+
+          ${minute}
+
+        </span>
+
+
+        <span class="match-date">
+
+          ${formatShortDate(
+            match.date_match
+          )}
+
+        </span>
+
+      </div>
+
+
+      <div class="teams">
+
+        <div class="team">
+
+          ${logo1}
+
+          ${escapeHtml(
+            match.equipe1
+          )}
+
+        </div>
+
+
+        <div class="score">
+
+          ${score}
+
+        </div>
+
+
+        <div class="team">
+
+          ${logo2}
+
+          ${escapeHtml(
+            match.equipe2
+          )}
+
+        </div>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* ============================================================
+   DETAIL MATCH
+============================================================ */
+
+async function showMatchDetails(
+  matchId
+) {
+
+  const modal =
+    document.getElementById(
+      "matchModal"
+    );
+
+
+  const content =
+    document.getElementById(
+      "matchDetailsContent"
+    );
+
+
+  modal.classList.add(
+    "open"
+  );
+
+
+  content.innerHTML = `
+
+    <div class="loading">
+
+      Chargement des détails...
+
+    </div>
+
+  `;
+
+
+  try {
+
+    const match =
+      allRealMatches.find(
+        item =>
+          String(item.id) ===
+          String(matchId)
+      );
+
+
+    if (!match) {
+
+      throw new Error(
+        "Match introuvable."
+      );
+
+    }
+
+
+    const [
+      statisticsResult,
+      eventsResult
+    ] = await Promise.all([
+
+      supabaseClient
+
+        .from("match_statistics")
+
+        .select("*")
+
+        .eq(
+          "match_id",
+          match.id
+        ),
+
+
+      supabaseClient
+
+        .from("match_events")
+
+        .select("*")
+
+        .eq(
+          "match_id",
+          match.id
+        )
+
+        .order(
+          "minute",
+          {
+            ascending: true
+          }
+        )
+
+    ]);
+
+
+    if (
+      statisticsResult.error
+    ) {
+
+      console.warn(
+        "Statistiques :",
+        statisticsResult.error
+      );
+
+    }
+
+
+    if (
+      eventsResult.error
+    ) {
+
+      console.warn(
+        "Événements :",
+        eventsResult.error
+      );
+
+    }
+
+
+    const statistics =
+      statisticsResult.data || [];
+
+
+    const events =
+      eventsResult.data || [];
+
+
+    if (!generalStatsData) {
 
       try {
 
@@ -2054,1017 +1888,1962 @@
             }
           );
 
-        if (!response.ok) {
 
-          throw new Error(
-            `Erreur API HTTP ${response.status}`
-          );
+        if (response.ok) {
+
+          generalStatsData =
+            await response.json();
+
         }
 
-        const data =
-          await response.json();
+      } catch (fallbackError) {
 
-        generalStatsData =
-          data;
-
-        renderGeneralStatistics(
-          data
+        console.warn(
+          "Stats générales indisponibles :",
+          fallbackError
         );
 
-        update.textContent =
-          `Dernière mise à jour : ${
-            new Date().toLocaleTimeString(
-              "fr-FR",
-              {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
-              }
-            )
-          }`;
-
-      } catch (error) {
-
-        console.error(
-          "Erreur statistiques générales :",
-          error
-        );
-
-        content.innerHTML = `
-          <div class="error-box">
-            Impossible de récupérer
-            les statistiques générales.
-            <br><br>
-            ${escapeHtml(
-              error.message
-            )}
-            <br><br>
-            Vérifie que ton API CISSE PRONOS
-            est disponible sur Render.
-          </div>
-        `;
-
-        update.textContent =
-          "Échec de la dernière actualisation.";
-
-      } finally {
-
-        if (manualRefresh) {
-
-          button.disabled = false;
-          button.textContent =
-            "🔄 Actualiser";
-        }
       }
+
     }
 
 
-    function renderGeneralStatistics(
-      data
-    ) {
+    const logo1 =
+      match.logo1
 
-      const content =
-        document.getElementById(
-          "generalStatsContent"
-        );
+        ? `
 
-      const overview =
-        data.overview || {};
+          <img
 
-      const goals =
-        data.goals || {};
+            class="detail-logo"
 
-      const results =
-        data.results || {};
+            src="${escapeHtml(
+              match.logo1
+            )}"
 
-      const over =
-        data.over || {};
+            alt=""
 
-      const btts =
-        data.btts || {};
+            onerror="
+              this.style.display='none'
+            "
 
-      const clean =
-        data.clean_sheets || {};
+          >
 
-      const zeroZero =
-        data.zero_zero || {};
+        `
 
-      const competitions =
-        data.competitions || [];
-
-      const distribution =
-        data.score_distribution || [];
+        : "";
 
 
-      document.getElementById(
-        "statsDate"
-      ).textContent =
-        formatStatsDate(
-          data.date
-        );
+    const logo2 =
+      match.logo2
+
+        ? `
+
+          <img
+
+            class="detail-logo"
+
+            src="${escapeHtml(
+              match.logo2
+            )}"
+
+            alt=""
+
+            onerror="
+              this.style.display='none'
+            "
+
+          >
+
+        `
+
+        : "";
 
 
-      content.innerHTML = `
+    content.innerHTML = `
 
-        <!-- =========================
-             VUE D'ENSEMBLE
-        ========================== -->
+      <div class="detail-match">
 
-        <div class="sub-title">
-          📌 Vue d'ensemble
-        </div>
+        <div class="detail-teams">
 
-        <div class="stat-grid">
+          <div class="detail-team">
 
-          ${statCard(
-            "⚽",
-            overview.total_matches,
-            "Total matchs"
-          )}
+            ${logo1}
 
-          ${statCard(
-            "🔴",
-            overview.live,
-            "En direct"
-          )}
+            ${escapeHtml(
+              match.equipe1
+            )}
 
-          ${statCard(
-            "🏁",
-            overview.finished,
-            "Terminés"
-          )}
-
-          ${statCard(
-            "⏳",
-            overview.upcoming,
-            "À venir"
-          )}
-
-          ${statCard(
-            "🚫",
-            overview.cancelled,
-            "Annulés"
-          )}
-
-          ${statCard(
-            "📅",
-            overview.postponed,
-            "Reportés"
-          )}
-
-        </div>
-
-
-        <!-- =========================
-             BUTS
-        ========================== -->
-
-        <div class="stats-panel">
-
-          <div class="stats-panel-title">
-            ⚽ Buts
           </div>
 
-          ${metricRow(
-            "Total",
-            numberValue(
-              goals.total
+
+          <div class="detail-score">
+
+            ${getScore(match)}
+
+          </div>
+
+
+          <div class="detail-team">
+
+            ${logo2}
+
+            ${escapeHtml(
+              match.equipe2
+            )}
+
+          </div>
+
+        </div>
+
+
+        <div class="detail-info">
+
+          ${escapeHtml(
+            statusLabel(
+              match.statut
             )
           )}
 
-          ${metricRow(
-            "Moyenne / match terminé",
-            goals.average_per_finished_match === null
+          ${
+            isLiveStatus(
+              match.statut
+            ) &&
+            match.minute
+
+              ? ` • ${match.minute}'`
+
+              : ""
+          }
+
+          <br>
+
+          ${formatDate(
+            match.date_match
+          )}
+
+          <br>
+
+          ID :
+          ${escapeHtml(
+            match.id
+          )}
+
+        </div>
+
+
+        <div class="detail-section">
+
+          <h3>
+            📊 Statistiques
+          </h3>
+
+
+          ${
+            statistics.length
+
+              ? renderDetailStatistics(
+                  statistics
+                )
+
+              : renderFallbackGeneralStats()
+
+          }
+
+        </div>
+
+
+        <div class="detail-section">
+
+          <h3>
+            ⚡ Événements
+          </h3>
+
+
+          ${
+            events.length
+
+              ? renderDetailEvents(
+                  events
+                )
+
+              : `
+
+                <div class="no-data">
+
+                  Aucun événement réel
+                  disponible pour ce match.
+
+                </div>
+
+              `
+
+          }
+
+        </div>
+
+      </div>
+
+    `;
+
+
+  } catch (error) {
+
+    console.error(
+      "Erreur détail :",
+      error
+    );
+
+
+    content.innerHTML = `
+
+      <div class="error-box">
+
+        Impossible de charger les détails.
+
+        <br>
+
+        ${escapeHtml(
+          error.message
+        )}
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+function renderFallbackGeneralStats() {
+
+  if (!generalStatsData) {
+
+    return `
+
+      <div class="no-data">
+
+        Aucune statistique réelle
+        disponible pour ce match.
+
+      </div>
+
+    `;
+
+  }
+
+
+  const overview =
+    generalStatsData.overview || {};
+
+
+  const goals =
+    generalStatsData.goals || {};
+
+
+  const results =
+    generalStatsData.results || {};
+
+
+  const btts =
+    generalStatsData.btts || {};
+
+
+  return `
+
+    <div class="fallback-note">
+
+      ℹ️ Aucune statistique spécifique
+      n'est disponible pour ce match.
+
+      Voici les statistiques générales
+      du jour à titre indicatif.
+
+    </div>
+
+
+    <div class="stat-grid">
+
+      ${statCard(
+        "⚽",
+        overview.total_matches,
+        "Total matchs"
+      )}
+
+      ${statCard(
+        "🔴",
+        overview.live,
+        "En direct"
+      )}
+
+      ${statCard(
+        "🏁",
+        overview.finished,
+        "Terminés"
+      )}
+
+      ${statCard(
+        "⏳",
+        overview.upcoming,
+        "À venir"
+      )}
+
+    </div>
+
+
+    <div
+      class="detail-table"
+      style="margin-top:10px;"
+    >
+
+      <div class="detail-row">
+
+        <span>
+          Total buts marqués
+        </span>
+
+        <strong>
+          ${numberValue(
+            goals.total
+          )}
+        </strong>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <span>
+          Moyenne / match terminé
+        </span>
+
+        <strong>
+
+          ${
+            goals.average_per_finished_match === null ||
+            goals.average_per_finished_match === undefined
+
               ? "—"
+
               : Number(
                   goals.average_per_finished_match
                 ).toFixed(2)
-          )}
 
-          ${metricRow(
-            "Buts à domicile",
-            numberValue(
-              goals.home
-            )
-          )}
-
-          ${metricRow(
-            "Buts à l'extérieur",
-            numberValue(
-              goals.away
-            )
-          )}
-
-        </div>
-
-
-        <!-- =========================
-             RESULTATS
-        ========================== -->
-
-        <div class="stats-panel">
-
-          <div class="stats-panel-title">
-            🏁 Résultats
-          </div>
-
-          ${resultMetric(
-            "🏠 Victoires domicile",
-            results.home_wins,
-            results.home_wins_percentage
-          )}
-
-          ${resultMetric(
-            "🤝 Matchs nuls",
-            results.draws,
-            results.draws_percentage
-          )}
-
-          ${resultMetric(
-            "✈️ Victoires extérieur",
-            results.away_wins,
-            results.away_wins_percentage
-          )}
-
-        </div>
-
-
-        <!-- =========================
-             OVER
-        ========================== -->
-
-        <div class="stats-panel">
-
-          <div class="stats-panel-title">
-            📈 Tendances buts
-          </div>
-
-          ${overMetric(
-            "Over 0.5",
-            over.over_0_5
-          )}
-
-          ${overMetric(
-            "Over 1.5",
-            over.over_1_5
-          )}
-
-          ${overMetric(
-            "Over 2.5",
-            over.over_2_5
-          )}
-
-          ${overMetric(
-            "Over 3.5",
-            over.over_3_5
-          )}
-
-          ${overMetric(
-            "Over 4.5",
-            over.over_4_5
-          )}
-
-        </div>
-
-
-        <!-- =========================
-             BTTS
-        ========================== -->
-
-        <div class="stats-panel">
-
-          <div class="stats-panel-title">
-            ⚔️ BTTS — Les deux équipes marquent
-          </div>
-
-          ${resultMetric(
-            "Oui",
-            btts.yes,
-            btts.yes_percentage
-          )}
-
-          ${resultMetric(
-            "Non",
-            btts.no,
-            btts.no_percentage
-          )}
-
-        </div>
-
-
-        <!-- =========================
-             CLEAN SHEETS
-        ========================== -->
-
-        <div class="stats-panel">
-
-          <div class="stats-panel-title">
-            🧤 Clean sheets
-          </div>
-
-          ${metricRow(
-            "Domicile",
-            numberValue(
-              clean.home
-            )
-          )}
-
-          ${metricRow(
-            "Extérieur",
-            numberValue(
-              clean.away
-            )
-          )}
-
-          ${metricRow(
-            "Total",
-            numberValue(
-              clean.total
-            )
-          )}
-
-        </div>
-
-
-        <!-- =========================
-             0-0
-        ========================== -->
-
-        <div class="stats-panel">
-
-          <div class="stats-panel-title">
-            0️⃣ 0-0
-          </div>
-
-          ${resultMetric(
-            "Matchs terminés 0-0",
-            zeroZero.count,
-            zeroZero.percentage
-          )}
-
-        </div>
-
-
-        <!-- =========================
-             SCORES
-        ========================== -->
-
-        <div class="stats-panel">
-
-          <div class="stats-panel-title">
-            🎯 Répartition des scores
-          </div>
-
-          ${
-            distribution.length
-              ? distribution
-                  .map(
-                    item => `
-                      <div class="metric-row">
-
-                        <div class="metric-name">
-                          ${escapeHtml(
-                            item.score ||
-                            "—"
-                          )}
-                        </div>
-
-                        <div class="metric-number">
-                          ${numberValue(
-                            item.count
-                          )}
-                          <span>
-                            ${
-                              item.percentage !==
-                              null &&
-                              item.percentage !==
-                              undefined
-                                ? ` • ${percentage(
-                                    item.percentage
-                                  )}`
-                                : ""
-                            }
-                          </span>
-                        </div>
-
-                      </div>
-                    `
-                  )
-                  .join("")
-              : `
-                <div class="no-data">
-                  Aucune statistique de score
-                  disponible pour le moment.
-                  Les statistiques apparaîtront
-                  après les premiers matchs terminés.
-                </div>
-              `
           }
 
-        </div>
+        </strong>
+
+      </div>
 
 
-        <!-- =========================
-             COMPETITIONS
-        ========================== -->
+      <div class="detail-row">
 
-        <div class="sub-title">
-          🏆 Par compétition
-        </div>
+        <span>
+          🏠 Victoires domicile
+        </span>
 
-        <div class="competition-list">
+        <strong>
+
+          ${numberValue(
+            results.home_wins
+          )}
 
           ${
-            competitions.length
-              ? competitions
-                  .map(
-                    renderCompetition
-                  )
-                  .join("")
-              : `
-                <div class="no-data">
-                  Aucune compétition disponible
-                  pour aujourd'hui.
-                </div>
-              `
+            results.home_wins_percentage !== null &&
+            results.home_wins_percentage !== undefined
+
+              ? ` (${percentage(
+                  results.home_wins_percentage
+                )})`
+
+              : ""
           }
 
-        </div>
+        </strong>
 
-      `;
-    }
-
-
-    function statCard(
-      icon,
-      value,
-      label
-    ) {
-
-      return `
-        <div class="stat-card">
-
-          <div class="stat-icon">
-            ${icon}
-          </div>
-
-          <div class="stat-value">
-            ${numberValue(value)}
-          </div>
-
-          <div class="stat-label">
-            ${label}
-          </div>
-
-        </div>
-      `;
-    }
+      </div>
 
 
-    function metricRow(
-      label,
-      value
-    ) {
+      <div class="detail-row">
 
-      return `
-        <div class="metric-row">
+        <span>
+          🤝 Matchs nuls
+        </span>
 
-          <div class="metric-name">
-            ${label}
-          </div>
+        <strong>
 
-          <div class="metric-number">
-            ${escapeHtml(
-              String(value)
-            )}
-          </div>
+          ${numberValue(
+            results.draws
+          )}
 
-        </div>
-      `;
-    }
+          ${
+            results.draws_percentage !== null &&
+            results.draws_percentage !== undefined
+
+              ? ` (${percentage(
+                  results.draws_percentage
+                )})`
+
+              : ""
+          }
+
+        </strong>
+
+      </div>
 
 
-    function resultMetric(
-      label,
-      count,
-      percent
-    ) {
+      <div class="detail-row">
 
-      return `
-        <div class="metric-row">
+        <span>
+          ✈️ Victoires extérieur
+        </span>
 
-          <div>
-            <div class="metric-name">
-              ${label}
-            </div>
+        <strong>
 
-            ${
-              percent !== null &&
-              percent !== undefined
-                ? `
-                  <div class="bar-container">
-                    <div
-                      class="bar"
-                      style="width:${Math.max(
-                        0,
-                        Math.min(
-                          100,
-                          Number(percent)
-                        )
-                      )}%"
-                    ></div>
+          ${numberValue(
+            results.away_wins
+          )}
+
+          ${
+            results.away_wins_percentage !== null &&
+            results.away_wins_percentage !== undefined
+
+              ? ` (${percentage(
+                  results.away_wins_percentage
+                )})`
+
+              : ""
+          }
+
+        </strong>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <span>
+          ⚔️ BTTS Oui
+        </span>
+
+        <strong>
+
+          ${numberValue(
+            btts.yes
+          )}
+
+          ${
+            btts.yes_percentage !== null &&
+            btts.yes_percentage !== undefined
+
+              ? ` (${percentage(
+                  btts.yes_percentage
+                )})`
+
+              : ""
+          }
+
+        </strong>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function renderDetailStatistics(
+  statistics
+) {
+
+  return `
+
+    <div class="detail-table">
+
+      ${statistics
+
+        .map(
+          stat => {
+
+            const entries =
+              Object.entries(stat)
+                .filter(
+                  ([key]) =>
+                    ![
+                      "id",
+                      "match_id",
+                      "created_at",
+                      "updated_at"
+                    ].includes(key)
+                );
+
+
+            return entries
+
+              .map(
+                ([key, value]) => `
+
+                  <div class="detail-row">
+
+                    <span>
+
+                      ${escapeHtml(
+                        key
+                      )}
+
+                    </span>
+
+                    <strong>
+
+                      ${escapeHtml(
+                        nullable(value)
+                      )}
+
+                    </strong>
+
                   </div>
+
                 `
-                : ""
-            }
-          </div>
-
-          <div class="metric-number">
-
-            ${numberValue(count)}
-
-            <span>
-              ${
-                percent !== null &&
-                percent !== undefined
-                  ? ` • ${percentage(percent)}`
-                  : ""
-              }
-            </span>
-
-          </div>
-
-        </div>
-      `;
-    }
-
-
-    function overMetric(
-      label,
-      object
-    ) {
-
-      if (!object) {
-
-        return `
-          <div class="metric-row">
-
-            <div class="metric-name">
-              ${label}
-            </div>
-
-            <div class="metric-number">
-              —
-            </div>
-
-          </div>
-        `;
-      }
-
-      return resultMetric(
-        label,
-        object.count,
-        object.percentage
-      );
-    }
-
-
-    function renderCompetition(
-      competition
-    ) {
-
-      return `
-        <div class="competition-card">
-
-          <div class="competition-head">
-
-            <div>
-
-              <div class="competition-name">
-                ${escapeHtml(
-                  competition.competition ||
-                  "Compétition"
-                )}
-              </div>
-
-              <div class="competition-country">
-                ${escapeHtml(
-                  competition.country ||
-                  "—"
-                )}
-              </div>
-
-            </div>
-
-            <div class="competition-code">
-              ${escapeHtml(
-                competition.code ||
-                ""
-              )}
-            </div>
-
-          </div>
-
-
-          <div class="competition-grid">
-
-            ${competitionItem(
-              "Matchs",
-              competition.matches
-            )}
-
-            ${competitionItem(
-              "Terminés",
-              competition.finished
-            )}
-
-            ${competitionItem(
-              "En direct",
-              competition.live
-            )}
-
-            ${competitionItem(
-              "À venir",
-              competition.upcoming
-            )}
-
-            ${competitionItem(
-              "Buts",
-              competition.goals
-            )}
-
-            ${competitionItem(
-              "Moyenne",
-              competition.average_goals === null ||
-              competition.average_goals === undefined
-                ? "—"
-                : Number(
-                    competition.average_goals
-                  ).toFixed(2)
-            )}
-
-          </div>
-
-        </div>
-      `;
-    }
-
-
-    function competitionItem(
-      label,
-      value
-    ) {
-
-      return `
-        <div class="competition-item">
-
-          <div class="competition-item-label">
-            ${label}
-          </div>
-
-          <div class="competition-item-value">
-            ${numberValue(value)}
-          </div>
-
-        </div>
-      `;
-    }
-
-
-    /* ============================================================
-       STATISTIQUES PRONOSTICS
-       CONSERVATION DE LA FONCTIONNALITE EXISTANTE
-    ============================================================ */
-
-    async function loadPronostics() {
-
-      try {
-
-        const {
-          data,
-          error
-        } = await supabaseClient
-          .from("pronostics")
-          .select("*");
-
-        if (error) {
-          throw error;
-        }
-
-        allPronostics =
-          data || [];
-
-        renderPronostics();
-
-        updatePronosticStats();
-
-      } catch (error) {
-
-        console.error(
-          "Erreur pronostics :",
-          error
-        );
-
-        document.getElementById(
-          "pronosticsContainer"
-        ).innerHTML = `
-          <div class="error-box">
-            Impossible de charger les pronostics.
-          </div>
-        `;
-
-        document.getElementById(
-          "pronosticStatsContainer"
-        ).innerHTML = `
-          <div class="no-data">
-            Impossible de calculer les statistiques
-            des pronostics.
-          </div>
-        `;
-      }
-    }
-
-
-    function renderPronostics() {
-
-      const container =
-        document.getElementById(
-          "pronosticsContainer"
-        );
-
-      if (!allPronostics.length) {
-
-        container.innerHTML = `
-          <div class="empty">
-            Aucun pronostic disponible
-            pour le moment.
-          </div>
-        `;
-
-        return;
-      }
-
-      container.innerHTML = `
-        <div class="match-list">
-
-          ${allPronostics
-            .map(
-              p => `
-
-                <article class="pronostic">
-
-                  <div class="match-top">
-
-                    <span class="status">
-                      ${
-                        escapeHtml(
-                          p.statut ||
-                          p.status ||
-                          "Pronostic"
-                        )
-                      }
-                    </span>
-
-                    <span class="match-date">
-                      ${
-                        p.created_at
-                          ? formatDate(
-                              p.created_at
-                            )
-                          : ""
-                      }
-                    </span>
-
-                  </div>
-
-                  <div>
-                    ${
-                      escapeHtml(
-                        p.pronostic ||
-                        p.prediction ||
-                        p.type ||
-                        "Pronostic"
-                      )
-                    }
-                  </div>
-
-                </article>
-
-              `
-            )
-            .join("")}
-
-        </div>
-      `;
-    }
-
-
-    function updatePronosticStats() {
-
-      const container =
-        document.getElementById(
-          "pronosticStatsContainer"
-        );
-
-      const total =
-        allPronostics.length;
-
-      if (!total) {
-
-        container.innerHTML = `
-          <div class="no-data">
-            Aucun pronostic disponible
-            pour calculer la performance.
-          </div>
-        `;
-
-        return;
-      }
-
-      let won = 0;
-      let lost = 0;
-      let pending = 0;
-      let finished = 0;
-
-      allPronostics.forEach(
-        p => {
-
-          const status =
-            String(
-              p.statut ||
-              p.status ||
-              ""
-            ).toLowerCase();
-
-          if (
-            [
-              "won",
-              "win",
-              "gagné",
-              "gagne",
-              "gagné"
-            ].includes(status)
-          ) {
-            won++;
-            finished++;
-          }
-
-          else if (
-            [
-              "lost",
-              "lose",
-              "perdu"
-            ].includes(status)
-          ) {
-            lost++;
-            finished++;
-          }
-
-          else {
-            pending++;
-          }
-
-        }
-      );
-
-      const winRate =
-        finished > 0
-          ? (
-              won /
-              finished *
-              100
-            ).toFixed(1)
-          : null;
-
-
-      container.innerHTML = `
-
-        <div class="pronostic-stats">
-
-          ${statCard(
-            "📊",
-            total,
-            "Total pronostics"
-          )}
-
-          ${statCard(
-            "⏳",
-            pending,
-            "En attente"
-          )}
-
-          ${statCard(
-            "✅",
-            won,
-            "Gagnés"
-          )}
-
-          ${statCard(
-            "❌",
-            lost,
-            "Perdus"
-          )}
-
-          ${statCard(
-            "🏁",
-            finished,
-            "Terminés"
-          )}
-
-          ${statCard(
-            "📈",
-            winRate === null
-              ? "—"
-              : `${winRate}%`,
-            "Taux de réussite"
-          )}
-
-        </div>
-
-      `;
-    }
-
-
-    /* ============================================================
-       AUTO REFRESH STATISTIQUES
-    ============================================================ */
-
-    function startStatisticsRefresh() {
-
-      if (statsAutoRefresh) {
-        clearInterval(
-          statsAutoRefresh
-        );
-      }
-
-      statsAutoRefresh =
-        setInterval(
-          () => {
-
-            const statsPage =
-              document.getElementById(
-                "tab-tips"
-              );
-
-            if (
-              statsPage &&
-              statsPage.classList.contains(
-                "active"
               )
-            ) {
 
-              loadGeneralStatistics();
+              .join("");
 
-            }
+          }
+        )
 
-          },
-          60000
-        );
-    }
+        .join("")}
+
+    </div>
+
+  `;
+
+}
 
 
-    /* ============================================================
-       AUTO REFRESH MATCHS
-    ============================================================ */
+function renderDetailEvents(
+  events
+) {
 
-    function startMatchesRefresh() {
+  return `
 
-      if (matchesAutoRefresh) {
-        clearInterval(
-          matchesAutoRefresh
-        );
+    <div class="detail-table">
+
+      ${events
+
+        .map(
+          event => `
+
+            <div class="detail-row">
+
+              <span>
+
+                ${
+                  event.minute !== null &&
+                  event.minute !== undefined
+
+                    ? `${event.minute}' `
+
+                    : ""
+                }
+
+                ${escapeHtml(
+                  event.type ||
+                  event.event_type ||
+                  "Événement"
+                )}
+
+              </span>
+
+
+              <strong>
+
+                ${escapeHtml(
+                  event.player ||
+                  event.description ||
+                  ""
+                )}
+
+              </strong>
+
+            </div>
+
+          `
+        )
+
+        .join("")}
+
+    </div>
+
+  `;
+
+}
+
+
+function closeMatchModal() {
+
+  document
+    .getElementById(
+      "matchModal"
+    )
+    .classList.remove(
+      "open"
+    );
+
+}
+
+
+document
+  .getElementById(
+    "matchModal"
+  )
+  .addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target.id ===
+        "matchModal"
+      ) {
+
+        closeMatchModal();
+
       }
 
-      matchesAutoRefresh =
-        setInterval(
-          () => {
-            loadRealMatches();
-          },
-          30000
+    }
+  );
+
+
+/* ============================================================
+   STATISTIQUES GENERALES
+============================================================ */
+
+async function loadGeneralStatistics(
+  manualRefresh = false
+) {
+
+  const content =
+    document.getElementById(
+      "generalStatsContent"
+    );
+
+
+  const update =
+    document.getElementById(
+      "lastStatsUpdate"
+    );
+
+
+  const button =
+    document.getElementById(
+      "refreshStatsBtn"
+    );
+
+
+  if (manualRefresh) {
+
+    button.disabled = true;
+
+    button.textContent =
+      "⏳ Chargement...";
+
+  }
+
+
+  content.innerHTML = `
+
+    <div class="loading">
+
+      Chargement des statistiques réelles...
+
+    </div>
+
+  `;
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_BASE_URL}/api/statistics/today`,
+        {
+          method: "GET",
+          cache: "no-store"
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        `Erreur API HTTP ${response.status}`
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    generalStatsData =
+      data;
+
+
+    renderGeneralStatistics(
+      data
+    );
+
+
+    update.textContent =
+      `Dernière mise à jour : ${
+        new Date().toLocaleTimeString(
+          "fr-FR",
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          }
+        )
+      }`;
+
+
+  } catch (error) {
+
+    console.error(
+      "Erreur statistiques générales :",
+      error
+    );
+
+
+    content.innerHTML = `
+
+      <div class="error-box">
+
+        Impossible de récupérer
+        les statistiques générales.
+
+        <br><br>
+
+        ${escapeHtml(
+          error.message
+        )}
+
+      </div>
+
+    `;
+
+
+    update.textContent =
+      "Échec de la dernière actualisation.";
+
+
+  } finally {
+
+    if (manualRefresh) {
+
+      button.disabled = false;
+
+      button.textContent =
+        "🔄 Actualiser";
+
+    }
+
+  }
+
+}
+
+
+function renderGeneralStatistics(
+  data
+) {
+
+  const content =
+    document.getElementById(
+      "generalStatsContent"
+    );
+
+
+  const overview =
+    data.overview || {};
+
+
+  const goals =
+    data.goals || {};
+
+
+  const results =
+    data.results || {};
+
+
+  const over =
+    data.over || {};
+
+
+  const btts =
+    data.btts || {};
+
+
+  const clean =
+    data.clean_sheets || {};
+
+
+  const zeroZero =
+    data.zero_zero || {};
+
+
+  const competitions =
+    data.competitions || [];
+
+
+  const distribution =
+    data.score_distribution || [];
+
+
+  document.getElementById(
+    "statsDate"
+  ).textContent =
+    formatStatsDate(
+      data.date
+    );
+
+
+  content.innerHTML = `
+
+    <div class="sub-title">
+      📌 Vue d'ensemble
+    </div>
+
+
+    <div class="stat-grid">
+
+      ${statCard(
+        "⚽",
+        overview.total_matches,
+        "Total matchs"
+      )}
+
+      ${statCard(
+        "🔴",
+        overview.live,
+        "En direct"
+      )}
+
+      ${statCard(
+        "🏁",
+        overview.finished,
+        "Terminés"
+      )}
+
+      ${statCard(
+        "⏳",
+        overview.upcoming,
+        "À venir"
+      )}
+
+      ${statCard(
+        "🚫",
+        overview.cancelled,
+        "Annulés"
+      )}
+
+      ${statCard(
+        "📅",
+        overview.postponed,
+        "Reportés"
+      )}
+
+    </div>
+
+
+    <div class="stats-panel">
+
+      <div class="stats-panel-title">
+        ⚽ Buts
+      </div>
+
+
+      ${metricRow(
+        "Total",
+        numberValue(
+          goals.total
+        )
+      )}
+
+
+      ${metricRow(
+        "Moyenne / match terminé",
+        goals.average_per_finished_match === null
+          ? "—"
+          : Number(
+              goals.average_per_finished_match
+            ).toFixed(2)
+      )}
+
+
+      ${metricRow(
+        "Buts à domicile",
+        numberValue(
+          goals.home
+        )
+      )}
+
+
+      ${metricRow(
+        "Buts à l'extérieur",
+        numberValue(
+          goals.away
+        )
+      )}
+
+    </div>
+
+
+    <div class="stats-panel">
+
+      <div class="stats-panel-title">
+        🏁 Résultats
+      </div>
+
+
+      ${resultMetric(
+        "🏠 Victoires domicile",
+        results.home_wins,
+        results.home_wins_percentage
+      )}
+
+
+      ${resultMetric(
+        "🤝 Matchs nuls",
+        results.draws,
+        results.draws_percentage
+      )}
+
+
+      ${resultMetric(
+        "✈️ Victoires extérieur",
+        results.away_wins,
+        results.away_wins_percentage
+      )}
+
+    </div>
+
+
+    <div class="stats-panel">
+
+      <div class="stats-panel-title">
+        📈 Tendances buts
+      </div>
+
+
+      ${overMetric(
+        "Over 0.5",
+        over.over_0_5
+      )}
+
+
+      ${overMetric(
+        "Over 1.5",
+        over.over_1_5
+      )}
+
+
+      ${overMetric(
+        "Over 2.5",
+        over.over_2_5
+      )}
+
+
+      ${overMetric(
+        "Over 3.5",
+        over.over_3_5
+      )}
+
+
+      ${overMetric(
+        "Over 4.5",
+        over.over_4_5
+      )}
+
+    </div>
+
+
+    <div class="stats-panel">
+
+      <div class="stats-panel-title">
+        ⚔️ BTTS — Les deux équipes marquent
+      </div>
+
+
+      ${resultMetric(
+        "Oui",
+        btts.yes,
+        btts.yes_percentage
+      )}
+
+
+      ${resultMetric(
+        "Non",
+        btts.no,
+        btts.no_percentage
+      )}
+
+    </div>
+
+
+    <div class="stats-panel">
+
+      <div class="stats-panel-title">
+        🧤 Clean sheets
+      </div>
+
+
+      ${metricRow(
+        "Domicile",
+        numberValue(
+          clean.home
+        )
+      )}
+
+
+      ${metricRow(
+        "Extérieur",
+        numberValue(
+          clean.away
+        )
+      )}
+
+
+      ${metricRow(
+        "Total",
+        numberValue(
+          clean.total
+        )
+      )}
+
+    </div>
+
+
+    <div class="stats-panel">
+
+      <div class="stats-panel-title">
+        0️⃣ 0-0
+      </div>
+
+
+      ${resultMetric(
+        "Matchs terminés 0-0",
+        zeroZero.count,
+        zeroZero.percentage
+      )}
+
+    </div>
+
+
+    <div class="stats-panel">
+
+      <div class="stats-panel-title">
+        🎯 Répartition des scores
+      </div>
+
+
+      ${
+        distribution.length
+
+          ? distribution
+
+              .map(
+                item => `
+
+                  <div class="metric-row">
+
+                    <div class="metric-name">
+
+                      ${escapeHtml(
+                        item.score ||
+                        "—"
+                      )}
+
+                    </div>
+
+
+                    <div class="metric-number">
+
+                      ${numberValue(
+                        item.count
+                      )}
+
+                      <span>
+
+                        ${
+                          item.percentage !== null &&
+                          item.percentage !== undefined
+
+                            ? ` • ${percentage(
+                                item.percentage
+                              )}`
+
+                            : ""
+                        }
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                `
+              )
+
+              .join("")
+
+
+          : `
+
+            <div class="no-data">
+
+              Aucune statistique de score
+              disponible pour le moment.
+
+            </div>
+
+          `
+
+      }
+
+    </div>
+
+
+    <div class="sub-title">
+      🏆 Par compétition
+    </div>
+
+
+    <div class="competition-list">
+
+      ${
+        competitions.length
+
+          ? competitions
+              .map(
+                renderCompetition
+              )
+              .join("")
+
+
+          : `
+
+            <div class="no-data">
+
+              Aucune compétition disponible
+              pour aujourd'hui.
+
+            </div>
+
+          `
+
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+function statCard(
+  icon,
+  value,
+  label
+) {
+
+  return `
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        ${icon}
+      </div>
+
+      <div class="stat-value">
+        ${numberValue(value)}
+      </div>
+
+      <div class="stat-label">
+        ${label}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function metricRow(
+  label,
+  value
+) {
+
+  return `
+
+    <div class="metric-row">
+
+      <div class="metric-name">
+        ${label}
+      </div>
+
+      <div class="metric-number">
+
+        ${escapeHtml(
+          String(value)
+        )}
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function resultMetric(
+  label,
+  count,
+  percent
+) {
+
+  return `
+
+    <div class="metric-row">
+
+      <div>
+
+        <div class="metric-name">
+          ${label}
+        </div>
+
+
+        ${
+          percent !== null &&
+          percent !== undefined
+
+            ? `
+
+              <div class="bar-container">
+
+                <div
+                  class="bar"
+                  style="width:${Math.max(
+                    0,
+                    Math.min(
+                      100,
+                      Number(percent)
+                    )
+                  )}%"
+                ></div>
+
+              </div>
+
+            `
+
+            : ""
+        }
+
+      </div>
+
+
+      <div class="metric-number">
+
+        ${numberValue(count)}
+
+        <span>
+
+          ${
+            percent !== null &&
+            percent !== undefined
+
+              ? ` • ${percentage(
+                  percent
+                )}`
+
+              : ""
+          }
+
+        </span>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function overMetric(
+  label,
+  object
+) {
+
+  if (!object) {
+
+    return `
+
+      <div class="metric-row">
+
+        <div class="metric-name">
+          ${label}
+        </div>
+
+        <div class="metric-number">
+          —
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  return resultMetric(
+    label,
+    object.count,
+    object.percentage
+  );
+
+}
+
+
+function renderCompetition(
+  competition
+) {
+
+  return `
+
+    <div class="competition-card">
+
+      <div class="competition-head">
+
+        <div>
+
+          <div class="competition-name">
+
+            ${escapeHtml(
+              competition.competition ||
+              "Compétition"
+            )}
+
+          </div>
+
+
+          <div class="competition-country">
+
+            ${escapeHtml(
+              competition.country ||
+              "—"
+            )}
+
+          </div>
+
+        </div>
+
+
+        <div class="competition-code">
+
+          ${escapeHtml(
+            competition.code ||
+            ""
+          )}
+
+        </div>
+
+      </div>
+
+
+      <div class="competition-grid">
+
+        ${competitionItem(
+          "Matchs",
+          competition.matches
+        )}
+
+
+        ${competitionItem(
+          "Terminés",
+          competition.finished
+        )}
+
+
+        ${competitionItem(
+          "En direct",
+          competition.live
+        )}
+
+
+        ${competitionItem(
+          "À venir",
+          competition.upcoming
+        )}
+
+
+        ${competitionItem(
+          "Buts",
+          competition.goals
+        )}
+
+
+        ${competitionItem(
+          "Moyenne",
+          competition.average_goals === null ||
+          competition.average_goals === undefined
+
+            ? "—"
+
+            : Number(
+                competition.average_goals
+              ).toFixed(2)
+
+        )}
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function competitionItem(
+  label,
+  value
+) {
+
+  return `
+
+    <div class="competition-item">
+
+      <div class="competition-item-label">
+        ${label}
+      </div>
+
+      <div class="competition-item-value">
+        ${numberValue(value)}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   PRONOSTICS
+============================================================ */
+
+async function loadPronostics() {
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+
+      .from("pronostics")
+
+      .select("*");
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    allPronostics =
+      data || [];
+
+
+    renderPronostics();
+
+    updatePronosticStats();
+
+
+  } catch (error) {
+
+    console.error(
+      "Erreur pronostics :",
+      error
+    );
+
+
+    document.getElementById(
+      "pronosticsContainer"
+    ).innerHTML = `
+
+      <div class="error-box">
+
+        Impossible de charger
+        les pronostics.
+
+      </div>
+
+    `;
+
+
+    document.getElementById(
+      "pronosticStatsContainer"
+    ).innerHTML = `
+
+      <div class="no-data">
+
+        Impossible de calculer les statistiques
+        des pronostics.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+function renderPronostics() {
+
+  const container =
+    document.getElementById(
+      "pronosticsContainer"
+    );
+
+
+  if (!allPronostics.length) {
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        Aucun pronostic disponible
+        pour le moment.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML = `
+
+    <div class="match-list">
+
+      ${allPronostics
+
+        .map(
+          p => `
+
+            <article class="pronostic">
+
+              <div class="match-top">
+
+                <span class="status">
+
+                  ${
+                    escapeHtml(
+                      p.statut ||
+                      p.status ||
+                      "Pronostic"
+                    )
+                  }
+
+                </span>
+
+
+                <span class="match-date">
+
+                  ${
+                    p.created_at
+
+                      ? formatDate(
+                          p.created_at
+                        )
+
+                      : ""
+                  }
+
+                </span>
+
+              </div>
+
+
+              <div>
+
+                ${
+                  escapeHtml(
+                    p.pronostic ||
+                    p.prediction ||
+                    p.type ||
+                    "Pronostic"
+                  )
+                }
+
+              </div>
+
+            </article>
+
+          `
+        )
+
+        .join("")}
+
+    </div>
+
+  `;
+
+}
+
+
+function updatePronosticStats() {
+
+  const container =
+    document.getElementById(
+      "pronosticStatsContainer"
+    );
+
+
+  const total =
+    allPronostics.length;
+
+
+  if (!total) {
+
+    container.innerHTML = `
+
+      <div class="no-data">
+
+        Aucun pronostic disponible
+        pour calculer la performance.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  let won = 0;
+  let lost = 0;
+  let pending = 0;
+  let finished = 0;
+
+
+  allPronostics.forEach(
+    p => {
+
+      const status =
+        String(
+          p.statut ||
+          p.status ||
+          ""
+        ).toLowerCase();
+
+
+      if (
+        [
+          "won",
+          "win",
+          "gagné",
+          "gagne"
+        ].includes(status)
+      ) {
+
+        won++;
+        finished++;
+
+      }
+
+
+      else if (
+        [
+          "lost",
+          "lose",
+          "perdu"
+        ].includes(status)
+      ) {
+
+        lost++;
+        finished++;
+
+      }
+
+
+      else {
+
+        pending++;
+
+      }
+
+    }
+  );
+
+
+  const winRate =
+    finished > 0
+
+      ? (
+          won /
+          finished *
+          100
+        ).toFixed(1)
+
+      : null;
+
+
+  container.innerHTML = `
+
+    <div class="pronostic-stats">
+
+      ${statCard(
+        "📊",
+        total,
+        "Total pronostics"
+      )}
+
+
+      ${statCard(
+        "⏳",
+        pending,
+        "En attente"
+      )}
+
+
+      ${statCard(
+        "✅",
+        won,
+        "Gagnés"
+      )}
+
+
+      ${statCard(
+        "❌",
+        lost,
+        "Perdus"
+      )}
+
+
+      ${statCard(
+        "🏁",
+        finished,
+        "Terminés"
+      )}
+
+
+      ${statCard(
+        "📈",
+        winRate === null
+          ? "—"
+          : `${winRate}%`,
+        "Taux de réussite"
+      )}
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   AUTO REFRESH STATISTIQUES
+============================================================ */
+
+function startStatisticsRefresh() {
+
+  if (statsAutoRefresh) {
+
+    clearInterval(
+      statsAutoRefresh
+    );
+
+  }
+
+
+  statsAutoRefresh =
+    setInterval(
+      () => {
+
+        const statsPage =
+          document.getElementById(
+            "tab-tips"
+          );
+
+
+        if (
+          statsPage &&
+          statsPage.classList.contains(
+            "active"
+          )
+        ) {
+
+          loadGeneralStatistics();
+
+        }
+
+      },
+
+      60000
+
+    );
+
+}
+
+
+/* ============================================================
+   AUTO REFRESH MATCHS
+============================================================ */
+
+function startMatchesRefresh() {
+
+  if (matchesAutoRefresh) {
+
+    clearInterval(
+      matchesAutoRefresh
+    );
+
+  }
+
+
+  /*
+   * Vérification toutes les 15 secondes.
+   *
+   * Exemple :
+   *
+   * 19:38 → 2-0
+   * 19:39 → 2-0
+   * 19:40 → 3-0
+   *
+   * Dès que Supabase contient le nouveau score,
+   * le site le récupère automatiquement.
+   */
+
+  matchesAutoRefresh =
+    setInterval(
+      () => {
+
+        loadRealMatches(
+          true
         );
+
+      },
+
+      15000
+
+    );
+
+}
+
+
+/* ============================================================
+   RECHARGEMENT QUAND L'UTILISATEUR
+   REVIENT SUR L'APPLICATION
+============================================================ */
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if (
+      document.visibilityState ===
+      "visible"
+    ) {
+
+      loadRealMatches(
+        true
+      );
+
+      /*
+       * Les statistiques sont également
+       * actualisées lorsque l'utilisateur
+       * revient sur l'application.
+       */
+
+      loadGeneralStatistics();
+
     }
 
-
-    /* ============================================================
-       INITIALISATION
-    ============================================================ */
-
-    async function init() {
-
-      await Promise.all([
-        loadRealMatches(),
-        loadPronostics(),
-        loadGeneralStatistics()
-      ]);
-
-      startStatisticsRefresh();
-      startMatchesRefresh();
-    }
+  }
+);
 
 
-    init();
+/* ============================================================
+   RECHARGEMENT APRÈS RETOUR RÉSEAU
+============================================================ */
 
-  </script>
+window.addEventListener(
+  "online",
+  () => {
+
+    console.log(
+      "Connexion Internet rétablie."
+    );
+
+
+    loadRealMatches(
+      true
+    );
+
+
+    loadGeneralStatistics();
+
+  }
+);
+
+
+/* ============================================================
+   INITIALISATION
+============================================================ */
+
+async function init() {
+
+  /*
+   * Chargement initial.
+   */
+
+  await Promise.all([
+    loadRealMatches(),
+    loadPronostics(),
+    loadGeneralStatistics()
+  ]);
+
+
+  /*
+   * Démarrage des mises à jour automatiques.
+   */
+
+  startStatisticsRefresh();
+
+  startMatchesRefresh();
+
+}
+
+
+/* ============================================================
+   LANCEMENT
+============================================================ */
+
+init();
+
+</script>
 
 </body>
-                </html>
+  </html>

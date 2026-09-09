@@ -296,6 +296,24 @@
       </select>
       <div class="helper-text">Sélectionne un match pour remplir automatiquement les équipes et la date.</div>
 
+      <!-- SÉLECTION RAPIDE DE COMPÉTITION -->
+      <label>🏆 Choix rapide de compétition</label>
+      <select id="leagueSelect" onchange="onLeagueSelected()">
+        <option value="">— Choisir la compétition —</option>
+        <optgroup label="🇪🇺 Coupes d'Europe">
+          <option value="Europe|Ligue des Champions de l'UEFA">Ligue des Champions de l'UEFA</option>
+          <option value="Europe|Ligue Europa de l'UEFA">Ligue Europa de l'UEFA</option>
+          <option value="Europe|Ligue Conférence de l'UEFA">Ligue Conférence de l'UEFA</option>
+        </optgroup>
+        <optgroup label="🌍 Championnats Nationaux">
+          <option value="Allemagne|Bundesliga">🇩🇪 Allemagne - Bundesliga</option>
+          <option value="Espagne|La Liga">🇪🇸 Espagne - La Liga</option>
+          <option value="France|Ligue 1">🇫🇷 France - Ligue 1</option>
+          <option value="Italie|Serie A">🇮🇹 Italie - Serie A</option>
+          <option value="Pays-Bas|Eredivisie">🇳🇱 Pays-Bas - Eredivisie</option>
+        </optgroup>
+      </select>
+
       <div class="row-2">
         <div>
           <label>Pays</label>
@@ -496,6 +514,19 @@ async function checkSession() {
   }
 }
 checkSession();
+
+// ============================================================
+// GESTION DU SÉLECTEUR DE COMPÉTITION (PAYS & CHAMPIONNAT)
+// ============================================================
+
+function onLeagueSelected() {
+  const selectedValue = document.getElementById("leagueSelect").value;
+  if (!selectedValue) return;
+
+  const [paysVal, champVal] = selectedValue.split("|");
+  document.getElementById("pays").value = paysVal || "";
+  document.getElementById("championnat").value = champVal || "";
+}
 
 // ============================================================
 // CHARGEMENT DES VRAIS MATCHS (pour la liste déroulante)
@@ -780,6 +811,20 @@ async function editPronostic(id) {
   document.getElementById("matchSelect").value = data.match_id || "";
   document.getElementById("pays").value = data.pays || "";
   document.getElementById("championnat").value = data.championnat || "";
+  
+  // Resynchroniser le sélecteur de compétition si correspond
+  const leagueSelect = document.getElementById("leagueSelect");
+  const targetVal = `${data.pays}|${data.championnat}`;
+  let matchFound = false;
+  for (let option of leagueSelect.options) {
+    if (option.value === targetVal) {
+      leagueSelect.value = targetVal;
+      matchFound = true;
+      break;
+    }
+  }
+  if (!matchFound) leagueSelect.value = "";
+
   document.getElementById("equipe1").value = data.equipe1 || "";
   document.getElementById("equipe2").value = data.equipe2 || "";
   document.getElementById("cote").value = data.cote ?? "";
@@ -868,6 +913,7 @@ function cancelEdit() {
 
 function clearForm() {
   document.getElementById("matchSelect").value = "";
+  document.getElementById("leagueSelect").value = "";
   document.getElementById("pays").value = "";
   document.getElementById("championnat").value = "";
   document.getElementById("equipe1").value = "";

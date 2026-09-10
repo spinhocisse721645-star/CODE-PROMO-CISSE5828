@@ -1303,14 +1303,13 @@
 
     /* ============================================================
        MATCHS
-       
-       IMPORTANT :
-       On ne lit plus "matchs" directement depuis Supabase.
-       On passe par l'API CISSE PRONOS.
-       
-       Cela supprime le problème :
-       "Invalid API key"
-       ============================================================ */
+
+       On lit désormais /api/matches (TOUS les matchs du jour
+       et du lendemain), et non plus /api/live qui ne renvoie
+       QUE les matchs en cours à l'instant présent. Le badge
+       "🔴 En direct" est appliqué côté affichage, match par
+       match, selon son statut.
+    ============================================================ */
 
     async function loadRealMatches() {
 
@@ -1324,7 +1323,7 @@
 
         const response =
           await fetch(
-            `${API_BASE_URL}/api/live?nocache=${Date.now()}`,
+            `${API_BASE_URL}/api/matches?nocache=${Date.now()}`,
             {
               method: "GET",
               cache: "no-store",
@@ -1347,12 +1346,6 @@
         const result =
           await response.json();
 
-
-        /*
-         * L'API peut retourner directement
-         * un tableau ou un objet contenant
-         * "matches".
-         */
 
         let matches = [];
 
@@ -1400,12 +1393,6 @@
           error
         );
 
-
-        /*
-         * On ne remplace pas l'ancien
-         * contenu si on possède déjà des
-         * matchs valides.
-         */
 
         if (!allRealMatches.length) {
 
@@ -1767,14 +1754,7 @@
 
     /* ============================================================
        DETAIL MATCH
-       
-       Les données principales viennent
-       déjà de l'API Render.
-       
-       Les statistiques/événements spécifiques
-       sont affichés seulement lorsqu'ils sont
-       réellement disponibles via l'API.
-       ============================================================ */
+    ============================================================ */
 
     async function showMatchDetails(matchId) {
 
@@ -2827,26 +2807,9 @@
 
     /* ============================================================
        PRONOSTICS
-       
-       Cette partie conserve la table existante.
-       
-       IMPORTANT :
-       si la clé Supabase du navigateur est invalide,
-       les pronostics pourront encore afficher une erreur.
-       
-       Cela ne bloque plus les MATCHS LIVE car ceux-ci
-       passent maintenant par Render.
-       ============================================================ */
+    ============================================================ */
 
     async function loadPronostics() {
-
-      /*
-       * On utilise l'API REST Supabase seulement
-       * pour les pronostics existants.
-       *
-       * La clé est récupérée depuis une variable
-       * globale si elle existe.
-       */
 
       const SUPABASE_URL =
         "https://avonpsmoruevwlokkfjg.supabase.co";
@@ -3219,15 +3182,7 @@
 
     /* ============================================================
        AUTO REFRESH MATCHS
-       
-       IMPORTANT :
-       15 secondes.
-       
-       Chaque appel va sur /api/live.
-       Cela permet à l'API Render de récupérer
-       les dernières données et au site d'afficher
-       le nouveau score.
-       ============================================================ */
+    ============================================================ */
 
     function startMatchesRefresh() {
 
@@ -3259,17 +3214,7 @@
 
     async function init() {
 
-      /*
-       * Les matchs sont prioritaires.
-       */
-
       await loadRealMatches();
-
-
-      /*
-       * Les autres éléments sont chargés
-       * ensuite sans bloquer les matchs.
-       */
 
       loadPronostics();
 
